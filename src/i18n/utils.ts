@@ -22,9 +22,26 @@ export function getRouteFromUrl(url: URL): string {
   return pathname;
 }
 
+// Route translations between languages
+const routeTranslations: Record<string, Record<string, string>> = {
+  nl: {
+    '/schedule': '/programma',
+    '/about': '/over-ons',
+    '/contact': '/contact',
+  },
+  en: {
+    '/programma': '/schedule',
+    '/over-ons': '/about',
+    '/contact': '/contact',
+  },
+};
+
 export function getLocalizedPath(path: string, lang: keyof typeof ui): string {
+  // Translate route if needed
+  const translatedPath = routeTranslations[lang]?.[path] || path;
+
   if (lang === defaultLang) {
-    return path;
+    return translatedPath;
   }
-  return `/${lang}${path}`;
+  return `/${lang}${translatedPath}`;
 }
