@@ -1,16 +1,16 @@
 /* CSS Variables */
 :root {
-  /* Colors - warm evening cinema theme */
-  --color-primary: #1a1a2e;
-  --color-secondary: #16213e;
+  /* Colors - warm evening cinema theme (lightened) */
+  --color-primary: #252542;
+  --color-secondary: #1e2a4a;
   --color-accent: #e94560;
   --color-accent-light: #ff6b6b;
   --color-gold: #f4a261;
-  --color-text: #eaeaea;
-  --color-text-muted: #a0a0a0;
-  --color-bg: #0f0f1a;
-  --color-card: #1a1a2e;
-  --color-card-hover: #252540;
+  --color-text: #f0f0f0;
+  --color-text-muted: #b8b8c0;
+  --color-bg: #1a1a2e;
+  --color-card: #2a2a48;
+  --color-card-hover: #353560;
 
   /* Spacing */
   --space-xs: 0.25rem;
