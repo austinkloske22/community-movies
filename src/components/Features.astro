@@ -1,0 +1,91 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const features = [
+  {
+    icon: '🎬',
+    title: t('about.multilingual'),
+    description: t('about.multilingualDesc'),
+  },
+  {
+    icon: '🤝',
+    title: t('about.community'),
+    description: t('about.communityDesc'),
+  },
+  {
+    icon: '🎟️',
+    title: t('about.free'),
+    description: t('about.freeDesc'),
+  },
+];
+---
+
+<section class="features section">
+  <div class="container">
+    <h2 class="text-center mb-lg">{t('about.title')}</h2>
+    <p class="features-intro text-center text-muted mb-lg">
+      {t('about.intro')}
+    </p>
+
+    <div class="features-grid grid grid-3">
+      {features.map((feature, index) => (
+        <div class="feature-card" style={`--delay: ${index * 0.1}s`}>
+          <span class="feature-icon">{feature.icon}</span>
+          <h3 class="feature-title">{feature.title}</h3>
+          <p class="feature-description">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    background: var(--color-primary);
+  }
+
+  .features-intro {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.125rem;
+  }
+
+  .features-grid {
+    margin-top: var(--space-xl);
+  }
+
+  .feature-card {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+  }
+
+  .feature-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(233, 69, 96, 0.3);
+    transform: translateY(-4px);
+  }
+
+  .feature-icon {
+    display: block;
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .feature-title {
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+  }
+
+  .feature-description {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+</style>

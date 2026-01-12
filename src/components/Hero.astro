@@ -1,0 +1,150 @@
+---
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title fade-in">
+        <span class="hero-icon">🎬</span>
+        {t('hero.title')}
+      </h1>
+      <p class="hero-subtitle fade-in">
+        {t('hero.subtitle')}
+      </p>
+      <div class="hero-info fade-in">
+        <div class="hero-badge">
+          <span class="badge-icon">📅</span>
+          <span>{lang === 'nl' ? 'Elke 2e zaterdag van de maand' : 'Every 2nd Saturday of the month'}</span>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-icon">📍</span>
+          <span>Nelson Mandelapark, Haarlem</span>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-icon">🎟️</span>
+          <span>{lang === 'nl' ? 'Gratis toegang' : 'Free admission'}</span>
+        </div>
+      </div>
+      <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary hero-cta fade-in">
+        {t('hero.cta')}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(233, 69, 96, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(244, 162, 97, 0.1) 0%, transparent 50%),
+      linear-gradient(180deg, var(--color-bg) 0%, var(--color-primary) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-icon {
+    font-size: clamp(3rem, 8vw, 5rem);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9rem;
+  }
+
+  .badge-icon {
+    font-size: 1.25rem;
+  }
+
+  .hero-cta {
+    font-size: 1.125rem;
+    padding: var(--space-md) var(--space-xl);
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .hero-title.fade-in {
+    animation-delay: 0.1s;
+  }
+
+  .hero-subtitle.fade-in {
+    animation-delay: 0.2s;
+  }
+
+  .hero-info.fade-in {
+    animation-delay: 0.3s;
+  }
+
+  .hero-cta.fade-in {
+    animation-delay: 0.4s;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 70vh;
+    }
+
+    .hero-title {
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .hero-info {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

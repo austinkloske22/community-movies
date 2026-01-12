@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.summermoviesinthepark.com)",
+      "Bash(wp-env start:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

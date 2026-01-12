@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import NextScreening from '../../components/NextScreening.astro';
+import Features from '../../components/Features.astro';
+import { getMovies, getNextMovie } from '../../lib/sheets';
+
+const movies = await getMovies();
+const nextMovie = getNextMovie(movies);
+---
+
+<BaseLayout title="Home" description="Free outdoor cinema in Nelson Mandela Park, Haarlem Noord">
+  <Hero />
+  <NextScreening movie={nextMovie} />
+  <Features />
+</BaseLayout>

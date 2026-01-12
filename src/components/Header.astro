@@ -1,0 +1,183 @@
+---
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
+import { languages } from '../i18n/ui';
+import LanguagePicker from './LanguagePicker.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Different paths for Dutch vs English
+const navItems = lang === 'en' ? [
+  { href: '/', label: t('nav.home') },
+  { href: '/schedule', label: t('nav.schedule') },
+  { href: '/about', label: t('nav.about') },
+  { href: '/contact', label: t('nav.contact') },
+] : [
+  { href: '/', label: t('nav.home') },
+  { href: '/programma', label: t('nav.schedule') },
+  { href: '/over-ons', label: t('nav.about') },
+  { href: '/contact', label: t('nav.contact') },
+];
+---
+
+<header class="header">
+  <div class="container">
+    <nav class="nav">
+      <a href={getLocalizedPath('/', lang)} class="logo">
+        <span class="logo-icon">🎬</span>
+        <span class="logo-text">Nelsons Film</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+
+      <ul class="nav-links">
+        {navItems.map((item) => (
+          <li>
+            <a href={getLocalizedPath(item.href, lang)} class="nav-link">
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li class="lang-picker-wrapper">
+          <LanguagePicker />
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 15, 26, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .logo:hover {
+    color: var(--color-accent);
+  }
+
+  .logo-icon {
+    font-size: 1.75rem;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    list-style: none;
+  }
+
+  .nav-link {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-sm);
+  }
+
+  .hamburger,
+  .hamburger::before,
+  .hamburger::after {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text);
+    transition: all var(--transition-fast);
+  }
+
+  .hamburger {
+    position: relative;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .hamburger::before {
+    top: -8px;
+  }
+
+  .hamburger::after {
+    top: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background: var(--color-bg);
+      padding: var(--space-lg);
+      gap: var(--space-md);
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-normal);
+    }
+
+    .nav-links.open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lang-picker-wrapper {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+</style>
+
+<script>
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+
+  menuBtn?.addEventListener('click', () => {
+    const isOpen = navLinks?.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(isOpen));
+  });
+</script>

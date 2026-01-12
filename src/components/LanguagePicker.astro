@@ -1,0 +1,74 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl, getRouteFromUrl } from '../i18n/utils';
+
+const currentLang = getLangFromUrl(Astro.url);
+const route = getRouteFromUrl(Astro.url);
+
+// Route translations between Dutch and English
+const routeMap: Record<string, Record<string, string>> = {
+  nl: {
+    '/schedule': '/programma',
+    '/about': '/over-ons',
+    '/contact': '/contact',
+  },
+  en: {
+    '/programma': '/schedule',
+    '/over-ons': '/about',
+    '/contact': '/contact',
+  },
+};
+
+function getTranslatedRoute(targetLang: string, currentRoute: string): string {
+  if (!currentRoute || currentRoute === '/') return '';
+  const map = routeMap[targetLang];
+  return map?.[currentRoute] || currentRoute;
+}
+
+function buildHref(targetLang: string): string {
+  const translatedRoute = getTranslatedRoute(targetLang, route);
+  if (targetLang === 'nl') {
+    return translatedRoute || '/';
+  }
+  return `/${targetLang}${translatedRoute || ''}`;
+}
+---
+
+<div class="language-picker">
+  {Object.entries(languages).map(([lang, label]) => (
+    <a
+      href={buildHref(lang)}
+      class:list={['lang-btn', { active: currentLang === lang }]}
+    >
+      {lang.toUpperCase()}
+    </a>
+  ))}
+</div>
+
+<style>
+  .language-picker {
+    display: flex;
+    gap: var(--space-xs);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 2px;
+  }
+
+  .lang-btn {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .lang-btn:hover {
+    color: var(--color-text);
+  }
+
+  .lang-btn.active {
+    background: var(--color-accent);
+    color: white;
+  }
+</style>

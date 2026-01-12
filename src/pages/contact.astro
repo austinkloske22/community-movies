@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('nav.contact')} description="Neem contact op met Nelsons Film - vrijwilliger worden of sponsor worden">
+  <section class="contact-page section">
+    <div class="container">
+      <header class="page-header">
+        <h1>{t('contact.title')}</h1>
+        <p class="page-subtitle">
+          {lang === 'nl'
+            ? 'Heb je vragen of wil je bijdragen?'
+            : 'Have questions or want to contribute?'}
+        </p>
+      </header>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <span class="card-icon">📧</span>
+          <h2>{t('contact.email')}</h2>
+          <a href="mailto:Nelsons.film.Haarlem@gmail.com" class="contact-link">
+            Nelsons.film.Haarlem@gmail.com
+          </a>
+        </div>
+
+        <div class="contact-card">
+          <span class="card-icon">📱</span>
+          <h2>{t('contact.followUs')}</h2>
+          <div class="social-links">
+            <a href="https://instagram.com/nelsonsfilm" target="_blank" rel="noopener" class="social-link">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              Instagram
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-card highlight">
+          <span class="card-icon">💝</span>
+          <h2>{t('contact.donate')}</h2>
+          <p>
+            {lang === 'nl'
+              ? 'Wil je Nelsons Film steunen met een donatie? Elke bijdrage helpt ons om gratis filmavonden te blijven organiseren!'
+              : 'Want to support Nelsons Film with a donation? Every contribution helps us keep organizing free movie nights!'}
+          </p>
+          <a href="mailto:Nelsons.film.Haarlem@gmail.com?subject=Donatie" class="btn btn-primary">
+            {lang === 'nl' ? 'Doneer nu' : 'Donate now'}
+          </a>
+        </div>
+
+        <div class="contact-card highlight">
+          <span class="card-icon">🤝</span>
+          <h2>{t('contact.sponsor')}</h2>
+          <p>
+            {lang === 'nl'
+              ? 'Wil je als lokale ondernemer bijdragen aan Nelsons Film? Neem contact met ons op!'
+              : 'Want to contribute as a local business? Get in touch with us!'}
+          </p>
+          <a href="mailto:Nelsons.film.Haarlem@gmail.com?subject=Sponsor" class="btn btn-secondary">
+            {lang === 'nl' ? 'Word sponsor' : 'Become a sponsor'}
+          </a>
+        </div>
+      </div>
+
+      <div class="location-section">
+        <h2>{t('location.title')}</h2>
+        <p class="location-name">📍 Nelson Mandelapark, Haarlem Noord</p>
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2435.8!2d4.62!3d52.40!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNelson+Mandelapark!5e0!3m2!1sen!2snl!4v1234567890"
+            width="100%"
+            height="300"
+            style="border:0; border-radius: var(--radius-lg);"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    min-height: 80vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    margin-top: var(--space-sm);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    max-width: 900px;
+    margin: 0 auto var(--space-xl);
+  }
+
+  .contact-card {
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+  }
+
+  .contact-card.highlight {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(244, 162, 97, 0.05));
+    border: 1px solid rgba(233, 69, 96, 0.2);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-card p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+  }
+
+  .contact-link {
+    font-size: 1rem;
+    word-break: break-word;
+  }
+
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    transition: all var(--transition-fast);
+  }
+
+  .social-link:hover {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  .location-section {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .location-section h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .location-name {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .map-container {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MovieCard from '../components/MovieCard.astro';
+import { getMovies, getUpcomingMovies, getNextMovie } from '../lib/sheets';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const movies = await getMovies();
+const upcomingMovies = getUpcomingMovies(movies);
+const nextMovie = getNextMovie(movies);
+---
+
+<BaseLayout title={t('schedule.title')} description="Bekijk het volledige programma van Nelsons Film - gratis openluchtbioscoop in Haarlem Noord">
+  <section class="schedule-page section">
+    <div class="container">
+      <header class="page-header">
+        <h1>{t('schedule.title')}</h1>
+        <p class="page-subtitle">
+          {lang === 'nl'
+            ? 'Elke tweede zaterdag van de maand, mei t/m oktober'
+            : 'Every second Saturday of the month, May through October'}
+        </p>
+      </header>
+
+      {upcomingMovies.length > 0 ? (
+        <div class="movies-grid grid grid-2">
+          {upcomingMovies.map((movie) => (
+            <MovieCard
+              title={movie.title}
+              descriptionNl={movie.descriptionNl}
+              descriptionEn={movie.descriptionEn}
+              rating={movie.rating}
+              date={movie.date}
+              time={movie.time}
+              language={movie.language}
+              subtitles={movie.subtitles}
+              headphones={movie.headphones}
+              previewUrl={movie.previewUrl}
+              isNext={nextMovie?.date === movie.date}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="no-movies">
+          <p class="text-muted text-center">{t('schedule.noUpcoming')}</p>
+        </div>
+      )}
+
+      <div class="schedule-info">
+        <div class="info-card">
+          <h3>🎧 {lang === 'nl' ? 'Meertalige ervaring' : 'Multilingual experience'}</h3>
+          <p>
+            {lang === 'nl'
+              ? 'Raadpleeg het filmschema voor informatie over gesproken taal en ondertiteling.'
+              : 'Check the film schedule for spoken language and subtitle details'}
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>🪑 {lang === 'nl' ? 'Wat meenemen?' : 'What to bring?'}</h3>
+          <p>
+            {lang === 'nl'
+              ? 'Neem je eigen stoel of kleedje mee. Kom op tijd, want er zijn beperkte plekken!'
+              : 'Bring your own chair or blanket. Arrive early as spaces are limited!'}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .schedule-page {
+    min-height: 80vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    margin-top: var(--space-sm);
+  }
+
+  .movies-grid {
+    margin-bottom: var(--space-xl);
+  }
+
+  .no-movies {
+    padding: var(--space-xl);
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+  }
+
+  .schedule-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+
+  .info-card {
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+  }
+
+  .info-card h3 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .info-card p {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+</style>
