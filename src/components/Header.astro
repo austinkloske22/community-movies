@@ -28,9 +28,14 @@ const navItems = lang === 'en' ? [
         <span class="logo-text">Nelsons Film</span>
       </a>
 
-      <button class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
-        <span class="hamburger"></span>
-      </button>
+      <div class="mobile-actions">
+        <div class="mobile-lang-picker">
+          <LanguagePicker />
+        </div>
+        <button class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+          <span class="hamburger"></span>
+        </button>
+      </div>
 
       <ul class="nav-links">
         {navItems.map((item) => (
@@ -101,6 +106,16 @@ const navItems = lang === 'en' ? [
     color: var(--color-text);
   }
 
+  .mobile-actions {
+    display: none;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .mobile-lang-picker {
+    display: none;
+  }
+
   .mobile-menu-btn {
     display: none;
     background: none;
@@ -139,6 +154,14 @@ const navItems = lang === 'en' ? [
   }
 
   @media (max-width: 768px) {
+    .mobile-actions {
+      display: flex;
+    }
+
+    .mobile-lang-picker {
+      display: block;
+    }
+
     .mobile-menu-btn {
       display: block;
     }
@@ -164,10 +187,9 @@ const navItems = lang === 'en' ? [
       visibility: visible;
     }
 
+    /* Hide language picker inside mobile menu since it's now in the header */
     .lang-picker-wrapper {
-      margin-top: var(--space-md);
-      padding-top: var(--space-md);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
     }
   }
 </style>
