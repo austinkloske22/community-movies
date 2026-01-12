@@ -1,8 +1,12 @@
 # Nelsons Film
 
-Bilingual (Dutch/English) website for free outdoor movie screenings in Nelson Mandela Park, Haarlem Noord.
+Community (Dutch/English) website for free outdoor movie screenings in Nelson Mandela Park, Haarlem Noord.
 
 **Live site:** https://nelsonsfilm.netlify.app
+
+**Movie schedule:** https://docs.google.com/spreadsheets/d/1dtmjdL45yZxr1miQenRqMOKTskf5RsQGi70XEYrE-mE/
+
+Permission to edit google docs should be requested.
 
 ## Tech Stack
 
