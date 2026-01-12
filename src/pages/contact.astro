@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DonateButton from '../components/DonateButton.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -48,9 +49,7 @@ const t = useTranslations(lang);
               ? 'Wil je Nelsons Film steunen met een donatie? Elke bijdrage helpt ons om gratis filmavonden te blijven organiseren!'
               : 'Want to support Nelsons Film with a donation? Every contribution helps us keep organizing free movie nights!'}
           </p>
-          <a href="mailto:Nelsons.film.Haarlem@gmail.com?subject=Donatie" class="btn btn-primary">
-            {lang === 'nl' ? 'Doneer nu' : 'Donate now'}
-          </a>
+          <DonateButton lang={lang} variant="primary" />
         </div>
 
         <div class="contact-card highlight">

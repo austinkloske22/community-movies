@@ -26,7 +26,8 @@ src/
 │   ├── MovieCard.astro
 │   ├── NextScreening.astro
 │   ├── Features.astro
-│   └── LanguagePicker.astro
+│   ├── LanguagePicker.astro
+│   └── DonateButton.astro
 ├── i18n/              # Internationalization
 │   ├── ui.ts          # All translations (NL/EN)
 │   └── utils.ts       # Language utilities & route translation
@@ -34,6 +35,7 @@ src/
 │   └── BaseLayout.astro
 ├── lib/
 │   ├── sheets.ts      # Google Sheets data fetching
+│   ├── settings.ts    # Site settings (Tikkie link, etc.)
 │   └── weather.ts     # Weather API integration
 ├── pages/
 │   ├── index.astro           # Dutch homepage
@@ -102,6 +104,24 @@ The movie schedule is managed via a Google Sheet. The sheet must be:
 
 Row 1 should contain headers. Data starts from row 2.
 
+### Donations (Tikkie)
+
+The donate button uses [Tikkie](https://tikkie.me) for payments. The Tikkie link is stored in the **Settings** tab of the Google Sheet, allowing it to be updated without redeploying.
+
+**Settings tab format:**
+| Column A (Key) | Column B (Value) |
+|----------------|------------------|
+| tikkie_url | https://tikkie.me/pay/your-link |
+| tikkie_recipient | Nelson's Movies |
+
+**To update the Tikkie link:**
+1. Create a new Tikkie payment request in the Tikkie app
+2. Copy the share link
+3. Update the `tikkie_url` value in the Settings tab
+4. Changes take effect immediately (no redeploy needed)
+
+**Note:** Tikkie links can expire, so check periodically that the donation link still works.
+
 ### Translations
 
 All UI text is in `src/i18n/ui.ts`. To update text:
@@ -154,10 +174,16 @@ netlify deploy --prod --dir=dist
 Create a `.env` file (see `.env.example`):
 
 ```
-PUBLIC_GOOGLE_SHEET_URL=https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv
+# Movie schedule (Schedule tab, published as CSV)
+PUBLIC_GOOGLE_SHEET_URL=https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?gid=0&output=csv
+
+# Site settings including Tikkie link (Settings tab, published as CSV)
+PUBLIC_GOOGLE_SHEET_SETTINGS=https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?gid=SETTINGS_TAB_ID&output=csv
 ```
 
-For Netlify deployment, add this variable in:
+**Important:** Each tab needs its own published URL with the correct `gid` parameter.
+
+For Netlify deployment, add these variables in:
 Site settings → Environment variables
 
 ## Custom Domain

@@ -1,0 +1,70 @@
+---
+interface Props {
+  lang: 'nl' | 'en';
+  variant?: 'primary' | 'secondary';
+  class?: string;
+}
+
+const { lang, variant = 'primary', class: className } = Astro.props;
+const buttonText = lang === 'nl' ? 'Doneer nu' : 'Donate now';
+const loadingText = lang === 'nl' ? 'Laden...' : 'Loading...';
+const settingsUrl = import.meta.env.PUBLIC_GOOGLE_SHEET_SETTINGS;
+---
+
+<a
+  href="#"
+  class:list={['btn', `btn-${variant}`, 'donate-button', className]}
+  data-donate-button
+  data-loading-text={loadingText}
+>
+  {buttonText}
+</a>
+
+<script define:vars={{ settingsUrl }}>
+  // Fetch Tikkie URL from Google Sheets settings
+  async function initDonateButtons() {
+    const buttons = document.querySelectorAll('[data-donate-button]');
+
+    if (!settingsUrl || buttons.length === 0) return;
+
+    try {
+      const response = await fetch(settingsUrl);
+      const csvText = await response.text();
+
+      // Parse CSV to find tikkie_url
+      let tikkieUrl = '';
+      const lines = csvText.split('\n');
+      for (const line of lines) {
+        const parts = line.split(',');
+        const key = parts[0]?.trim().replace(/^"|"$/g, '');
+        const value = parts[1]?.trim().replace(/^"|"$/g, '');
+        if (key === 'tikkie_url' && value) {
+          tikkieUrl = value;
+          break;
+        }
+      }
+
+      if (tikkieUrl) {
+        buttons.forEach(button => {
+          button.setAttribute('href', tikkieUrl);
+          button.setAttribute('target', '_blank');
+          button.setAttribute('rel', 'noopener');
+        });
+      } else {
+        // Fallback to email if no Tikkie URL configured
+        buttons.forEach(button => {
+          button.setAttribute('href', 'mailto:Nelsons.film.Haarlem@gmail.com?subject=Donatie');
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load Tikkie URL:', error);
+      // Fallback to email on error
+      buttons.forEach(button => {
+        button.setAttribute('href', 'mailto:Nelsons.film.Haarlem@gmail.com?subject=Donatie');
+      });
+    }
+  }
+
+  // Run on page load
+  initDonateButtons();
+</script>
