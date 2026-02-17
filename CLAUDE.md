@@ -72,15 +72,29 @@ CSV columns (in order):
 1. **Title** - Movie title
 2. **descriptionNl** - Dutch description
 3. **descriptionEn** - English description
-4. **Rating** - PG, PG-13, etc.
-5. **Date** - Format: YYYY-MM-DD
-6. **Time** - Format: HH:MM
-7. **language** - Spoken language
-8. **subtitles** - Subtitle language
-9. **headphones** - Audio description availability (or "n/a")
-10. **Preview URL** - YouTube link for trailer
+4. **Rating** - Kijkwijzer age rating (AL, 6, 9, 12, 14, 16, 18)
+5. **ContentWarnings** - Kijkwijzer pictograms, pipe-separated (e.g., `geweld|angst`)
+6. **Date** - Format: YYYY-MM-DD
+7. **Time** - Format: HH:MM
+8. **language** - Spoken language
+9. **subtitles** - Subtitle language
+10. **headphones** - Audio description availability (or "n/a")
+11. **Preview URL** - YouTube link for trailer
 
-**Note:** Wrap fields containing commas in double quotes.
+**Kijkwijzer Age Ratings:**
+- `AL` - Alle leeftijden (All ages)
+- `6`, `9`, `12`, `14`, `16`, `18` - Minimum age
+
+**Content Warning Codes:**
+- `geweld` - Violence
+- `angst` - Fear/Scary content
+- `seks` - Sexual content
+- `grof` - Coarse language
+- `discriminatie` - Discrimination
+- `drugs` - Drugs/Alcohol/Smoking
+- `gevaar` - Dangerous behavior
+
+**Note:** Wrap fields containing commas in double quotes. Use `|` to separate multiple content warnings.
 
 ### Site Settings: `src/data/settings.json`
 

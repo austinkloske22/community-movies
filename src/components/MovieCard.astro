@@ -6,6 +6,7 @@ interface Props {
   descriptionNl: string;
   descriptionEn: string;
   rating: string;
+  contentWarnings?: string;
   date: string;
   time: string;
   language?: string;
@@ -16,7 +17,13 @@ interface Props {
   isNext?: boolean;
 }
 
-const { title, descriptionNl, descriptionEn, rating, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext } = Astro.props;
+const { title, descriptionNl, descriptionEn, rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext } = Astro.props;
+
+// Get age icon path
+function getAgeIcon(age: string): string {
+  const normalized = age.toLowerCase();
+  return `/images/kijkwijzer/${normalized}.svg`;
+}
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -70,7 +77,7 @@ function formatDate(dateStr: string): string {
 
   <div class="movie-content">
     <div class="movie-meta">
-      <span class="movie-rating">{rating}</span>
+      <img src={getAgeIcon(rating)} alt={`Kijkwijzer ${rating}`} class="kijkwijzer-icon" />
       <span class="movie-date">{formatDate(date)}</span>
       <span class="movie-time">{time}</span>
     </div>
@@ -191,12 +198,9 @@ function formatDate(dateStr: string): string {
     font-size: 0.875rem;
   }
 
-  .movie-rating {
-    background: var(--color-gold);
-    color: var(--color-primary);
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
+  .kijkwijzer-icon {
+    width: 24px;
+    height: 24px;
   }
 
   .movie-date,

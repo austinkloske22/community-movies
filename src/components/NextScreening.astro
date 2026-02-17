@@ -10,6 +10,12 @@ const { movie } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
+// Get age icon path
+function getAgeIcon(age: string): string {
+  const normalized = age.toLowerCase();
+  return `/images/kijkwijzer/${normalized}.svg`;
+}
+
 // Format date for display
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -86,9 +92,9 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
             </div>
           </div>
 
-          <div class="rating-badge">
-            <span class="rating-label">{lang === 'nl' ? 'Classificatie' : 'Rating'}</span>
-            <span class="rating-value">{movie.rating}</span>
+          <div class="kijkwijzer-badge">
+            <span class="kijkwijzer-label">{lang === 'nl' ? 'Kijkwijzer' : 'Age Rating'}</span>
+            <img src={getAgeIcon(movie.rating)} alt={`Kijkwijzer ${movie.rating}`} class="kijkwijzer-icon" />
           </div>
 
           {(movie.language || movie.subtitles || movie.headphones) && (
@@ -236,24 +242,27 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
     font-weight: 600;
   }
 
-  .rating-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    background: var(--color-gold);
-    color: var(--color-primary);
-    padding: var(--space-sm) var(--space-md);
+  .kijkwijzer-badge {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-md);
+    padding: var(--space-md);
     width: fit-content;
   }
 
-  .rating-label {
+  .kijkwijzer-label {
     font-size: 0.75rem;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
   }
 
-  .rating-value {
-    font-weight: 700;
+  .kijkwijzer-icon {
+    width: 32px;
+    height: 32px;
   }
 
   .language-info {

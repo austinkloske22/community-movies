@@ -8,6 +8,7 @@ export interface Movie {
   descriptionNl: string;
   descriptionEn: string;
   rating: string;
+  contentWarnings: string;
   date: string;
   time: string;
   language: string;
@@ -41,18 +42,19 @@ function parseCSV(csv: string): Movie[] {
     }
     values.push(current.trim());
 
-    // Column order: Title, descriptionNl, descriptionEn, Rating, Date, Time, language, subtitles, headphones, Preview URL
+    // Column order: Title, descriptionNl, descriptionEn, Rating, ContentWarnings, Date, Time, language, subtitles, headphones, Preview URL
     return {
       title: values[0] || '',
       descriptionNl: values[1] || '',
       descriptionEn: values[2] || '',
       rating: values[3] || '',
-      date: values[4] || '',
-      time: values[5] || '',
-      language: values[6] || '',
-      subtitles: values[7] || '',
-      headphones: values[8] || '',
-      previewUrl: values[9] || '',
+      contentWarnings: values[4] || '',
+      date: values[5] || '',
+      time: values[6] || '',
+      language: values[7] || '',
+      subtitles: values[8] || '',
+      headphones: values[9] || '',
+      previewUrl: values[10] || '',
     };
   }).filter((movie) => movie.title && movie.date);
 }
