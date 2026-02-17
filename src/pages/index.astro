@@ -5,7 +5,7 @@ import NextScreening from '../components/NextScreening.astro';
 import Features from '../components/Features.astro';
 import { getMovies, getNextMovie } from '../lib/sheets';
 
-const movies = await getMovies();
+const movies = getMovies();
 const nextMovie = getNextMovie(movies);
 ---
 

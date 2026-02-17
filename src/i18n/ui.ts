@@ -40,10 +40,6 @@ export const ui = {
     'location.park': 'Nelson Mandelapark, Haarlem Noord',
     'location.directions': 'Routebeschrijving',
 
-    // Weather
-    'weather.title': 'Weer verwachting',
-    'weather.screeningDay': 'Op de vertoningsdag',
-
     // Contact
     'contact.title': 'Contact',
     'contact.email': 'E-mail',
@@ -93,10 +89,6 @@ export const ui = {
     'location.title': 'Location',
     'location.park': 'Nelson Mandela Park, Haarlem Noord',
     'location.directions': 'Get directions',
-
-    // Weather
-    'weather.title': 'Weather forecast',
-    'weather.screeningDay': 'On screening day',
 
     // Contact
     'contact.title': 'Contact',

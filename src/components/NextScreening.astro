@@ -1,7 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
-import { getWeatherForDate, type WeatherData } from '../lib/weather';
 
 interface Props {
   movie: Movie | null;
@@ -10,19 +9,6 @@ interface Props {
 const { movie } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-let weather: WeatherData | null = null;
-
-// Only fetch weather if movie is within forecast range (typically 16 days)
-if (movie) {
-  const movieDate = new Date(movie.date);
-  const today = new Date();
-  const daysUntil = Math.ceil((movieDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-
-  if (daysUntil >= 0 && daysUntil <= 14) {
-    weather = await getWeatherForDate(movie.date);
-  }
-}
 
 // Format date for display
 function formatDate(dateStr: string): string {
@@ -99,23 +85,6 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
               <span class="detail-value">Nelson Mandelapark, Haarlem</span>
             </div>
           </div>
-
-          {weather && (
-            <div class="detail-card weather-card">
-              <span class="detail-icon">{weather.weatherIcon}</span>
-              <div class="detail-content">
-                <span class="detail-label">{t('weather.title')}</span>
-                <span class="detail-value">
-                  {weather.temperatureMin}° - {weather.temperatureMax}°C
-                  {weather.precipitationProbability > 30 && (
-                    <span class="rain-chance">
-                      💧 {weather.precipitationProbability}%
-                    </span>
-                  )}
-                </span>
-              </div>
-            </div>
-          )}
 
           <div class="rating-badge">
             <span class="rating-label">{lang === 'nl' ? 'Classificatie' : 'Rating'}</span>
@@ -265,11 +234,6 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
 
   .detail-value {
     font-weight: 600;
-  }
-
-  .rain-chance {
-    margin-left: var(--space-sm);
-    color: var(--color-accent);
   }
 
   .rating-badge {

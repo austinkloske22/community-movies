@@ -7,7 +7,7 @@ import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const movies = await getMovies();
+const movies = getMovies();
 const upcomingMovies = getUpcomingMovies(movies);
 const nextMovie = getNextMovie(movies);
 ---
