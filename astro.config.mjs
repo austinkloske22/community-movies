@@ -1,8 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://austinkloske22.github.io',
-  base: '/community-movies',
+  site: 'https://nelsonsfilm.nl',
   i18n: {
     defaultLocale: 'nl',
     locales: ['nl', 'en'],
