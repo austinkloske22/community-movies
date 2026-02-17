@@ -10,7 +10,11 @@
       "Bash(git push:*)",
       "Bash(netlify status:*)",
       "Bash(netlify sites:create:*)",
-      "Bash(netlify deploy:*)"
+      "Bash(netlify deploy:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(git -C /Users/austinkloske/Projects/community-movies log --oneline -10)",
+      "Bash(npm run build:*)"
     ]
   }
 }
