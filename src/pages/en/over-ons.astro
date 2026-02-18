@@ -1,12 +1,21 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import DonateButton from '../../components/DonateButton.astro';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const values = [
+  t('about.value1'),
+  t('about.value2'),
+  t('about.value3'),
+  t('about.value4'),
+  t('about.value5'),
+];
 ---
 
-<BaseLayout title="About" description="About Nelsons Film - free outdoor cinema bringing the neighborhood together in Haarlem Noord">
+<BaseLayout title={t('nav.about')} description={t('about.intro')}>
   <section class="about-page section">
     <div class="container">
       <header class="page-header">
@@ -14,20 +23,22 @@ const t = useTranslations(lang);
       </header>
 
       <div class="about-content">
-        <div class="about-intro">
-          <p class="lead">
-            Nelsons Film brings the neighborhood together with free pop-up cinema in Nelson Mandela Park, Haarlem Noord.
-          </p>
-
-          <p>
-            In recent years, many new people have come to live in Haarlem Noord - young professionals, expats, refugees, and Haarlemmers from other neighborhoods. Nelsons Film was born from the desire to bring all these different people together.
-          </p>
-
-          <p>
-            By offering the same film in multiple languages simultaneously, we create a connecting experience for people who might otherwise never meet. After the film, we provide space to chat and connect.
-          </p>
+        <!-- Mission Section -->
+        <div class="content-section mission">
+          <h2>{t('about.missionTitle')}</h2>
+          <p class="mission-text">{t('about.missionText')}</p>
+          <p class="mission-subtext">{t('about.missionSubtext')}</p>
         </div>
 
+        <!-- History Section -->
+        <div class="content-section">
+          <h2>{t('about.historyTitle')}</h2>
+          <p>{t('about.historyText')}</p>
+          <p>{t('about.historyText2')}</p>
+          <p>{t('about.historyText3')}</p>
+        </div>
+
+        <!-- Photo Gallery -->
         <div class="photo-gallery">
           <h2>Our Events</h2>
           <div class="gallery-grid">
@@ -52,52 +63,36 @@ const t = useTranslations(lang);
           </div>
         </div>
 
-        <div class="about-features">
-          <div class="feature">
-            <span class="feature-icon">📅</span>
-            <h3>When?</h3>
-            <p>
-              Every second Saturday of the month, from May through October. Six film nights per season.
-            </p>
-          </div>
-
-          <div class="feature">
-            <span class="feature-icon">📍</span>
-            <h3>Where?</h3>
-            <p>
-              Nelson Mandela Park, Haarlem Noord
-            </p>
-          </div>
-
-          <div class="feature">
-            <span class="feature-icon">🎧</span>
-            <h3>Languages</h3>
-            <p>
-              View the film schedule for details
-            </p>
-          </div>
-
-          <div class="feature">
-            <span class="feature-icon">🎟️</span>
-            <h3>Admission</h3>
-            <p>
-              Free! Bring your own chair or blanket.
-            </p>
-          </div>
+        <!-- Values Section -->
+        <div class="content-section values">
+          <h2>{t('about.valuesTitle')}</h2>
+          <ul class="values-list">
+            {values.map((value) => (
+              <li>{value}</li>
+            ))}
+          </ul>
+          <p class="values-note">{t('about.valuesSubtext')}</p>
         </div>
 
-        <div class="organizers">
-          <h2>Organizers</h2>
-          <p>
-            Nelsons Film is organized by Niels van Weerdenburg, Thomas Legras & Sylvia, with support from local businesses and the municipality.
-          </p>
+        <!-- Foundation Section -->
+        <div class="content-section foundation">
+          <h2>{t('about.foundationTitle')}</h2>
+          <p>{t('about.foundationText')}</p>
+          <a href={getLocalizedPath('/voor-gemeenten', lang)} class="link-arrow">
+            {t('about.partnerCta')} →
+          </a>
         </div>
 
+        <!-- Donate Section -->
+        <div class="donate-section">
+          <p>{t('about.donateText')}</p>
+          <DonateButton lang={lang} variant="primary" />
+        </div>
+
+        <!-- Sponsors Section -->
         <div class="sponsors">
           <h2>{t('footer.sponsors')}</h2>
-          <p class="text-muted">
-            Made possible by:
-          </p>
+          <p class="text-muted">Made possible by:</p>
           <div class="sponsor-list">
             <a href="https://buurtamsterdam.nl" target="_blank" rel="noopener" class="sponsor">BUURT / Fjörd</a>
             <a href="https://cronje.nl" target="_blank" rel="noopener" class="sponsor">Cronjé</a>
@@ -106,6 +101,17 @@ const t = useTranslations(lang);
             <a href="https://www.haarlem.nl" target="_blank" rel="noopener" class="sponsor">Gemeente Haarlem</a>
             <a href="https://hbphoorne.nl" target="_blank" rel="noopener" class="sponsor">HBP Hoorne</a>
             <a href="https://duizend1.nl" target="_blank" rel="noopener" class="sponsor">Duizend1</a>
+          </div>
+        </div>
+
+        <!-- Press/Links Section -->
+        <div class="press-section">
+          <h2>In the news</h2>
+          <div class="press-links">
+            <a href="https://www.023magazine.nl/cultuur-uitgaan/3149-succesvolle-bewonersinitiatieven" target="_blank" rel="noopener" class="press-link">
+              <span class="press-icon">📰</span>
+              <span>023 Magazine - Successful resident initiatives</span>
+            </a>
           </div>
         </div>
       </div>
@@ -128,20 +134,77 @@ const t = useTranslations(lang);
     margin: 0 auto;
   }
 
-  .about-intro {
+  .content-section {
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
     margin-bottom: var(--space-xl);
   }
 
-  .lead {
-    font-size: 1.25rem;
-    color: var(--color-text);
-    margin-bottom: var(--space-lg);
+  .content-section h2 {
+    margin-bottom: var(--space-md);
   }
 
-  .about-intro p {
+  .content-section p {
     color: var(--color-text-muted);
     line-height: 1.8;
     margin-bottom: var(--space-md);
+  }
+
+  .content-section p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .mission {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.08), rgba(244, 162, 97, 0.04));
+    border: 1px solid rgba(233, 69, 96, 0.15);
+  }
+
+  .mission-text {
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .mission-subtext {
+    font-style: italic;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--space-md);
+  }
+
+  .values-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .values-list li {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .values-note {
+    font-style: italic;
+    text-align: center;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .link-arrow {
+    display: inline-block;
+    color: var(--color-accent);
+    font-weight: 500;
+    margin-top: var(--space-md);
+  }
+
+  .link-arrow:hover {
+    color: var(--color-accent-light);
   }
 
   .photo-gallery {
@@ -181,59 +244,27 @@ const t = useTranslations(lang);
     transform: scale(1.05);
   }
 
-  @media (max-width: 768px) {
-    .gallery-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .gallery-item.featured {
-      grid-column: span 2;
-      grid-row: span 1;
-      aspect-ratio: 16 / 9;
-    }
-  }
-
-  .about-features {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-lg);
+  .donate-section {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(244, 162, 97, 0.05));
+    border: 1px solid rgba(233, 69, 96, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
     margin-bottom: var(--space-xl);
   }
 
-  .feature {
-    background: var(--color-card);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-  }
-
-  .feature-icon {
-    font-size: 2rem;
-    display: block;
-    margin-bottom: var(--space-sm);
-  }
-
-  .feature h3 {
-    margin-bottom: var(--space-sm);
-  }
-
-  .feature p {
+  .donate-section p {
     color: var(--color-text-muted);
-    font-size: 0.9rem;
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
   }
 
-  .organizers,
   .sponsors {
     margin-bottom: var(--space-xl);
   }
 
-  .organizers h2,
   .sponsors h2 {
     margin-bottom: var(--space-md);
-  }
-
-  .organizers p {
-    color: var(--color-text-muted);
-    line-height: 1.7;
   }
 
   .sponsor-list {
@@ -261,8 +292,57 @@ const t = useTranslations(lang);
     transform: translateY(-2px);
   }
 
-  @media (max-width: 600px) {
-    .about-features {
+  .press-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  .press-section h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .press-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .press-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-card);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .press-link:hover {
+    background: var(--color-card-hover);
+    transform: translateX(4px);
+  }
+
+  .press-icon {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-item.featured {
+      grid-column: span 2;
+      grid-row: span 1;
+      aspect-ratio: 16 / 9;
+    }
+
+    .content-section {
+      padding: var(--space-lg);
+    }
+
+    .values-list {
       grid-template-columns: 1fr;
     }
   }

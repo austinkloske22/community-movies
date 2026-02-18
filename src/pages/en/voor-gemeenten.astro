@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const benefits = [
+  t('municipalities.why1'),
+  t('municipalities.why2'),
+  t('municipalities.why3'),
+  t('municipalities.why4'),
+  t('municipalities.why5'),
+];
+
+const connections = [
+  t('municipalities.connected1'),
+  t('municipalities.connected2'),
+  t('municipalities.connected3'),
+  t('municipalities.connected4'),
+];
+---
+
+<BaseLayout title={t('nav.municipalities')} description={t('municipalities.introText')}>
+  <section class="municipalities-page section">
+    <div class="container">
+      <!-- Hero Section -->
+      <header class="page-header">
+        <h1>{t('municipalities.title')}</h1>
+        <p class="page-intro">{t('municipalities.intro')}</p>
+        <p class="page-subtext">{t('municipalities.introText')}</p>
+        <a href={getLocalizedPath('/contact', lang)} class="btn btn-primary">
+          {t('municipalities.cta')}
+        </a>
+      </header>
+
+      <!-- Why Section -->
+      <div class="content-section">
+        <h2>{t('municipalities.whyTitle')}</h2>
+        <ul class="benefits-list">
+          {benefits.map((benefit) => (
+            <li>
+              <span class="check-icon">✓</span>
+              {benefit}
+            </li>
+          ))}
+        </ul>
+        <p class="section-note">{t('municipalities.whySubtext')}</p>
+      </div>
+
+      <!-- Total Concept Section -->
+      <div class="content-section highlight">
+        <h2>{t('municipalities.conceptTitle')}</h2>
+        <p>{t('municipalities.conceptText')}</p>
+        <p class="details">{t('municipalities.conceptDetails')}</p>
+      </div>
+
+      <!-- Local Ownership Section -->
+      <div class="content-section">
+        <h2>{t('municipalities.localTitle')}</h2>
+        <p>{t('municipalities.localText')}</p>
+        <p class="emphasis">{t('municipalities.localSubtext')}</p>
+      </div>
+
+      <!-- Locally Supported Section -->
+      <div class="content-section alt">
+        <h2>{t('municipalities.connectedTitle')}</h2>
+        <p>{t('municipalities.connectedText')}</p>
+        <ul class="connections-list">
+          {connections.map((connection) => (
+            <li>{connection}</li>
+          ))}
+        </ul>
+        <p class="section-note">{t('municipalities.connectedSubtext')}</p>
+      </div>
+
+      <!-- Foundation Section -->
+      <div class="content-section">
+        <h2>{t('municipalities.foundationTitle')}</h2>
+        <p>{t('municipalities.foundationText')}</p>
+        <p class="goal">{t('municipalities.goal')}</p>
+        <a href={getLocalizedPath('/over-ons', lang)} class="link-arrow">
+          {t('about.partnerCta')} →
+        </a>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="cta-section">
+        <h2>{t('municipalities.curiousTitle')}</h2>
+        <p>{t('municipalities.curiousText')}</p>
+        <div class="cta-buttons">
+          <a href={getLocalizedPath('/contact', lang)} class="btn btn-primary">
+            {t('municipalities.meetingCta')}
+          </a>
+          <a href="tel:+31657576047" class="btn btn-secondary">
+            📞 +31 6 57576047
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .municipalities-page {
+    min-height: 80vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .page-header h1 {
+    margin-bottom: var(--space-md);
+  }
+
+  .page-intro {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-subtext {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    max-width: 700px;
+    margin: 0 auto var(--space-lg);
+    line-height: 1.7;
+  }
+
+  .content-section {
+    max-width: 800px;
+    margin: 0 auto var(--space-xl);
+    padding: var(--space-xl);
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+  }
+
+  .content-section.highlight {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.08), rgba(244, 162, 97, 0.04));
+    border: 1px solid rgba(233, 69, 96, 0.15);
+  }
+
+  .content-section.alt {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .content-section h2 {
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .content-section p {
+    color: var(--color-text-muted);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+  }
+
+  .content-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  .details {
+    font-size: 0.95rem;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .emphasis {
+    font-weight: 500;
+    color: var(--color-text);
+    font-style: italic;
+  }
+
+  .goal {
+    font-weight: 600;
+    color: var(--color-accent);
+    font-size: 1.1rem;
+  }
+
+  .benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+  }
+
+  .benefits-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    color: var(--color-text);
+    font-size: 1.05rem;
+  }
+
+  .check-icon {
+    color: var(--color-accent);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .connections-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-md) 0;
+  }
+
+  .connections-list li {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .section-note {
+    font-style: italic;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--space-md);
+  }
+
+  .link-arrow {
+    display: inline-block;
+    color: var(--color-accent);
+    font-weight: 500;
+    margin-top: var(--space-sm);
+  }
+
+  .link-arrow:hover {
+    color: var(--color-accent-light);
+  }
+
+  .cta-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.12), rgba(244, 162, 97, 0.06));
+    border: 2px solid rgba(233, 69, 96, 0.3);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .cta-section p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 768px) {
+    .content-section {
+      padding: var(--space-lg);
+    }
+
+    .connections-list {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-buttons .btn {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+</style>

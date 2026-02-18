@@ -15,13 +15,16 @@ const t = useTranslations(lang);
         <span class="hero-icon">🎬</span>
         {t('hero.title')}
       </h1>
+      <p class="hero-slogan fade-in">
+        {t('hero.slogan')}
+      </p>
       <p class="hero-subtitle fade-in">
         {t('hero.subtitle')}
       </p>
       <div class="hero-info fade-in">
         <div class="hero-badge">
           <span class="badge-icon">📅</span>
-          <span>{lang === 'nl' ? 'Elke 2e zaterdag van de maand - Mei tot en met oktober' : 'Every 2nd Saturday of the month - May - Oct'}</span>
+          <span>{t('schedule.everySecondSaturday')}</span>
         </div>
         <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="hero-badge hero-badge-link">
           <span class="badge-icon">📍</span>
@@ -32,12 +35,17 @@ const t = useTranslations(lang);
           <span>{lang === 'nl' ? 'Gratis toegang' : 'Free admission'}</span>
         </div>
       </div>
-      <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary hero-cta fade-in">
-        {t('hero.cta')}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
+      <div class="hero-ctas fade-in">
+        <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary hero-cta">
+          {t('hero.cta')}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-secondary hero-cta-secondary">
+          {t('hero.ctaMunicipalities')}
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -45,7 +53,7 @@ const t = useTranslations(lang);
 <style>
   .hero {
     position: relative;
-    min-height: 80vh;
+    min-height: 90vh;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -76,7 +84,7 @@ const t = useTranslations(lang);
   .hero-content {
     position: relative;
     text-align: center;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
   }
 
@@ -85,17 +93,31 @@ const t = useTranslations(lang);
     align-items: center;
     justify-content: center;
     gap: var(--space-md);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
   }
 
   .hero-icon {
     font-size: clamp(3rem, 8vw, 5rem);
   }
 
+  .hero-slogan {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   .hero-subtitle {
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-size: clamp(1rem, 2vw, 1.25rem);
     color: var(--color-text-muted);
     margin-bottom: var(--space-lg);
+    line-height: 1.7;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-info {
@@ -134,9 +156,21 @@ const t = useTranslations(lang);
     color: var(--color-accent);
   }
 
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
   .hero-cta {
     font-size: 1.125rem;
     padding: var(--space-md) var(--space-xl);
+  }
+
+  .hero-cta-secondary {
+    font-size: 1rem;
+    padding: var(--space-md) var(--space-lg);
   }
 
   .fade-in {
@@ -148,6 +182,10 @@ const t = useTranslations(lang);
     animation-delay: 0.1s;
   }
 
+  .hero-slogan.fade-in {
+    animation-delay: 0.15s;
+  }
+
   .hero-subtitle.fade-in {
     animation-delay: 0.2s;
   }
@@ -156,13 +194,13 @@ const t = useTranslations(lang);
     animation-delay: 0.3s;
   }
 
-  .hero-cta.fade-in {
+  .hero-ctas.fade-in {
     animation-delay: 0.4s;
   }
 
   @media (max-width: 768px) {
     .hero {
-      min-height: 70vh;
+      min-height: 85vh;
     }
 
     .hero-title {
@@ -173,6 +211,17 @@ const t = useTranslations(lang);
     .hero-info {
       flex-direction: column;
       align-items: center;
+    }
+
+    .hero-ctas {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-cta,
+    .hero-cta-secondary {
+      width: 100%;
+      max-width: 300px;
     }
   }
 </style>
