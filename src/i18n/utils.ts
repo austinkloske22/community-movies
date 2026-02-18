@@ -16,32 +16,19 @@ export function getRouteFromUrl(url: URL): string {
   const pathname = url.pathname;
   const parts = pathname.split('/').filter(Boolean);
 
+  // If first part is a language code, return the rest of the path
   if (parts[0] in ui) {
-    return '/' + parts.slice(1).join('/');
+    const route = '/' + parts.slice(1).join('/');
+    return route === '/' ? '' : route;
   }
-  return pathname;
+  // Otherwise return the pathname (for default language)
+  return pathname === '/' ? '' : pathname;
 }
 
-// Route translations between languages
-const routeTranslations: Record<string, Record<string, string>> = {
-  nl: {
-    '/schedule': '/programma',
-    '/about': '/over-ons',
-    '/contact': '/contact',
-  },
-  en: {
-    '/programma': '/schedule',
-    '/over-ons': '/about',
-    '/contact': '/contact',
-  },
-};
-
+// Simple localized path - same paths for all languages, just add prefix
 export function getLocalizedPath(path: string, lang: keyof typeof ui): string {
-  // Translate route if needed
-  const translatedPath = routeTranslations[lang]?.[path] || path;
-
   if (lang === defaultLang) {
-    return translatedPath;
+    return path || '/';
   }
-  return `/${lang}${translatedPath}`;
+  return `/${lang}${path}`;
 }

@@ -5,32 +5,13 @@ import { getLangFromUrl, getRouteFromUrl } from '../i18n/utils';
 const currentLang = getLangFromUrl(Astro.url);
 const route = getRouteFromUrl(Astro.url);
 
-// Route translations between Dutch and English
-const routeMap: Record<string, Record<string, string>> = {
-  nl: {
-    '/schedule': '/programma',
-    '/about': '/over-ons',
-    '/contact': '/contact',
-  },
-  en: {
-    '/programma': '/schedule',
-    '/over-ons': '/about',
-    '/contact': '/contact',
-  },
-};
-
-function getTranslatedRoute(targetLang: string, currentRoute: string): string {
-  if (!currentRoute || currentRoute === '/') return '';
-  const map = routeMap[targetLang];
-  return map?.[currentRoute] || currentRoute;
-}
-
+// Simple language switching - paths stay the same, only prefix changes
 function buildHref(targetLang: string): string {
-  const translatedRoute = getTranslatedRoute(targetLang, route);
+  const path = route || '';
   if (targetLang === 'nl') {
-    return translatedRoute || '/';
+    return path || '/';
   }
-  return `/${targetLang}${translatedRoute || ''}`;
+  return `/${targetLang}${path}`;
 }
 ---
 

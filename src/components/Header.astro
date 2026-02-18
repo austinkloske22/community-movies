@@ -6,13 +6,8 @@ import LanguagePicker from './LanguagePicker.astro';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Different paths for Dutch vs English
-const navItems = lang === 'en' ? [
-  { href: '/', label: t('nav.home') },
-  { href: '/schedule', label: t('nav.schedule') },
-  { href: '/about', label: t('nav.about') },
-  { href: '/contact', label: t('nav.contact') },
-] : [
+// Same paths for all languages (Dutch path names)
+const navItems = [
   { href: '/', label: t('nav.home') },
   { href: '/programma', label: t('nav.schedule') },
   { href: '/over-ons', label: t('nav.about') },
