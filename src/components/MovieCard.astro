@@ -27,6 +27,54 @@ function getAgeIcon(age: string): string {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
+// Convert language codes to full names
+function getLanguageName(code: string | undefined): string {
+  if (!code) return '';
+  const normalized = code.toLowerCase().trim();
+
+  // Language name mappings (displayed based on site language)
+  const languageNames: Record<string, { nl: string; en: string }> = {
+    'en': { nl: 'Engels', en: 'English' },
+    'nl': { nl: 'Nederlands', en: 'Dutch' },
+    'de': { nl: 'Duits', en: 'German' },
+    'fr': { nl: 'Frans', en: 'French' },
+    'es': { nl: 'Spaans', en: 'Spanish' },
+    'it': { nl: 'Italiaans', en: 'Italian' },
+    'pt': { nl: 'Portugees', en: 'Portuguese' },
+    'ja': { nl: 'Japans', en: 'Japanese' },
+    'ko': { nl: 'Koreaans', en: 'Korean' },
+    'zh': { nl: 'Chinees', en: 'Chinese' },
+    'ru': { nl: 'Russisch', en: 'Russian' },
+    'ar': { nl: 'Arabisch', en: 'Arabic' },
+    'hi': { nl: 'Hindi', en: 'Hindi' },
+    'english': { nl: 'Engels', en: 'English' },
+    'dutch': { nl: 'Nederlands', en: 'Dutch' },
+    'german': { nl: 'Duits', en: 'German' },
+    'french': { nl: 'Frans', en: 'French' },
+    'spanish': { nl: 'Spaans', en: 'Spanish' },
+    'italian': { nl: 'Italiaans', en: 'Italian' },
+    'portuguese': { nl: 'Portugees', en: 'Portuguese' },
+    'japanese': { nl: 'Japans', en: 'Japanese' },
+    'korean': { nl: 'Koreaans', en: 'Korean' },
+    'chinese': { nl: 'Chinees', en: 'Chinese' },
+    'russian': { nl: 'Russisch', en: 'Russian' },
+    'arabic': { nl: 'Arabisch', en: 'Arabic' },
+    'nederlands': { nl: 'Nederlands', en: 'Dutch' },
+    'engels': { nl: 'Engels', en: 'English' },
+    'duits': { nl: 'Duits', en: 'German' },
+    'frans': { nl: 'Frans', en: 'French' },
+    'spaans': { nl: 'Spaans', en: 'Spanish' },
+  };
+
+  const mapping = languageNames[normalized];
+  if (mapping) {
+    return lang === 'nl' ? mapping.nl : mapping.en;
+  }
+
+  // Return original if no mapping found (capitalize first letter)
+  return code.charAt(0).toUpperCase() + code.slice(1);
+}
+
 // Get description based on current language
 const description = lang === 'nl' ? descriptionNl : descriptionEn;
 
@@ -89,12 +137,12 @@ function formatDate(dateStr: string): string {
       <div class="movie-languages">
         {language && !['TBA', 'n/a', 'N/A', ''].includes(language) && (
           <span class="lang-tag" title={lang === 'nl' ? 'Gesproken taal' : 'Spoken language'}>
-            🗣️ {language}
+            🗣️ {lang === 'nl' ? 'Taal' : 'Language'}: {getLanguageName(language)}
           </span>
         )}
         {subtitles && !['TBA', 'n/a', 'N/A', ''].includes(subtitles) && (
           <span class="lang-tag" title={lang === 'nl' ? 'Ondertiteling' : 'Subtitles'}>
-            💬 {subtitles}
+            💬 {lang === 'nl' ? 'Ondertiteling' : 'Subtitles'}: {getLanguageName(subtitles)}
           </span>
         )}
         {headphones && !['TBA', 'n/a', 'N/A', ''].includes(headphones) && (

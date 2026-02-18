@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../../components/MovieCard.astro';
 import { getMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -12,14 +12,26 @@ const upcomingMovies = getUpcomingMovies(movies);
 const nextMovie = getNextMovie(movies);
 ---
 
-<BaseLayout title="Schedule" description="View the full Nelsons Film schedule - free outdoor cinema in Haarlem Noord">
+<BaseLayout title={t('schedule.title')} description="View the full Nelsons Film schedule - free outdoor cinema in Haarlem Noord">
   <section class="schedule-page section">
     <div class="container">
+      <!-- Location Header -->
+      <div class="location-header">
+        <div class="location-badge active">
+          <span class="badge-icon">📍</span>
+          <div class="badge-content">
+            <span class="badge-city">{t('schedule.locationHaarlem')}</span>
+            <span class="badge-park">{t('schedule.locationPark')}</span>
+          </div>
+          <span class="status-indicator">Active</span>
+        </div>
+      </div>
+
       <header class="page-header">
-        <h1>{t('schedule.title')}</h1>
-        <p class="page-subtitle">
-          Every second Saturday of the month, May through October
-        </p>
+        <h1>{t('schedule.title')} — {t('schedule.locationHaarlem')}</h1>
+        <p class="page-subtitle">{t('schedule.everySecondSaturday')}</p>
+        <p class="page-info">{t('schedule.selectionInfo')}</p>
+        <p class="page-free">{t('schedule.freeInfo')}</p>
       </header>
 
       {upcomingMovies.length > 0 ? (
@@ -50,16 +62,38 @@ const nextMovie = getNextMovie(movies);
       <div class="schedule-info">
         <div class="info-card">
           <h3>🎧 Multilingual experience</h3>
-          <p>
-            Check the film schedule for spoken language and subtitle details
-          </p>
+          <p>Check the film schedule for spoken language and subtitle details</p>
         </div>
 
         <div class="info-card">
           <h3>🪑 What to bring?</h3>
-          <p>
-            Bring your own chair or blanket. Arrive early as spaces are limited!
-          </p>
+          <p>Bring your own chair or blanket. Arrive early as spaces are limited!</p>
+        </div>
+
+        <div class="info-card location-card">
+          <h3>📍 {t('location.title')}</h3>
+          <p>{t('schedule.locationPark')}, {t('schedule.locationHaarlem')}</p>
+          <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="map-link">
+            {t('location.directions')} →
+          </a>
+        </div>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div class="coming-soon-section">
+        <div class="coming-soon-content">
+          <div class="coming-soon-icon">🌍</div>
+          <h2>{t('schedule.expandingTitle')}</h2>
+          <p>{t('schedule.expandingText')}</p>
+          <div class="coming-soon-locations">
+            <div class="location-preview">
+              <span class="preview-icon">🔜</span>
+              <span class="preview-text">{t('schedule.comingSoon')}</span>
+            </div>
+          </div>
+          <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-primary">
+            {t('schedule.expandingCta')}
+          </a>
         </div>
       </div>
     </div>
@@ -71,6 +105,58 @@ const nextMovie = getNextMovie(movies);
     min-height: 80vh;
   }
 
+  .location-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .location-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .location-badge.active {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(244, 162, 97, 0.05));
+    border-color: rgba(233, 69, 96, 0.3);
+  }
+
+  .badge-icon {
+    font-size: 1.5rem;
+  }
+
+  .badge-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .badge-city {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .badge-park {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .status-indicator {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--color-accent);
+    color: white;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+  }
+
   .page-header {
     text-align: center;
     margin-bottom: var(--space-xl);
@@ -79,6 +165,22 @@ const nextMovie = getNextMovie(movies);
   .page-subtitle {
     color: var(--color-text-muted);
     font-size: 1.125rem;
+    margin-top: var(--space-sm);
+  }
+
+  .page-info {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    margin-top: var(--space-md);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .page-free {
+    color: var(--color-accent);
+    font-size: 0.95rem;
+    font-weight: 500;
     margin-top: var(--space-sm);
   }
 
@@ -94,9 +196,10 @@ const nextMovie = getNextMovie(movies);
 
   .schedule-info {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--space-lg);
     margin-top: var(--space-xl);
+    margin-bottom: var(--space-xl);
   }
 
   .info-card {
@@ -112,5 +215,86 @@ const nextMovie = getNextMovie(movies);
   .info-card p {
     color: var(--color-text-muted);
     line-height: 1.7;
+  }
+
+  .location-card .map-link {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .location-card .map-link:hover {
+    color: var(--color-accent-light);
+  }
+
+  /* Coming Soon Section */
+  .coming-soon-section {
+    margin-top: var(--space-xl);
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .coming-soon-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .coming-soon-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .coming-soon-section h2 {
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .coming-soon-section p {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+  }
+
+  .coming-soon-locations {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .location-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    opacity: 0.7;
+  }
+
+  .preview-icon {
+    font-size: 1.25rem;
+  }
+
+  .preview-text {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .location-badge {
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .badge-content {
+      align-items: center;
+    }
   }
 </style>

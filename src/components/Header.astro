@@ -6,13 +6,31 @@ import LanguagePicker from './LanguagePicker.astro';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
+// Locations for the schedule dropdown
+const locations = [
+  {
+    id: 'haarlem',
+    name: t('schedule.locationHaarlem'),
+    park: t('schedule.locationPark'),
+    href: '/programma',
+    active: true
+  },
+  {
+    id: 'coming-soon',
+    name: t('schedule.comingSoon'),
+    park: null,
+    href: null,
+    active: false
+  }
+];
+
 // Same paths for all languages (Dutch path names)
 const navItems = [
-  { href: '/', label: t('nav.home') },
-  { href: '/programma', label: t('nav.schedule') },
-  { href: '/over-ons', label: t('nav.about') },
-  { href: '/voor-gemeenten', label: t('nav.municipalities') },
-  { href: '/contact', label: t('nav.contact') },
+  { href: '/', label: t('nav.home'), hasDropdown: false },
+  { href: '/programma', label: t('nav.schedule'), hasDropdown: true },
+  { href: '/over-ons', label: t('nav.about'), hasDropdown: false },
+  { href: '/voor-gemeenten', label: t('nav.municipalities'), hasDropdown: false },
+  { href: '/contact', label: t('nav.contact'), hasDropdown: false },
 ];
 ---
 
@@ -35,10 +53,52 @@ const navItems = [
 
       <ul class="nav-links">
         {navItems.map((item) => (
-          <li>
-            <a href={getLocalizedPath(item.href, lang)} class="nav-link">
-              {item.label}
-            </a>
+          <li class={item.hasDropdown ? 'has-dropdown' : ''}>
+            {item.hasDropdown ? (
+              <>
+                <a href={getLocalizedPath(item.href, lang)} class="nav-link">
+                  {item.label}
+                  <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-header">
+                    <span class="dropdown-title">{t('schedule.locations')}</span>
+                  </div>
+                  {locations.map((location) => (
+                    location.active ? (
+                      <a href={getLocalizedPath(location.href!, lang)} class="dropdown-item active">
+                        <span class="location-icon">📍</span>
+                        <div class="location-info">
+                          <span class="location-name">{location.name}</span>
+                          <span class="location-park">{location.park}</span>
+                        </div>
+                        <span class="active-badge">{lang === 'nl' ? 'Actief' : 'Active'}</span>
+                      </a>
+                    ) : (
+                      <div class="dropdown-item coming-soon">
+                        <span class="location-icon">🔜</span>
+                        <div class="location-info">
+                          <span class="location-name">{location.name}</span>
+                          <span class="location-park">{lang === 'nl' ? 'Nieuwe locaties volgen' : 'New locations coming'}</span>
+                        </div>
+                      </div>
+                    )
+                  ))}
+                  <a href={getLocalizedPath('/voor-gemeenten', lang)} class="dropdown-cta">
+                    {lang === 'nl' ? 'Nelsons Film in jouw gemeente?' : 'Nelsons Film in your area?'}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </a>
+                </div>
+              </>
+            ) : (
+              <a href={getLocalizedPath(item.href, lang)} class="nav-link">
+                {item.label}
+              </a>
+            )}
           </li>
         ))}
         <li class="lang-picker-wrapper">
@@ -93,6 +153,9 @@ const navItems = [
   }
 
   .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     color: var(--color-text-muted);
     font-weight: 500;
     transition: color var(--transition-fast);
@@ -100,6 +163,130 @@ const navItems = [
 
   .nav-link:hover {
     color: var(--color-text);
+  }
+
+  .dropdown-arrow {
+    transition: transform var(--transition-fast);
+  }
+
+  /* Dropdown styles */
+  .has-dropdown {
+    position: relative;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    min-width: 280px;
+    background: var(--color-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-sm);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .has-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .has-dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-header {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: var(--space-xs);
+  }
+
+  .dropdown-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .dropdown-item.active {
+    background: rgba(233, 69, 96, 0.1);
+    border: 1px solid rgba(233, 69, 96, 0.2);
+  }
+
+  .dropdown-item.coming-soon {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .location-icon {
+    font-size: 1.25rem;
+  }
+
+  .location-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .location-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .location-park {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .active-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--color-accent);
+    color: white;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .dropdown-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    margin-top: var(--space-xs);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .dropdown-cta:hover {
+    color: var(--color-accent-light);
   }
 
   .mobile-actions {
@@ -175,12 +362,30 @@ const navItems = [
       opacity: 0;
       visibility: hidden;
       transition: all var(--transition-normal);
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
     }
 
     .nav-links.open {
       transform: translateY(0);
       opacity: 1;
       visibility: visible;
+    }
+
+    /* Mobile dropdown - always visible when menu is open */
+    .has-dropdown .dropdown-menu {
+      position: static;
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+      min-width: 100%;
+      margin-top: var(--space-sm);
+      box-shadow: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-arrow {
+      transform: rotate(180deg);
     }
 
     /* Hide language picker inside mobile menu since it's now in the header */
