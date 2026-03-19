@@ -88,7 +88,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
             <span class="detail-icon">📍</span>
             <div class="detail-content">
               <span class="detail-label">{t('location.title')}</span>
-              <span class="detail-value">Nelson Mandelapark, Haarlem</span>
+              <span class="detail-value">{movie.location || 'Nelson Mandelapark, Haarlem'}</span>
             </div>
           </div>
 

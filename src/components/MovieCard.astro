@@ -15,9 +15,10 @@ interface Props {
   previewUrl?: string;
   imageUrl?: string;
   isNext?: boolean;
+  location?: string;
 }
 
-const { title, descriptionNl, descriptionEn, rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext } = Astro.props;
+const { title, descriptionNl, descriptionEn, rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext, location } = Astro.props;
 
 // Get age icon path
 function getAgeIcon(age: string): string {
@@ -133,7 +134,7 @@ function formatDate(dateStr: string): string {
     <h3 class="movie-title">{title}</h3>
     <p class="movie-description">{description}</p>
 
-    {(language || subtitles || headphones) && (
+    {(language || subtitles || headphones || (location && location !== 'Nelson Mandelapark')) && (
       <div class="movie-languages">
         {language && !['TBA', 'n/a', 'N/A', ''].includes(language) && (
           <span class="lang-tag" title={lang === 'nl' ? 'Gesproken taal' : 'Spoken language'}>
@@ -148,6 +149,11 @@ function formatDate(dateStr: string): string {
         {headphones && !['TBA', 'n/a', 'N/A', ''].includes(headphones) && (
           <span class="lang-tag" title={lang === 'nl' ? 'Koptelefoon' : 'Headphones'}>
             🎧 {headphones}
+          </span>
+        )}
+        {location && location !== 'Nelson Mandelapark' && (
+          <span class="lang-tag location-tag" title={lang === 'nl' ? 'Locatie' : 'Location'}>
+            📍 {location}
           </span>
         )}
       </div>
@@ -296,5 +302,13 @@ function formatDate(dateStr: string): string {
     border-radius: var(--radius-sm);
     font-size: 0.75rem;
     color: var(--color-text-muted);
+  }
+
+  .lang-tag.location-tag {
+    background: var(--color-accent, #e94560);
+    color: #ffffff;
+    border-color: var(--color-accent, #e94560);
+    font-weight: 600;
+    width: 100%;
   }
 </style>
