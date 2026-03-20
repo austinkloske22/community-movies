@@ -22,19 +22,21 @@ const t = useTranslations(lang);
         {t('hero.subtitle')}
       </p>
       <div class="hero-info fade-in">
-        <div class="hero-badge">
-          <span class="badge-icon">📅</span>
-          <span>{t('schedule.everySecondSaturday')}</span>
-        </div>
-        <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="hero-badge hero-badge-link hero-badge-active">
+        <a href={getLocalizedPath('/programma/haarlem', lang)} class="hero-badge hero-badge-link hero-badge-active">
           <span class="badge-icon">📍</span>
-          <span>Nelson Mandelapark, Haarlem</span>
+          <span>Haarlem</span>
           <span class="active-indicator">{lang === 'nl' ? 'Actief' : 'Active'}</span>
         </a>
-        <div class="hero-badge hero-badge-coming-soon">
-          <span class="badge-icon blue-pin">📍</span>
-          <span>{lang === 'nl' ? 'Binnenkort in jouw gemeente' : 'Coming soon in your municipality'}</span>
-        </div>
+        <a href={getLocalizedPath('/programma/tiel', lang)} class="hero-badge hero-badge-link hero-badge-announced">
+          <span class="badge-icon">📍</span>
+          <span>Tiel</span>
+          <span class="announced-indicator">{lang === 'nl' ? 'Aangekondigd' : 'Announced'}</span>
+        </a>
+        <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="hero-badge hero-badge-link hero-badge-announced">
+          <span class="badge-icon">📍</span>
+          <span>IJmuiden</span>
+          <span class="announced-indicator">{lang === 'nl' ? 'Aangekondigd' : 'Announced'}</span>
+        </a>
         <div class="hero-badge">
           <span class="badge-icon">🎟️</span>
           <span>{lang === 'nl' ? 'Gratis toegang' : 'Free admission'}</span>
@@ -178,13 +180,21 @@ const t = useTranslations(lang);
     margin-left: var(--space-xs);
   }
 
-  .hero-badge-coming-soon {
-    opacity: 0.5;
-    border-style: dashed;
+  .hero-badge-announced {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
-  .blue-pin {
-    filter: hue-rotate(200deg) saturate(1.5);
+  .announced-indicator {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-muted);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    margin-left: var(--space-xs);
   }
 
   .hero-ctas {
