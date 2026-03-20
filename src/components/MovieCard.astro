@@ -136,7 +136,7 @@ function formatDate(dateStr: string): string {
     <h3 class="movie-title">{title}</h3>
     <p class="movie-description">{description}</p>
 
-    {(language || subtitles || headphones || (location && location !== 'Nelson Mandelapark')) && (
+    {(language || subtitles || headphones || location) && (
       <div class="movie-languages">
         {language && !['TBA', 'n/a', 'N/A', ''].includes(language) && (
           <span class="lang-tag" title={lang === 'nl' ? 'Gesproken taal' : 'Spoken language'}>
@@ -153,7 +153,7 @@ function formatDate(dateStr: string): string {
             🎧 {headphones}
           </span>
         )}
-        {location && location !== 'Nelson Mandelapark' && (
+        {location && (
           <span class="lang-tag location-tag" title={lang === 'nl' ? 'Locatie' : 'Location'}>
             📍 {location}
           </span>
@@ -281,10 +281,6 @@ function formatDate(dateStr: string): string {
     color: var(--color-text-muted);
     font-size: 0.9rem;
     line-height: 1.6;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 
   .movie-languages {
