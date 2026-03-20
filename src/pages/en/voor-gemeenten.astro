@@ -34,44 +34,48 @@ const connections = [
         </a>
       </header>
 
-      <!-- Why Section -->
-      <div class="content-section">
-        <h2>{t('municipalities.whyTitle')}</h2>
-        <ul class="benefits-list">
-          {benefits.map((benefit) => (
-            <li>
-              <span class="check-icon">✓</span>
-              {benefit}
-            </li>
-          ))}
-        </ul>
-        <p class="section-note">{t('municipalities.whySubtext')}</p>
+      <div class="split-section split-50-50">
+        <!-- Why Section -->
+        <div class="content-section">
+          <h2>{t('municipalities.whyTitle')}</h2>
+          <ul class="benefits-list">
+            {benefits.map((benefit) => (
+              <li>
+                <span class="check-icon">✓</span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+          <p class="section-note">{t('municipalities.whySubtext')}</p>
+        </div>
+
+        <!-- Total Concept Section -->
+        <div class="content-section highlight">
+          <h2>{t('municipalities.conceptTitle')}</h2>
+          <p>{t('municipalities.conceptText')}</p>
+          <p class="details">{t('municipalities.conceptDetails')}</p>
+        </div>
       </div>
 
-      <!-- Total Concept Section -->
-      <div class="content-section highlight">
-        <h2>{t('municipalities.conceptTitle')}</h2>
-        <p>{t('municipalities.conceptText')}</p>
-        <p class="details">{t('municipalities.conceptDetails')}</p>
-      </div>
+      <div class="split-section split-50-50">
+        <!-- Local Ownership Section -->
+        <div class="content-section">
+          <h2>{t('municipalities.localTitle')}</h2>
+          <p>{t('municipalities.localText')}</p>
+          <p class="emphasis">{t('municipalities.localSubtext')}</p>
+        </div>
 
-      <!-- Local Ownership Section -->
-      <div class="content-section">
-        <h2>{t('municipalities.localTitle')}</h2>
-        <p>{t('municipalities.localText')}</p>
-        <p class="emphasis">{t('municipalities.localSubtext')}</p>
-      </div>
-
-      <!-- Locally Supported Section -->
-      <div class="content-section alt">
-        <h2>{t('municipalities.connectedTitle')}</h2>
-        <p>{t('municipalities.connectedText')}</p>
-        <ul class="connections-list">
-          {connections.map((connection) => (
-            <li>{connection}</li>
-          ))}
-        </ul>
-        <p class="section-note">{t('municipalities.connectedSubtext')}</p>
+        <!-- Locally Supported Section -->
+        <div class="content-section alt">
+          <h2>{t('municipalities.connectedTitle')}</h2>
+          <p>{t('municipalities.connectedText')}</p>
+          <ul class="connections-list">
+            {connections.map((connection) => (
+              <li>{connection}</li>
+            ))}
+          </ul>
+          <p class="section-note">{t('municipalities.connectedSubtext')}</p>
+        </div>
       </div>
 
       <!-- Foundation Section -->
@@ -132,7 +136,7 @@ const connections = [
   }
 
   .content-section {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 0 auto var(--space-xl);
     padding: var(--space-xl);
     background: var(--color-card);
@@ -238,6 +242,21 @@ const connections = [
     color: var(--color-accent-light);
   }
 
+  .split-section {
+    display: grid;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    align-items: start;
+  }
+
+  .split-50-50 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .split-section > .content-section {
+    margin-bottom: 0;
+  }
+
   .cta-section {
     max-width: 800px;
     margin: 0 auto;
@@ -267,6 +286,10 @@ const connections = [
   }
 
   @media (max-width: 768px) {
+    .split-section {
+      grid-template-columns: 1fr;
+    }
+
     .content-section {
       padding: var(--space-lg);
     }

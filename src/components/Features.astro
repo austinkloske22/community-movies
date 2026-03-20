@@ -22,47 +22,50 @@ const moreThanItems = [
 
 <section class="features-section section">
   <div class="container">
-    <!-- For Everyone Section -->
-    <div class="content-block">
-      <h2 class="section-title">{t('home.forEveryoneTitle')}</h2>
-      <p class="section-text">{t('home.forEveryoneText')}</p>
+    <!-- For Everyone Section — 60/40 split -->
+    <div class="split-section split-60-40">
+      <div class="split-left">
+        <h2 class="section-title">{t('home.forEveryoneTitle')}</h2>
+        <p class="section-text">{t('home.forEveryoneText')}</p>
+        <p class="section-subtext">{t('home.accessibilityText')}</p>
+      </div>
+      <div class="split-right">
+        <div class="features-grid">
+          {features.map((feature) => (
+            <div class="feature-item">
+              <span class="feature-icon">{feature.icon}</span>
+              <span class="feature-text">{t(feature.key)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
 
-      <div class="features-grid">
-        {features.map((feature) => (
-          <div class="feature-item">
-            <span class="feature-icon">{feature.icon}</span>
-            <span class="feature-text">{t(feature.key)}</span>
-          </div>
-        ))}
+    <!-- More Than + Proven Concept — side by side -->
+    <div class="split-section split-50-50">
+      <div class="content-block alt-bg">
+        <h2 class="section-title">{t('home.moreThanTitle')}</h2>
+        <p class="section-text">{t('home.moreThanText')}</p>
+
+        <ul class="experience-list">
+          {moreThanItems.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+
+        <p class="community-note">{t('home.communityProject')}</p>
       </div>
 
-      <p class="section-subtext">{t('home.accessibilityText')}</p>
+      <div class="content-block">
+        <h2 class="section-title">{t('home.provenTitle')}</h2>
+        <p class="section-text">{t('home.provenText')}</p>
+        <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary">
+          {t('home.viewProgram')}
+        </a>
+      </div>
     </div>
 
-    <!-- More Than a Film Night -->
-    <div class="content-block alt-bg">
-      <h2 class="section-title">{t('home.moreThanTitle')}</h2>
-      <p class="section-text">{t('home.moreThanText')}</p>
-
-      <ul class="experience-list">
-        {moreThanItems.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
-
-      <p class="community-note">{t('home.communityProject')}</p>
-    </div>
-
-    <!-- Proven Concept -->
-    <div class="content-block">
-      <h2 class="section-title">{t('home.provenTitle')}</h2>
-      <p class="section-text">{t('home.provenText')}</p>
-      <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary">
-        {t('home.viewProgram')}
-      </a>
-    </div>
-
-    <!-- Municipality CTA -->
+    <!-- Municipality CTA — full width -->
     <div class="content-block highlight-block">
       <h2 class="section-title">{t('home.municipalityTitle')}</h2>
       <p class="section-text">{t('home.municipalityText')}</p>
@@ -78,9 +81,33 @@ const moreThanItems = [
     background: var(--color-bg);
   }
 
-  .content-block {
-    max-width: 800px;
+  /* Split layouts */
+  .split-section {
+    display: grid;
+    gap: var(--space-lg);
+    max-width: 1100px;
     margin: 0 auto var(--space-xl);
+    align-items: start;
+  }
+
+  .split-60-40 {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .split-50-50 {
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+
+  .split-left,
+  .split-right {
+    padding: var(--space-xl);
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Content blocks (used in split and standalone) */
+  .content-block {
     padding: var(--space-xl);
     background: var(--color-card);
     border-radius: var(--radius-lg);
@@ -92,6 +119,8 @@ const moreThanItems = [
   }
 
   .content-block.highlight-block {
+    max-width: 800px;
+    margin: 0 auto;
     background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(244, 162, 97, 0.05));
     border: 1px solid rgba(233, 69, 96, 0.2);
     text-align: center;
@@ -176,6 +205,12 @@ const moreThanItems = [
   }
 
   @media (max-width: 768px) {
+    .split-section {
+      grid-template-columns: 1fr;
+    }
+
+    .split-left,
+    .split-right,
     .content-block {
       padding: var(--space-lg);
     }
