@@ -64,6 +64,9 @@ export const ui = {
     'schedule.expandingText': 'Nelsons Film groeit. Achter de schermen bereiden we nieuwe locaties in Nederland voor. Wil je Nelsons Film in jouw gemeente?',
     'schedule.expandingCta': 'Neem contact op',
     'schedule.locations': 'Locaties',
+    'schedule.locationTiel': 'Tiel',
+    'schedule.chooseLocation': 'Kies je locatie',
+    'schedule.activeScreenings': 'vertoningen gepland',
 
     // About
     'about.title': 'Over Nelsons Film',
@@ -212,6 +215,9 @@ export const ui = {
     'schedule.expandingText': 'Nelsons Film is growing. Behind the scenes, we are preparing new locations across the Netherlands. Want Nelsons Film in your municipality?',
     'schedule.expandingCta': 'Get in touch',
     'schedule.locations': 'Locations',
+    'schedule.locationTiel': 'Tiel',
+    'schedule.chooseLocation': 'Choose your location',
+    'schedule.activeScreenings': 'screenings scheduled',
 
     // About
     'about.title': 'About Nelsons Film',

@@ -1,7 +1,8 @@
-// Movie schedule from local CSV file
-// Update src/data/schedule.csv and redeploy to change the schedule
+// Movie schedules from local CSV files (one per location)
+// Update src/data/<location>-schedule.csv and redeploy to change the schedule
 
-import scheduleCSV from '../data/schedule.csv?raw';
+import haarlemCSV from '../data/haarlem-schedule.csv?raw';
+import tielCSV from '../data/tiel-schedule.csv?raw';
 
 export interface Movie {
   title: string;
@@ -61,8 +62,16 @@ function parseCSV(csv: string): Movie[] {
   }).filter((movie) => movie.title && movie.date);
 }
 
+export function getHaarlemMovies(): Movie[] {
+  return parseCSV(haarlemCSV);
+}
+
+export function getTielMovies(): Movie[] {
+  return parseCSV(tielCSV);
+}
+
 export function getMovies(): Movie[] {
-  return parseCSV(scheduleCSV);
+  return [...getHaarlemMovies(), ...getTielMovies()];
 }
 
 export function getUpcomingMovies(movies: Movie[]): Movie[] {

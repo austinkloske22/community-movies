@@ -1,33 +1,36 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import MovieCard from '../../components/MovieCard.astro';
-import { getMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
-import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import MovieCard from '../../../components/MovieCard.astro';
+import { getTielMovies, getUpcomingMovies, getNextMovie } from '../../../lib/sheets';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const movies = getMovies();
+const movies = getTielMovies();
 const upcomingMovies = getUpcomingMovies(movies);
 const nextMovie = getNextMovie(movies);
 ---
 
-<BaseLayout title={t('schedule.title')} description="View the full Nelsons Film schedule - free outdoor cinema in Haarlem Noord">
+<BaseLayout title={`${t('schedule.title')} — ${t('schedule.locationTiel')}`} description="View the Nelsons Film schedule in Tiel">
   <section class="schedule-page section">
     <div class="container">
-      <!-- Location Header -->
+      <div class="back-link">
+        <a href={getLocalizedPath('/programma', lang)}>← {t('schedule.locations')}</a>
+      </div>
+
       <div class="location-header">
         <div class="location-badge active">
           <span class="badge-icon">📍</span>
           <div class="badge-content">
-            <span class="badge-city">{t('schedule.locationHaarlem')}</span>
+            <span class="badge-city">{t('schedule.locationTiel')}</span>
           </div>
-          <span class="status-indicator">Active</span>
+          <span class="status-indicator">{lang === 'nl' ? 'Actief' : 'Active'}</span>
         </div>
       </div>
 
       <header class="page-header">
-        <h1>{t('schedule.title')} — {t('schedule.locationHaarlem')}</h1>
+        <h1>{t('schedule.title')} — {t('schedule.locationTiel')}</h1>
         <p class="page-subtitle">{t('schedule.everySecondSaturday')}</p>
         <p class="page-info">{t('schedule.selectionInfo')}</p>
         <p class="page-free">{t('schedule.freeInfo')}</p>
@@ -61,39 +64,26 @@ const nextMovie = getNextMovie(movies);
 
       <div class="schedule-info">
         <div class="info-card">
-          <h3>🎧 Multilingual experience</h3>
-          <p>Check the film schedule for spoken language and subtitle details</p>
+          <h3>🎧 {lang === 'nl' ? 'Meertalige ervaring' : 'Multilingual experience'}</h3>
+          <p>
+            {lang === 'nl'
+              ? 'Raadpleeg het filmschema voor informatie over gesproken taal en ondertiteling.'
+              : 'Check the film schedule for spoken language and subtitle details'}
+          </p>
         </div>
 
         <div class="info-card">
-          <h3>🪑 What to bring?</h3>
-          <p>Bring your own chair or blanket. Arrive early as spaces are limited!</p>
+          <h3>🪑 {lang === 'nl' ? 'Wat meenemen?' : 'What to bring?'}</h3>
+          <p>
+            {lang === 'nl'
+              ? 'Neem je eigen stoel of kleedje mee. Kom op tijd, want er zijn beperkte plekken!'
+              : 'Bring your own chair or blanket. Arrive early as spaces are limited!'}
+          </p>
         </div>
 
         <div class="info-card location-card">
           <h3>📍 {t('location.title')}</h3>
-          <p>{t('schedule.locationPark')}, {t('schedule.locationHaarlem')}</p>
-          <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="map-link">
-            {t('location.directions')} →
-          </a>
-        </div>
-      </div>
-
-      <!-- Coming Soon Section -->
-      <div class="coming-soon-section">
-        <div class="coming-soon-content">
-          <div class="coming-soon-icon">🌍</div>
-          <h2>{t('schedule.expandingTitle')}</h2>
-          <p>{t('schedule.expandingText')}</p>
-          <div class="coming-soon-locations">
-            <div class="location-preview">
-              <span class="preview-icon">🔜</span>
-              <span class="preview-text">{t('schedule.comingSoon')}</span>
-            </div>
-          </div>
-          <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-primary">
-            {t('schedule.expandingCta')}
-          </a>
+          <p>{t('schedule.locationTiel')}</p>
         </div>
       </div>
     </div>
@@ -103,6 +93,20 @@ const nextMovie = getNextMovie(movies);
 <style>
   .schedule-page {
     min-height: 80vh;
+  }
+
+  .back-link {
+    margin-bottom: var(--space-md);
+  }
+
+  .back-link a {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    transition: color var(--transition-fast);
+  }
+
+  .back-link a:hover {
+    color: var(--color-accent);
   }
 
   .location-header {
@@ -139,11 +143,6 @@ const nextMovie = getNextMovie(movies);
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--color-text);
-  }
-
-  .badge-park {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
   }
 
   .status-indicator {
@@ -226,64 +225,6 @@ const nextMovie = getNextMovie(movies);
 
   .location-card .map-link:hover {
     color: var(--color-accent-light);
-  }
-
-  /* Coming Soon Section */
-  .coming-soon-section {
-    margin-top: var(--space-xl);
-    padding: var(--space-xl);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.05));
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    text-align: center;
-  }
-
-  .coming-soon-content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .coming-soon-icon {
-    font-size: 3rem;
-    margin-bottom: var(--space-md);
-  }
-
-  .coming-soon-section h2 {
-    margin-bottom: var(--space-md);
-    color: var(--color-text);
-  }
-
-  .coming-soon-section p {
-    color: var(--color-text-muted);
-    line-height: 1.7;
-    margin-bottom: var(--space-lg);
-  }
-
-  .coming-soon-locations {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-lg);
-  }
-
-  .location-preview {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px dashed rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-md);
-    opacity: 0.7;
-  }
-
-  .preview-icon {
-    font-size: 1.25rem;
-  }
-
-  .preview-text {
-    color: var(--color-text-muted);
-    font-weight: 500;
   }
 
   @media (max-width: 768px) {

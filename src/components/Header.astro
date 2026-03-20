@@ -11,17 +11,17 @@ const locations = [
   {
     id: 'haarlem',
     name: t('schedule.locationHaarlem'),
-    park: t('schedule.locationPark'),
-    href: '/programma',
+    park: null,
+    href: '/programma/haarlem',
     active: true
   },
   {
-    id: 'coming-soon',
-    name: t('schedule.comingSoon'),
+    id: 'tiel',
+    name: t('schedule.locationTiel'),
     park: null,
-    href: null,
-    active: false
-  }
+    href: '/programma/tiel',
+    active: true
+  },
 ];
 
 // Same paths for all languages (Dutch path names)
@@ -67,24 +67,9 @@ const navItems = [
                     <span class="dropdown-title">{t('schedule.locations')}</span>
                   </div>
                   {locations.map((location) => (
-                    location.active ? (
-                      <a href={getLocalizedPath(location.href!, lang)} class="dropdown-item active">
-                        <span class="location-icon">📍</span>
-                        <div class="location-info">
-                          <span class="location-name">{location.name}</span>
-                          <span class="location-park">{location.park}</span>
-                        </div>
-                        <span class="active-badge">{lang === 'nl' ? 'Actief' : 'Active'}</span>
-                      </a>
-                    ) : (
-                      <div class="dropdown-item coming-soon">
-                        <span class="location-icon">🔜</span>
-                        <div class="location-info">
-                          <span class="location-name">{location.name}</span>
-                          <span class="location-park">{lang === 'nl' ? 'Nieuwe locaties volgen' : 'New locations coming'}</span>
-                        </div>
-                      </div>
-                    )
+                    <a href={getLocalizedPath(location.href!, lang)} class="dropdown-item">
+                      <span class="location-name">{location.name}</span>
+                    </a>
                   ))}
                   <a href={getLocalizedPath('/voor-gemeenten', lang)} class="dropdown-cta">
                     {lang === 'nl' ? 'Nelsons Film in jouw gemeente?' : 'Nelsons Film in your area?'}
@@ -229,45 +214,9 @@ const navItems = [
     background: rgba(255, 255, 255, 0.05);
   }
 
-  .dropdown-item.active {
-    background: rgba(233, 69, 96, 0.1);
-    border: 1px solid rgba(233, 69, 96, 0.2);
-  }
-
-  .dropdown-item.coming-soon {
-    opacity: 0.6;
-    cursor: default;
-  }
-
-  .location-icon {
-    font-size: 1.25rem;
-  }
-
-  .location-info {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-
-  .location-name {
-    font-weight: 600;
+  .dropdown-item .location-name {
+    font-weight: 500;
     font-size: 0.95rem;
-  }
-
-  .location-park {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-  }
-
-  .active-badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: var(--color-accent);
-    color: white;
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
   }
 
   .dropdown-cta {
