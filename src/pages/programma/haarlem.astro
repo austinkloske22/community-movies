@@ -22,7 +22,9 @@ const nextMovie = getNextMovie(movies);
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationHaarlem')}</h1>
         {upcomingMovies.length > 0 && (
-          <a href="/programma/haarlem.ics" class="calendar-btn">
+          <a href="/programma/haarlem.ics" class="calendar-btn"
+             data-goatcounter-click="calendar-haarlem"
+             data-goatcounter-title="Calendar download (nl)">
             📅 {lang === 'nl' ? 'Voeg toe aan agenda' : 'Add to calendar'}
           </a>
         )}
