@@ -43,7 +43,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
   <section class="next-screening section">
     <div class="container">
       <div class="screening-header">
-        <span class="screening-badge">{t('schedule.nextScreening')}</span>
+        <span class="screening-badge">{t('schedule.nextScreening')} — {movie.location || 'Haarlem'}</span>
         <h2 class="screening-title">{movie.title}</h2>
       </div>
 
