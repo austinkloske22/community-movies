@@ -3,6 +3,7 @@
 
 import haarlemCSV from '../data/haarlem-schedule.csv?raw';
 import tielCSV from '../data/tiel-schedule.csv?raw';
+import ijmuidenCSV from '../data/ijmuiden-schedule.csv?raw';
 
 export interface Movie {
   title: string;
@@ -70,8 +71,12 @@ export function getTielMovies(): Movie[] {
   return parseCSV(tielCSV);
 }
 
+export function getIJmuidenMovies(): Movie[] {
+  return parseCSV(ijmuidenCSV);
+}
+
 export function getMovies(): Movie[] {
-  return [...getHaarlemMovies(), ...getTielMovies()];
+  return [...getHaarlemMovies(), ...getTielMovies(), ...getIJmuidenMovies()];
 }
 
 export function getUpcomingMovies(movies: Movie[]): Movie[] {

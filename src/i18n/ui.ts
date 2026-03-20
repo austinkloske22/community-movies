@@ -65,6 +65,7 @@ export const ui = {
     'schedule.expandingCta': 'Neem contact op',
     'schedule.locations': 'Locaties',
     'schedule.locationTiel': 'Tiel',
+    'schedule.locationIJmuiden': 'IJmuiden',
     'schedule.chooseLocation': 'Kies je locatie',
     'schedule.activeScreenings': 'vertoningen gepland',
 
@@ -216,6 +217,7 @@ export const ui = {
     'schedule.expandingCta': 'Get in touch',
     'schedule.locations': 'Locations',
     'schedule.locationTiel': 'Tiel',
+    'schedule.locationIJmuiden': 'IJmuiden',
     'schedule.chooseLocation': 'Choose your location',
     'schedule.activeScreenings': 'screenings scheduled',
 

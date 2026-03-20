@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getHaarlemMovies, getTielMovies, getUpcomingMovies } from '../../../lib/sheets';
+import { getHaarlemMovies, getTielMovies, getIJmuidenMovies, getUpcomingMovies } from '../../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -8,6 +8,7 @@ const t = useTranslations(lang);
 
 const haarlemUpcoming = getUpcomingMovies(getHaarlemMovies());
 const tielUpcoming = getUpcomingMovies(getTielMovies());
+const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
 ---
 
 <BaseLayout title={t('schedule.title')} description="View the Nelsons Film schedule - free outdoor cinema at multiple locations">
@@ -36,6 +37,16 @@ const tielUpcoming = getUpcomingMovies(getTielMovies());
           <div class="tile-content">
             <h2 class="tile-city">{t('schedule.locationTiel')}</h2>
             <span class="tile-count">{tielUpcoming.length} {t('schedule.activeScreenings')}</span>
+          </div>
+          <span class="tile-badge">{lang === 'nl' ? 'Actief' : 'Active'}</span>
+          <span class="tile-arrow">→</span>
+        </a>
+
+        <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="location-tile">
+          <span class="tile-icon">📍</span>
+          <div class="tile-content">
+            <h2 class="tile-city">{t('schedule.locationIJmuiden')}</h2>
+            <span class="tile-count">{ijmuidenUpcoming.length} {t('schedule.activeScreenings')}</span>
           </div>
           <span class="tile-badge">{lang === 'nl' ? 'Actief' : 'Active'}</span>
           <span class="tile-arrow">→</span>
