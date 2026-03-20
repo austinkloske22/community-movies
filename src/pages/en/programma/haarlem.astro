@@ -19,18 +19,13 @@ const nextMovie = getNextMovie(movies);
         <a href={getLocalizedPath('/programma', lang)}>← {t('schedule.locations')}</a>
       </div>
 
-      <div class="location-header">
-        <div class="location-badge active">
-          <span class="badge-icon">📍</span>
-          <div class="badge-content">
-            <span class="badge-city">{t('schedule.locationHaarlem')}</span>
-          </div>
-          <span class="status-indicator">{lang === 'nl' ? 'Actief' : 'Active'}</span>
-        </div>
-      </div>
-
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationHaarlem')}</h1>
+        {upcomingMovies.length > 0 && (
+          <a href="/en/programma/haarlem.ics" class="calendar-btn">
+            📅 {lang === 'nl' ? 'Voeg toe aan agenda' : 'Add to calendar'}
+          </a>
+        )}
         <p class="page-subtitle">{t('schedule.everySecondSaturday')}</p>
         <p class="page-info">{t('schedule.selectionInfo')}</p>
         <p class="page-free">{t('schedule.freeInfo')}</p>
@@ -184,6 +179,26 @@ const nextMovie = getNextMovie(movies);
     font-size: 0.95rem;
     font-weight: 500;
     margin-top: var(--space-sm);
+  }
+
+  .calendar-btn {
+    display: inline-block;
+    margin-top: var(--space-md);
+    padding: var(--space-md) var(--space-xl);
+    background: rgba(233, 69, 96, 0.1);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--color-accent);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .calendar-btn:hover {
+    background: rgba(233, 69, 96, 0.2);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
   }
 
   .movies-grid {
