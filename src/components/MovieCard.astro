@@ -116,7 +116,9 @@ function formatDate(dateStr: string): string {
   <div class="movie-image">
     <img src={thumbnail} alt={title} loading="lazy" />
     {previewUrl && (
-      <a href={previewUrl} target="_blank" rel="noopener" class="play-button" aria-label={t('common.watchTrailer')}>
+      <a href={previewUrl} target="_blank" rel="noopener" class="play-button" aria-label={t('common.watchTrailer')}
+         data-goatcounter-click={`trailer-${title.toLowerCase().replace(/\s+/g, '-')}`}
+         data-goatcounter-title={`Trailer: ${title}`}>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
           <path d="M8 5v14l11-7z"/>
         </svg>

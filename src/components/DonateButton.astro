@@ -21,6 +21,8 @@ const isExternal = settings.tikkie_url ? true : false;
   class:list={['btn', `btn-${variant}`, className]}
   target={isExternal ? '_blank' : undefined}
   rel={isExternal ? 'noopener' : undefined}
+  data-goatcounter-click="donate-click"
+  data-goatcounter-title={`Donate (${lang})`}
 >
   {buttonText}
 </a>
