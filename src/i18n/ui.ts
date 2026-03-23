@@ -169,7 +169,7 @@ export const ui = {
     // Hero
     'hero.title': 'Nelsons Film',
     'hero.slogan': 'Watch together, live together',
-    'hero.subtitle': 'Free open-air films for residents — multilingual, connecting, and fully taken care of. Nelsons Film brings people together under the stars, regardless of language or background.',
+    'hero.subtitle': 'Free open-air films for residents — multilingual, connecting, local and fully taken care of. Nelsons Film brings people together under the stars, regardless of language or background.',
     'hero.cta': 'View schedule',
     'hero.ctaMunicipalities': 'Organize this in your municipality',
 
