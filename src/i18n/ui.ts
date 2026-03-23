@@ -17,7 +17,7 @@ export const ui = {
     // Hero
     'hero.title': 'Nelsons Film',
     'hero.slogan': 'Samen kijken, samen leven',
-    'hero.subtitle': 'Gratis openluchtfilms voor bewoners — meertalig, verbindend lokaal en volledig verzorgd. Nelsons Film brengt mensen samen onder de sterren, ongeacht taal of achtergrond.',
+    'hero.subtitle': 'Gratis openluchtfilms voor bewoners — meertalig, verbindend, lokaal en volledig verzorgd. Nelsons Film brengt mensen samen onder de sterren, ongeacht taal of achtergrond.',
     'hero.cta': 'Bekijk programma',
     'hero.ctaMunicipalities': 'Organiseer dit in jouw gemeente',
 
