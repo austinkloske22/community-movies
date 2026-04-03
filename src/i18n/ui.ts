@@ -11,7 +11,7 @@ export const ui = {
     'nav.home': 'Home',
     'nav.schedule': 'Programma',
     'nav.about': 'Over ons',
-    'nav.municipalities': 'Voor gemeenten',
+    'nav.municipalities': 'In jouw buurt',
     'nav.contact': 'Contact',
     'nav.municipalityBanner': 'Nelsons Film in jouw gemeente?',
 
@@ -203,7 +203,7 @@ export const ui = {
     'nav.home': 'Home',
     'nav.schedule': 'Schedule',
     'nav.about': 'About',
-    'nav.municipalities': 'For municipalities',
+    'nav.municipalities': 'In your neighborhood',
     'nav.contact': 'Contact',
     'nav.municipalityBanner': 'Nelsons Film in your area?',
 

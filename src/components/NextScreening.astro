@@ -61,7 +61,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
             </div>
           ) : (
             <div class="video-placeholder">
-              <span class="placeholder-icon">🎬</span>
+              <img src="/images/brand/icon-logo.jpg" alt="Nelsons Film" class="placeholder-icon" />
               <span>{t('movie.trailerComingSoon')}</span>
             </div>
           )}
@@ -203,7 +203,10 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
   }
 
   .placeholder-icon {
-    font-size: 4rem;
+    height: 64px;
+    width: 64px;
+    object-fit: contain;
+    border-radius: 8px;
   }
 
   .screening-details {

@@ -9,8 +9,7 @@ const t = useTranslations(lang);
   <div class="container">
     <div class="footer-content">
       <div class="footer-brand">
-        <span class="logo-icon">🎬</span>
-        <span class="logo-text">Nelsons Film</span>
+        <img src="/images/brand/Text-logo.png" alt="Nelsons Film" class="footer-logo" />
         <p class="footer-tagline">{t('footer.madeWith')}</p>
       </div>
 
@@ -74,14 +73,11 @@ const t = useTranslations(lang);
     gap: var(--space-sm);
   }
 
-  .logo-icon {
-    font-size: 2rem;
-  }
-
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
+  .footer-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    align-self: flex-start;
   }
 
   .footer-tagline {

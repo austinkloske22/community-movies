@@ -1,16 +1,16 @@
 /* CSS Variables */
 :root {
-  /* Colors - warm evening cinema theme (lightened) */
-  --color-primary: #252542;
-  --color-secondary: #1e2a4a;
-  --color-accent: #e94560;
-  --color-accent-light: #ff6b6b;
-  --color-gold: #f4a261;
-  --color-text: #f0f0f0;
-  --color-text-muted: #b8b8c0;
-  --color-bg: #1a1a2e;
-  --color-card: #2a2a48;
-  --color-card-hover: #353560;
+  /* Colors - Brandbook palette */
+  --color-primary: #1B2F4A;
+  --color-secondary: #1B2F4A;
+  --color-accent: #D76E4D;
+  --color-accent-light: #F2C75C;
+  --color-gold: #F2C75C;
+  --color-text: #EFE6D8;
+  --color-text-muted: #b8b0a4;
+  --color-bg: #1B2F4A;
+  --color-card: #243a58;
+  --color-card-hover: #2d4568;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -20,7 +20,7 @@
   --space-xl: 4rem;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Poppins', var(--font-sans);
 
   /* Border radius */
@@ -55,8 +55,9 @@ body {
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
+  text-transform: none;
 }
 
 h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
@@ -108,7 +109,7 @@ a:hover {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 4px 20px rgba(215, 110, 77, 0.4);
 }
 
 .btn-secondary {
@@ -118,8 +119,8 @@ a:hover {
 }
 
 .btn-secondary:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
 }
 
 /* Cards */
