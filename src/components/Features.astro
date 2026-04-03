@@ -13,10 +13,12 @@ const features = [
 ];
 
 const moreThanItems = [
-  t('home.moreThanItem1'),
-  t('home.moreThanItem2'),
-  t('home.moreThanItem3'),
-  t('home.moreThanItem4'),
+  { title: t('home.moreThanItem1'), detail: t('home.moreThanDetail1') },
+  { title: t('home.moreThanItem2'), detail: t('home.moreThanDetail2') },
+  { title: t('home.moreThanItem3'), detail: t('home.moreThanDetail3') },
+  { title: t('home.moreThanItem4'), detail: t('home.moreThanDetail4') },
+  { title: t('home.moreThanItem5'), detail: t('home.moreThanDetail5') },
+  { title: t('home.moreThanItem6'), detail: t('home.moreThanDetail6') },
 ];
 ---
 
@@ -41,28 +43,30 @@ const moreThanItems = [
       </div>
     </div>
 
-    <!-- More Than + Proven Concept — side by side -->
-    <div class="split-section split-50-50">
-      <div class="content-block alt-bg">
-        <h2 class="section-title">{t('home.moreThanTitle')}</h2>
-        <p class="section-text">{t('home.moreThanText')}</p>
+    <!-- More Than a Film Night -->
+    <div class="content-block alt-bg" style="max-width: 800px; margin: 0 auto var(--space-xl);">
+      <h2 class="section-title">{t('home.moreThanTitle')}</h2>
+      <details class="expand-item subtitle-expand">
+        <summary class="section-text">{t('home.moreThanText')}</summary>
+        <p class="expand-detail">{t('home.moreThanDetail')}</p>
+      </details>
 
-        <ul class="experience-list">
-          {moreThanItems.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
+      <ul class="experience-list">
+        {moreThanItems.map((item) => (
+          <li>
+            {item.detail ? (
+              <details class="expand-item">
+                <summary>{item.title}</summary>
+                <p class="expand-detail">{item.detail}</p>
+              </details>
+            ) : (
+              <span>{item.title}</span>
+            )}
+          </li>
+        ))}
+      </ul>
 
-        <p class="community-note">{t('home.communityProject')}</p>
-      </div>
-
-      <div class="content-block">
-        <h2 class="section-title">{t('home.provenTitle')}</h2>
-        <p class="section-text">{t('home.provenText')}</p>
-        <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary">
-          {t('home.viewProgram')}
-        </a>
-      </div>
+      <p class="community-note">{t('home.communityProject')}</p>
     </div>
 
     <!-- Municipality CTA — full width -->
@@ -189,6 +193,46 @@ const moreThanItems = [
     left: 0;
     color: var(--color-accent);
     font-weight: bold;
+  }
+
+  .expand-item {
+    cursor: pointer;
+  }
+
+  .expand-item summary {
+    list-style: none;
+    display: inline;
+  }
+
+  .expand-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .expand-item summary::after {
+    content: ' +';
+    color: var(--color-accent);
+    font-weight: bold;
+    font-size: 0.85em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .expand-item[open] summary::after {
+    content: ' −';
+  }
+
+  .expand-item summary:hover::after {
+    opacity: 1;
+  }
+
+  .expand-detail {
+    margin: var(--space-sm) 0 0;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    border-left: 2px solid var(--color-accent);
+    opacity: 0.85;
   }
 
   .community-note {
