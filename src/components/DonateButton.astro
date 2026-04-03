@@ -1,5 +1,6 @@
 ---
 import { getSettings } from '../lib/settings';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 interface Props {
   lang: 'nl' | 'en';
@@ -8,7 +9,8 @@ interface Props {
 }
 
 const { lang, variant = 'primary', class: className } = Astro.props;
-const buttonText = lang === 'nl' ? 'Doneer nu' : 'Donate now';
+const t = useTranslations(lang);
+const buttonText = t('common.donateNow');
 const settings = getSettings();
 
 // Use Tikkie URL if configured, otherwise fallback to email

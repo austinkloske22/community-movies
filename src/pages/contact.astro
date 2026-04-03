@@ -65,9 +65,7 @@ const t = useTranslations(lang);
         <div class="contact-card highlight">
           <span class="card-icon">🏛️</span>
           <h2>{t('nav.municipalities')}</h2>
-          <p>{lang === 'nl'
-            ? 'Benieuwd wat Nelsons Film voor jouw gemeente kan betekenen?'
-            : 'Curious what Nelsons Film can offer your municipality?'}</p>
+          <p>{t('contact.municipalityText')}</p>
           <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-secondary">
             {t('common.learnMore')}
           </a>
@@ -89,7 +87,7 @@ const t = useTranslations(lang);
           ></iframe>
         </div>
         <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="map-link">
-          {lang === 'nl' ? 'Open in Google Maps' : 'Open in Google Maps'} →
+          {t('contact.openMaps')} →
         </a>
       </div>
     </div>

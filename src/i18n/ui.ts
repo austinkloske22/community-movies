@@ -13,6 +13,7 @@ export const ui = {
     'nav.about': 'Over ons',
     'nav.municipalities': 'Voor gemeenten',
     'nav.contact': 'Contact',
+    'nav.municipalityBanner': 'Nelsons Film in jouw gemeente?',
 
     // Hero
     'hero.title': 'Nelsons Film',
@@ -20,6 +21,9 @@ export const ui = {
     'hero.subtitle': 'Gratis openluchtfilms voor bewoners — meertalig, verbindend, lokaal en volledig verzorgd. Nelsons Film brengt mensen samen onder de sterren, ongeacht taal of achtergrond.',
     'hero.cta': 'Bekijk programma',
     'hero.ctaMunicipalities': 'Organiseer dit in jouw gemeente',
+    'hero.badgeActive': 'Actief',
+    'hero.badgeAnnounced': 'Aangekondigd',
+    'hero.badgeYourNeighborhood': 'Jouw buurt?',
 
     // Home page sections
     'home.forEveryoneTitle': 'Een filmavond voor iedereen. Echt iedereen.',
@@ -68,6 +72,22 @@ export const ui = {
     'schedule.locationIJmuiden': 'IJmuiden',
     'schedule.chooseLocation': 'Kies je locatie',
     'schedule.activeScreenings': 'vertoningen gepland',
+    'schedule.addToCalendar': 'Voeg toe aan agenda',
+    'schedule.datesToBeAnnounced': 'Data worden nog bekendgemaakt',
+    'schedule.multilingualTitle': 'Meertalige ervaring',
+    'schedule.multilingualText': 'Raadpleeg het filmschema voor informatie over gesproken taal en ondertiteling.',
+    'schedule.whatToBringTitle': 'Wat meenemen?',
+    'schedule.whatToBringText': 'Neem je eigen stoel of kleedje mee. Kom op tijd, want er zijn beperkte plekken!',
+
+    // Movie
+    'movie.language': 'Taal',
+    'movie.spokenLanguage': 'Gesproken taal',
+    'movie.subtitles': 'Ondertiteling',
+    'movie.headphones': 'Koptelefoon',
+    'movie.location': 'Locatie',
+    'movie.kijkwijzer': 'Kijkwijzer',
+    'movie.trailerComingSoon': 'Trailer komt binnenkort',
+    'movie.viewFullSchedule': 'Bekijk volledig programma',
 
     // About
     'about.title': 'Over Nelsons Film',
@@ -95,6 +115,16 @@ export const ui = {
     'about.communityDesc': 'Een plek waar de buurt samenkomt en nieuwe verbindingen worden gemaakt.',
     'about.free': 'Gratis toegang',
     'about.freeDesc': 'Neem je eigen stoel of kleedje mee en geniet van film onder de sterren.',
+    'about.ourEvents': 'Onze Avonden',
+    'about.altSunset': 'Buurtbewoners kijken naar een film bij zonsondergang',
+    'about.altPark': 'Filmavond in het park',
+    'about.altFamily': 'Gezinnen genieten van de film',
+    'about.altCozy': 'Gezellige sfeer',
+    'about.altWinter': 'Wintervertoning binnen',
+    'about.altFestive': 'Feestelijke avond',
+    'about.inTheNews': 'In het nieuws',
+    'about.newsItem023': '023 Magazine - Succesvolle bewonersinitiatieven',
+    'about.madePossibleBy': 'Mede mogelijk gemaakt door:',
 
     // Municipalities page
     'municipalities.title': 'Voor gemeenten',
@@ -145,6 +175,8 @@ export const ui = {
     'contact.sponsor': 'Sponsor worden?',
     'contact.sponsorText': 'Wil je als lokale ondernemer bijdragen aan Nelsons Film? Neem contact met ons op!',
     'contact.becomeSponsor': 'Word sponsor',
+    'contact.openMaps': 'Open in Google Maps',
+    'contact.municipalityText': 'Benieuwd wat Nelsons Film voor jouw gemeente kan betekenen?',
 
     // Footer
     'footer.madeWith': 'Gemaakt met liefde voor de buurt',
@@ -156,6 +188,7 @@ export const ui = {
     'common.backToSchedule': 'Terug naar programma',
     'common.learnMore': 'Meer informatie',
     'common.donate': 'Doneer',
+    'common.donateNow': 'Doneer nu',
   },
   en: {
     // Navigation
@@ -164,6 +197,7 @@ export const ui = {
     'nav.about': 'About',
     'nav.municipalities': 'For municipalities',
     'nav.contact': 'Contact',
+    'nav.municipalityBanner': 'Nelsons Film in your area?',
 
     // Hero
     'hero.title': 'Nelsons Film',
@@ -171,6 +205,9 @@ export const ui = {
     'hero.subtitle': 'Free open-air films for residents — multilingual, connecting, local and fully taken care of. Nelsons Film brings people together under the stars, regardless of language or background.',
     'hero.cta': 'View schedule',
     'hero.ctaMunicipalities': 'Organize this in your municipality',
+    'hero.badgeActive': 'Active',
+    'hero.badgeAnnounced': 'Announced',
+    'hero.badgeYourNeighborhood': 'Your neighborhood?',
 
     // Home page sections
     'home.forEveryoneTitle': 'A film night for everyone. Truly everyone.',
@@ -219,6 +256,22 @@ export const ui = {
     'schedule.locationIJmuiden': 'IJmuiden',
     'schedule.chooseLocation': 'Choose your location',
     'schedule.activeScreenings': 'screenings scheduled',
+    'schedule.addToCalendar': 'Add to calendar',
+    'schedule.datesToBeAnnounced': 'Dates to be announced',
+    'schedule.multilingualTitle': 'Multilingual experience',
+    'schedule.multilingualText': 'Check the film schedule for spoken language and subtitle details.',
+    'schedule.whatToBringTitle': 'What to bring?',
+    'schedule.whatToBringText': 'Bring your own chair or blanket. Arrive early as spaces are limited!',
+
+    // Movie
+    'movie.language': 'Language',
+    'movie.spokenLanguage': 'Spoken language',
+    'movie.subtitles': 'Subtitles',
+    'movie.headphones': 'Headphones',
+    'movie.location': 'Location',
+    'movie.kijkwijzer': 'Age Rating',
+    'movie.trailerComingSoon': 'Trailer coming soon',
+    'movie.viewFullSchedule': 'View full schedule',
 
     // About
     'about.title': 'About Nelsons Film',
@@ -245,6 +298,16 @@ export const ui = {
     'about.communityDesc': 'A place where the neighborhood comes together and new connections are made.',
     'about.free': 'Free admission',
     'about.freeDesc': 'Bring your own chair or blanket and enjoy movies under the stars.',
+    'about.ourEvents': 'Our Events',
+    'about.altSunset': 'Neighbors watching a movie at sunset',
+    'about.altPark': 'Movie night in the park',
+    'about.altFamily': 'Families enjoying the movie',
+    'about.altCozy': 'Cozy atmosphere',
+    'about.altWinter': 'Winter screening indoors',
+    'about.altFestive': 'Festive evening',
+    'about.inTheNews': 'In the news',
+    'about.newsItem023': '023 Magazine - Successful resident initiatives',
+    'about.madePossibleBy': 'Made possible by:',
 
     // Municipalities page
     'municipalities.title': 'For municipalities',
@@ -295,6 +358,8 @@ export const ui = {
     'contact.sponsor': 'Become a sponsor?',
     'contact.sponsorText': 'Want to contribute as a local business? Get in touch with us!',
     'contact.becomeSponsor': 'Become a sponsor',
+    'contact.openMaps': 'Open in Google Maps',
+    'contact.municipalityText': 'Curious what Nelsons Film can offer your municipality?',
 
     // Footer
     'footer.madeWith': 'Made with love for the neighborhood',
@@ -306,5 +371,6 @@ export const ui = {
     'common.backToSchedule': 'Back to schedule',
     'common.learnMore': 'Learn more',
     'common.donate': 'Donate',
+    'common.donateNow': 'Donate now',
   },
 } as const;

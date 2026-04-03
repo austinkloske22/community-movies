@@ -62,7 +62,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
           ) : (
             <div class="video-placeholder">
               <span class="placeholder-icon">🎬</span>
-              <span>{lang === 'nl' ? 'Trailer komt binnenkort' : 'Trailer coming soon'}</span>
+              <span>{t('movie.trailerComingSoon')}</span>
             </div>
           )}
         </div>
@@ -93,7 +93,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
           </div>
 
           <div class="kijkwijzer-badge">
-            <span class="kijkwijzer-label">{lang === 'nl' ? 'Kijkwijzer' : 'Age Rating'}</span>
+            <span class="kijkwijzer-label">{t('movie.kijkwijzer')}</span>
             <img src={getAgeIcon(movie.rating)} alt={`Kijkwijzer ${movie.rating}`} class="kijkwijzer-icon" />
           </div>
 
@@ -102,21 +102,21 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
               {movie.language && !['TBA', 'n/a', 'N/A', ''].includes(movie.language) && (
                 <div class="lang-item">
                   <span class="lang-icon">🗣️</span>
-                  <span class="lang-label">{lang === 'nl' ? 'Taal' : 'Language'}:</span>
+                  <span class="lang-label">{t('movie.language')}:</span>
                   <span class="lang-value">{movie.language}</span>
                 </div>
               )}
               {movie.subtitles && !['TBA', 'n/a', 'N/A', ''].includes(movie.subtitles) && (
                 <div class="lang-item">
                   <span class="lang-icon">💬</span>
-                  <span class="lang-label">{lang === 'nl' ? 'Ondertiteling' : 'Subtitles'}:</span>
+                  <span class="lang-label">{t('movie.subtitles')}:</span>
                   <span class="lang-value">{movie.subtitles}</span>
                 </div>
               )}
               {movie.headphones && !['TBA', 'n/a', 'N/A', ''].includes(movie.headphones) && (
                 <div class="lang-item">
                   <span class="lang-icon">🎧</span>
-                  <span class="lang-label">{lang === 'nl' ? 'Koptelefoon' : 'Headphones'}:</span>
+                  <span class="lang-label">{t('movie.headphones')}:</span>
                   <span class="lang-value">{movie.headphones}</span>
                 </div>
               )}
@@ -126,7 +126,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
           <p class="screening-description">{description}</p>
 
           <a href={getLocalizedPath('/programma', lang)} class="btn btn-secondary">
-            {lang === 'nl' ? 'Bekijk volledig programma' : 'View full schedule'}
+            {t('movie.viewFullSchedule')}
           </a>
         </div>
       </div>

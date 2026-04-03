@@ -25,7 +25,7 @@ const nextMovie = getNextMovie(movies);
           <a href="/en/programma/haarlem.ics" class="calendar-btn"
              data-goatcounter-click="calendar-haarlem"
              data-goatcounter-title="Calendar download (en)">
-            📅 {lang === 'nl' ? 'Voeg toe aan agenda' : 'Add to calendar'}
+            📅 {t('schedule.addToCalendar')}
           </a>
         )}
         <p class="page-subtitle">{t('schedule.everySecondSaturday')}</p>
@@ -61,21 +61,13 @@ const nextMovie = getNextMovie(movies);
 
       <div class="schedule-info">
         <div class="info-card">
-          <h3>🎧 {lang === 'nl' ? 'Meertalige ervaring' : 'Multilingual experience'}</h3>
-          <p>
-            {lang === 'nl'
-              ? 'Raadpleeg het filmschema voor informatie over gesproken taal en ondertiteling.'
-              : 'Check the film schedule for spoken language and subtitle details'}
-          </p>
+          <h3>🎧 {t('schedule.multilingualTitle')}</h3>
+          <p>{t('schedule.multilingualText')}</p>
         </div>
 
         <div class="info-card">
-          <h3>🪑 {lang === 'nl' ? 'Wat meenemen?' : 'What to bring?'}</h3>
-          <p>
-            {lang === 'nl'
-              ? 'Neem je eigen stoel of kleedje mee. Kom op tijd, want er zijn beperkte plekken!'
-              : 'Bring your own chair or blanket. Arrive early as spaces are limited!'}
-          </p>
+          <h3>🪑 {t('schedule.whatToBringTitle')}</h3>
+          <p>{t('schedule.whatToBringText')}</p>
         </div>
 
         <div class="info-card location-card">

@@ -28,7 +28,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
             <h2 class="tile-city">{t('schedule.locationHaarlem')}</h2>
             <span class="tile-count">{haarlemUpcoming.length} {t('schedule.activeScreenings')}</span>
           </div>
-          <span class="tile-badge">{lang === 'nl' ? 'Actief' : 'Active'}</span>
+          <span class="tile-badge">{t('hero.badgeActive')}</span>
           <span class="tile-arrow">→</span>
         </a>
 
@@ -38,7 +38,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
             <h2 class="tile-city">{t('schedule.locationTiel')}</h2>
             <span class="tile-count">{tielUpcoming.length} {t('schedule.activeScreenings')}</span>
           </div>
-          <span class="tile-badge tile-badge-announced">{lang === 'nl' ? 'Aangekondigd' : 'Announced'}</span>
+          <span class="tile-badge tile-badge-announced">{t('hero.badgeAnnounced')}</span>
           <span class="tile-arrow">→</span>
         </a>
 
@@ -48,7 +48,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
             <h2 class="tile-city">{t('schedule.locationIJmuiden')}</h2>
             <span class="tile-count">{ijmuidenUpcoming.length} {t('schedule.activeScreenings')}</span>
           </div>
-          <span class="tile-badge tile-badge-announced">{lang === 'nl' ? 'Aangekondigd' : 'Announced'}</span>
+          <span class="tile-badge tile-badge-announced">{t('hero.badgeAnnounced')}</span>
           <span class="tile-arrow">→</span>
         </a>
       </div>

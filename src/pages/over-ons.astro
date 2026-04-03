@@ -42,25 +42,25 @@ const values = [
 
         <!-- Photo Gallery -->
         <div class="photo-gallery">
-          <h2>{lang === 'nl' ? 'Onze Avonden' : 'Our Events'}</h2>
+          <h2>{t('about.ourEvents')}</h2>
           <div class="gallery-grid">
             <div class="gallery-item featured">
-              <img src="/images/outdoor-sunset.jpg" alt={lang === 'nl' ? 'Buurtbewoners kijken naar een film bij zonsondergang' : 'Neighbors watching a movie at sunset'} loading="lazy" />
+              <img src="/images/outdoor-sunset.jpg" alt={t('about.altSunset')} loading="lazy" />
             </div>
             <div class="gallery-item">
-              <img src="/images/park-screening.jpg" alt={lang === 'nl' ? 'Filmavond in het park' : 'Movie night in the park'} loading="lazy" />
+              <img src="/images/park-screening.jpg" alt={t('about.altPark')} loading="lazy" />
             </div>
             <div class="gallery-item">
-              <img src="/images/family-screening.jpg" alt={lang === 'nl' ? 'Gezinnen genieten van de film' : 'Families enjoying the movie'} loading="lazy" />
+              <img src="/images/family-screening.jpg" alt={t('about.altFamily')} loading="lazy" />
             </div>
             <div class="gallery-item">
-              <img src="/images/audience-indoor.jpg" alt={lang === 'nl' ? 'Gezellige sfeer' : 'Cozy atmosphere'} loading="lazy" />
+              <img src="/images/audience-indoor.jpg" alt={t('about.altCozy')} loading="lazy" />
             </div>
             <div class="gallery-item">
-              <img src="/images/venue-screening.jpg" alt={lang === 'nl' ? 'Wintervertoning binnen' : 'Winter screening indoors'} loading="lazy" />
+              <img src="/images/venue-screening.jpg" alt={t('about.altWinter')} loading="lazy" />
             </div>
             <div class="gallery-item">
-              <img src="/images/event-party.jpg" alt={lang === 'nl' ? 'Feestelijke avond' : 'Festive evening'} loading="lazy" />
+              <img src="/images/event-party.jpg" alt={t('about.altFestive')} loading="lazy" />
             </div>
           </div>
         </div>
@@ -97,9 +97,7 @@ const values = [
         <div class="sponsors">
           <h2>{t('footer.sponsors')}</h2>
           <p class="text-muted">
-            {lang === 'nl'
-              ? 'Mede mogelijk gemaakt door:'
-              : 'Made possible by:'}
+            {t('about.madePossibleBy')}
           </p>
           <div class="sponsor-list">
             <a href="https://buurtamsterdam.nl" target="_blank" rel="noopener" class="sponsor">BUURT / Fjörd</a>
@@ -114,11 +112,11 @@ const values = [
 
         <!-- Press/Links Section -->
         <div class="press-section">
-          <h2>{lang === 'nl' ? 'In het nieuws' : 'In the news'}</h2>
+          <h2>{t('about.inTheNews')}</h2>
           <div class="press-links">
             <a href="https://www.023magazine.nl/cultuur-uitgaan/3149-succesvolle-bewonersinitiatieven" target="_blank" rel="noopener" class="press-link">
               <span class="press-icon">📰</span>
-              <span>{lang === 'nl' ? '023 Magazine - Succesvolle bewonersinitiatieven' : '023 Magazine - Successful resident initiatives'}</span>
+              <span>{t('about.newsItem023')}</span>
             </a>
           </div>
         </div>

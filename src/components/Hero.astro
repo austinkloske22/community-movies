@@ -25,21 +25,21 @@ const t = useTranslations(lang);
         <a href={getLocalizedPath('/programma/haarlem', lang)} class="hero-badge hero-badge-link hero-badge-active">
           <span class="badge-icon">📍</span>
           <span>Haarlem</span>
-          <span class="active-indicator">{lang === 'nl' ? 'Actief' : 'Active'}</span>
+          <span class="active-indicator">{t('hero.badgeActive')}</span>
         </a>
         <a href={getLocalizedPath('/programma/tiel', lang)} class="hero-badge hero-badge-link hero-badge-announced">
           <span class="badge-icon">📍</span>
           <span>Tiel</span>
-          <span class="announced-indicator">{lang === 'nl' ? 'Aangekondigd' : 'Announced'}</span>
+          <span class="announced-indicator">{t('hero.badgeAnnounced')}</span>
         </a>
         <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="hero-badge hero-badge-link hero-badge-announced">
           <span class="badge-icon">📍</span>
           <span>IJmuiden</span>
-          <span class="announced-indicator">{lang === 'nl' ? 'Aangekondigd' : 'Announced'}</span>
+          <span class="announced-indicator">{t('hero.badgeAnnounced')}</span>
         </a>
         <div class="hero-badge">
-          <span class="badge-icon">🎟️</span>
-          <span>{lang === 'nl' ? 'Gratis toegang' : 'Free admission'}</span>
+          <span class="badge-icon">🏘️</span>
+          <span>{t('hero.badgeYourNeighborhood')}</span>
         </div>
       </div>
       <div class="hero-ctas fade-in">

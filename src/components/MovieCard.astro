@@ -139,22 +139,22 @@ function formatDate(dateStr: string): string {
     {(language || subtitles || headphones || location) && (
       <div class="movie-languages">
         {language && !['TBA', 'n/a', 'N/A', ''].includes(language) && (
-          <span class="lang-tag" title={lang === 'nl' ? 'Gesproken taal' : 'Spoken language'}>
-            🗣️ {lang === 'nl' ? 'Taal' : 'Language'}: {getLanguageName(language)}
+          <span class="lang-tag" title={t('movie.spokenLanguage')}>
+            🗣️ {t('movie.language')}: {getLanguageName(language)}
           </span>
         )}
         {subtitles && !['TBA', 'n/a', 'N/A', ''].includes(subtitles) && (
-          <span class="lang-tag" title={lang === 'nl' ? 'Ondertiteling' : 'Subtitles'}>
-            💬 {lang === 'nl' ? 'Ondertiteling' : 'Subtitles'}: {getLanguageName(subtitles)}
+          <span class="lang-tag" title={t('movie.subtitles')}>
+            💬 {t('movie.subtitles')}: {getLanguageName(subtitles)}
           </span>
         )}
         {headphones && !['TBA', 'n/a', 'N/A', ''].includes(headphones) && (
-          <span class="lang-tag" title={lang === 'nl' ? 'Koptelefoon' : 'Headphones'}>
+          <span class="lang-tag" title={t('movie.headphones')}>
             🎧 {headphones}
           </span>
         )}
         {location && (
-          <span class="lang-tag location-tag" title={lang === 'nl' ? 'Locatie' : 'Location'}>
+          <span class="lang-tag location-tag" title={t('movie.location')}>
             📍 {location}
           </span>
         )}
