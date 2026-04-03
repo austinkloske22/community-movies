@@ -12,8 +12,7 @@ const t = useTranslations(lang);
   <div class="container">
     <div class="hero-content">
       <h1 class="hero-title fade-in">
-        <img src="/images/brand/icon-logo.jpg" alt="" class="hero-icon" />
-        <span>Nelsons Film</span>
+        <img src="/images/brand/text-logo-clear-background.png" alt={t('hero.title')} class="hero-logo" />
       </h1>
       <p class="hero-slogan fade-in">
         {t('hero.slogan')}
@@ -99,15 +98,14 @@ const t = useTranslations(lang);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-sm);
+    margin-bottom: 0;
   }
 
-  .hero-icon {
-    height: clamp(48px, 10vw, 80px);
-    width: auto;
+  .hero-logo {
+    width: clamp(300px, 50vw, 600px);
+    height: auto;
     object-fit: contain;
-    border-radius: 8px;
+    margin-bottom: clamp(-80px, -12vw, -40px);
   }
 
   .hero-slogan {
