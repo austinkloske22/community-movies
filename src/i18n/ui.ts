@@ -130,6 +130,8 @@ export const ui = {
     'about.altFestive': 'Feestelijke avond',
     'about.inTheNews': 'In het nieuws',
     'about.newsItem023': '023 Magazine - Succesvolle bewonersinitiatieven',
+    'about.newsItemHaarlemlink': 'Haarlem Link - Pitch Nelsons Film',
+    'about.newsItemDagblad': 'Haarlemmerdagblad - Nelsons Film brengt buurt samen met gratis pop-up bioscoop',
     'about.madePossibleBy': 'Mede mogelijk gemaakt door:',
 
     // Municipalities page
@@ -320,6 +322,8 @@ export const ui = {
     'about.altFestive': 'Festive evening',
     'about.inTheNews': 'In the news',
     'about.newsItem023': '023 Magazine - Successful resident initiatives',
+    'about.newsItemHaarlemlink': 'Haarlem Link - Nelsons Film Pitch',
+    'about.newsItemDagblad': 'Haarlemmerdagblad - Nelsons Film brings neighborhood together with free pop-up cinema',
     'about.madePossibleBy': 'Made possible by:',
 
     // Municipalities page

@@ -25,7 +25,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
         <a href={getLocalizedPath('/programma/haarlem', lang)} class="location-tile">
           <span class="tile-icon">📍</span>
           <div class="tile-content">
-            <h2 class="tile-city">{t('schedule.locationHaarlem')}</h2>
+            <img src="/images/HAARLEM.png" alt="Haarlem" class="tile-logo" />
             <span class="tile-count">{haarlemUpcoming.length} {t('schedule.activeScreenings')}</span>
           </div>
           <span class="tile-badge">{t('hero.badgeActive')}</span>
@@ -138,6 +138,14 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
   .tile-city {
     font-size: 1.5rem;
     font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .tile-logo {
+    height: 80px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
     margin-bottom: 4px;
   }
 
