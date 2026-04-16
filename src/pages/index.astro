@@ -1,16 +1,4 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import NextScreening from '../components/NextScreening.astro';
-import Features from '../components/Features.astro';
-import { getMovies, getNextMovie } from '../lib/sheets';
-
-const movies = getMovies();
-const nextMovie = getNextMovie(movies);
+import HomePage from '../components/pages/HomePage.astro';
 ---
-
-<BaseLayout title="Home">
-  <Hero />
-  <NextScreening movie={nextMovie} />
-  <Features />
-</BaseLayout>
+<HomePage />

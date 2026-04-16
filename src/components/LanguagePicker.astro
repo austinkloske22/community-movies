@@ -5,6 +5,12 @@ import { getLangFromUrl, getRouteFromUrl } from '../i18n/utils';
 const currentLang = getLangFromUrl(Astro.url);
 const route = getRouteFromUrl(Astro.url);
 
+const pickerLabels: Record<string, string> = {
+  nl: 'NL',
+  en: 'EN',
+  ara: 'ARA',
+};
+
 // Simple language switching - paths stay the same, only prefix changes
 function buildHref(targetLang: string): string {
   const path = route || '';
@@ -21,7 +27,7 @@ function buildHref(targetLang: string): string {
       href={buildHref(lang)}
       class:list={['lang-btn', { active: currentLang === lang }]}
     >
-      {lang.toUpperCase()}
+      {pickerLabels[lang] || lang.toUpperCase()}
     </a>
   ))}
 </div>

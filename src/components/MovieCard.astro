@@ -34,49 +34,49 @@ function getLanguageName(code: string | undefined): string {
   const normalized = code.toLowerCase().trim();
 
   // Language name mappings (displayed based on site language)
-  const languageNames: Record<string, { nl: string; en: string }> = {
-    'en': { nl: 'Engels', en: 'English' },
-    'nl': { nl: 'Nederlands', en: 'Dutch' },
-    'de': { nl: 'Duits', en: 'German' },
-    'fr': { nl: 'Frans', en: 'French' },
-    'es': { nl: 'Spaans', en: 'Spanish' },
-    'it': { nl: 'Italiaans', en: 'Italian' },
-    'pt': { nl: 'Portugees', en: 'Portuguese' },
-    'ja': { nl: 'Japans', en: 'Japanese' },
-    'ko': { nl: 'Koreaans', en: 'Korean' },
-    'zh': { nl: 'Chinees', en: 'Chinese' },
-    'ru': { nl: 'Russisch', en: 'Russian' },
-    'ar': { nl: 'Arabisch', en: 'Arabic' },
-    'hi': { nl: 'Hindi', en: 'Hindi' },
-    'english': { nl: 'Engels', en: 'English' },
-    'dutch': { nl: 'Nederlands', en: 'Dutch' },
-    'german': { nl: 'Duits', en: 'German' },
-    'french': { nl: 'Frans', en: 'French' },
-    'spanish': { nl: 'Spaans', en: 'Spanish' },
-    'italian': { nl: 'Italiaans', en: 'Italian' },
-    'portuguese': { nl: 'Portugees', en: 'Portuguese' },
-    'japanese': { nl: 'Japans', en: 'Japanese' },
-    'korean': { nl: 'Koreaans', en: 'Korean' },
-    'chinese': { nl: 'Chinees', en: 'Chinese' },
-    'russian': { nl: 'Russisch', en: 'Russian' },
-    'arabic': { nl: 'Arabisch', en: 'Arabic' },
-    'nederlands': { nl: 'Nederlands', en: 'Dutch' },
-    'engels': { nl: 'Engels', en: 'English' },
-    'duits': { nl: 'Duits', en: 'German' },
-    'frans': { nl: 'Frans', en: 'French' },
-    'spaans': { nl: 'Spaans', en: 'Spanish' },
+  const languageNames: Record<string, { nl: string; en: string; ara: string }> = {
+    'en': { nl: 'Engels', en: 'English', ara: 'الإنجليزية' },
+    'nl': { nl: 'Nederlands', en: 'Dutch', ara: 'الهولندية' },
+    'de': { nl: 'Duits', en: 'German', ara: 'الألمانية' },
+    'fr': { nl: 'Frans', en: 'French', ara: 'الفرنسية' },
+    'es': { nl: 'Spaans', en: 'Spanish', ara: 'الإسبانية' },
+    'it': { nl: 'Italiaans', en: 'Italian', ara: 'الإيطالية' },
+    'pt': { nl: 'Portugees', en: 'Portuguese', ara: 'البرتغالية' },
+    'ja': { nl: 'Japans', en: 'Japanese', ara: 'اليابانية' },
+    'ko': { nl: 'Koreaans', en: 'Korean', ara: 'الكورية' },
+    'zh': { nl: 'Chinees', en: 'Chinese', ara: 'الصينية' },
+    'ru': { nl: 'Russisch', en: 'Russian', ara: 'الروسية' },
+    'ar': { nl: 'Arabisch', en: 'Arabic', ara: 'العربية' },
+    'hi': { nl: 'Hindi', en: 'Hindi', ara: 'الهندية' },
+    'english': { nl: 'Engels', en: 'English', ara: 'الإنجليزية' },
+    'dutch': { nl: 'Nederlands', en: 'Dutch', ara: 'الهولندية' },
+    'german': { nl: 'Duits', en: 'German', ara: 'الألمانية' },
+    'french': { nl: 'Frans', en: 'French', ara: 'الفرنسية' },
+    'spanish': { nl: 'Spaans', en: 'Spanish', ara: 'الإسبانية' },
+    'italian': { nl: 'Italiaans', en: 'Italian', ara: 'الإيطالية' },
+    'portuguese': { nl: 'Portugees', en: 'Portuguese', ara: 'البرتغالية' },
+    'japanese': { nl: 'Japans', en: 'Japanese', ara: 'اليابانية' },
+    'korean': { nl: 'Koreaans', en: 'Korean', ara: 'الكورية' },
+    'chinese': { nl: 'Chinees', en: 'Chinese', ara: 'الصينية' },
+    'russian': { nl: 'Russisch', en: 'Russian', ara: 'الروسية' },
+    'arabic': { nl: 'Arabisch', en: 'Arabic', ara: 'العربية' },
+    'nederlands': { nl: 'Nederlands', en: 'Dutch', ara: 'الهولندية' },
+    'engels': { nl: 'Engels', en: 'English', ara: 'الإنجليزية' },
+    'duits': { nl: 'Duits', en: 'German', ara: 'الألمانية' },
+    'frans': { nl: 'Frans', en: 'French', ara: 'الفرنسية' },
+    'spaans': { nl: 'Spaans', en: 'Spanish', ara: 'الإسبانية' },
   };
 
   const mapping = languageNames[normalized];
   if (mapping) {
-    return lang === 'nl' ? mapping.nl : mapping.en;
+    return mapping[lang] || mapping.en;
   }
 
   // Return original if no mapping found (capitalize first letter)
   return code.charAt(0).toUpperCase() + code.slice(1);
 }
 
-// Get description based on current language
+// Get description based on current language (Arabic falls back to English)
 const description = lang === 'nl' ? descriptionNl : descriptionEn;
 
 // Extract YouTube video ID for thumbnail
@@ -95,7 +95,8 @@ const thumbnail = imageUrl || getYouTubeThumbnail(previewUrl);
 function formatDate(dateStr: string): string {
   try {
     const date = new Date(dateStr);
-    return date.toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-US', {
+    const localeMap: Record<string, string> = { nl: 'nl-NL', en: 'en-US', ara: 'ar-SA' };
+    return date.toLocaleDateString(localeMap[lang] || 'en-US', {
       weekday: 'long',
       day: 'numeric',
       month: 'long'
@@ -184,7 +185,7 @@ function formatDate(dateStr: string): string {
   .next-badge {
     position: absolute;
     top: var(--space-md);
-    left: var(--space-md);
+    inset-inline-start: var(--space-md);
     z-index: 10;
     background: var(--color-accent);
     color: white;

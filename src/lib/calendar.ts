@@ -10,7 +10,7 @@ function escapeICS(text: string): string {
   return text.replace(/[\\;,]/g, '\\$&').replace(/\n/g, '\\n');
 }
 
-export function generateICS(movies: Movie[], lang: 'nl' | 'en', calendarName: string): string {
+export function generateICS(movies: Movie[], lang: 'nl' | 'en' | 'ara', calendarName: string): string {
   const events = movies.map((movie) => {
     const dtStart = formatICSDate(movie.date, movie.time);
     const [h, m] = movie.time.split(':').map(Number);

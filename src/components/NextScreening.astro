@@ -19,7 +19,8 @@ function getAgeIcon(age: string): string {
 // Format date for display
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-US', {
+  const localeMap: Record<string, string> = { nl: 'nl-NL', en: 'en-US', ara: 'ar-SA' };
+  return date.toLocaleDateString(localeMap[lang] || 'en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -185,7 +186,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
   .video-wrapper iframe {
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 100%;
     height: 100%;
   }

@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../Hero.astro';
+import NextScreening from '../NextScreening.astro';
+import Features from '../Features.astro';
+import { getMovies, getNextMovie } from '../../lib/sheets';
+
+const movies = getMovies();
+const nextMovie = getNextMovie(movies);
+---
+
+<BaseLayout title="Home">
+  <Hero />
+  <NextScreening movie={nextMovie} />
+  <Features />
+</BaseLayout>

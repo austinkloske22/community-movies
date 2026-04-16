@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getHaarlemMovies, getTielMovies, getIJmuidenMovies, getUpcomingMovies } from '../../lib/sheets';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const haarlemUpcoming = getUpcomingMovies(getHaarlemMovies());
+const tielUpcoming = getUpcomingMovies(getTielMovies());
+const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
+---
+
+<BaseLayout title={t('schedule.title')} description="Bekijk het programma van Nelsons Film - gratis openluchtbioscoop op meerdere locaties">
+  <section class="schedule-page section">
+    <div class="container">
+      <header class="page-header">
+        <h1>{t('schedule.title')}</h1>
+        <p class="page-subtitle">{t('schedule.chooseLocation')}</p>
+        <p class="page-info">{t('schedule.selectionInfo')}</p>
+        <p class="page-free">{t('schedule.freeInfo')}</p>
+      </header>
+
+      <div class="locations-grid">
+        <a href={getLocalizedPath('/programma/haarlem', lang)} class="location-tile">
+          <span class="tile-icon">📍</span>
+          <div class="tile-content">
+            <img src="/images/location-icons/HaarlemGroteMarkt1.JPG" alt="Haarlem" class="tile-logo" />
+            <span class="tile-count">{haarlemUpcoming.length} {t('schedule.activeScreenings')}</span>
+          </div>
+          <span class="tile-badge">{t('hero.badgeActive')}</span>
+          <span class="tile-arrow">→</span>
+        </a>
+
+        <a href={getLocalizedPath('/programma/tiel', lang)} class="location-tile location-tile-announced">
+          <span class="tile-icon">📍</span>
+          <div class="tile-content">
+            <img src="/images/location-icons/Tiel-Flipje.png" alt="Tiel" class="tile-logo" />
+            <span class="tile-count">{tielUpcoming.length} {t('schedule.activeScreenings')}</span>
+          </div>
+          <span class="tile-badge tile-badge-announced">{t('hero.badgeAnnounced')}</span>
+          <span class="tile-arrow">→</span>
+        </a>
+
+        <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="location-tile location-tile-announced">
+          <span class="tile-icon">📍</span>
+          <div class="tile-content">
+            <img src="/images/location-icons/Velsen-logo.png" alt="IJmuiden" class="tile-logo" />
+            <span class="tile-count">{ijmuidenUpcoming.length} {t('schedule.activeScreenings')}</span>
+          </div>
+          <span class="tile-badge tile-badge-announced">{t('hero.badgeAnnounced')}</span>
+          <span class="tile-arrow">→</span>
+        </a>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div class="coming-soon-section">
+        <div class="coming-soon-content">
+          <div class="coming-soon-icon">🌍</div>
+          <h2>{t('schedule.expandingTitle')}</h2>
+          <p>{t('schedule.expandingText')}</p>
+          <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-primary">
+            {t('schedule.expandingCta')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .schedule-page {
+    min-height: 80vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    margin-top: var(--space-sm);
+  }
+
+  .page-info {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    margin-top: var(--space-md);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .page-free {
+    color: var(--color-accent);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-top: var(--space-sm);
+  }
+
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-lg);
+    max-width: 800px;
+    margin: 0 auto var(--space-xl);
+  }
+
+  .location-tile {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg) var(--space-xl);
+    background: linear-gradient(135deg, rgba(215, 110, 77, 0.1), rgba(242, 199, 92, 0.05));
+    border: 1px solid rgba(215, 110, 77, 0.3);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all var(--transition-normal);
+  }
+
+  .location-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    border-color: var(--color-accent);
+  }
+
+  .tile-icon {
+    font-size: 2rem;
+  }
+
+  .tile-content {
+    flex: 1;
+  }
+
+  .tile-city {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .tile-logo {
+    height: 80px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    margin-bottom: 4px;
+  }
+
+  .tile-count {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .tile-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--color-accent);
+    color: white;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .tile-badge-announced {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-muted);
+  }
+
+  .location-tile-announced {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .tile-arrow {
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast);
+  }
+
+  .location-tile:hover .tile-arrow {
+    transform: translateX(4px);
+    color: var(--color-accent);
+  }
+
+  /* Coming Soon Section */
+  .coming-soon-section {
+    margin-top: var(--space-xl);
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .coming-soon-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .coming-soon-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .coming-soon-section h2 {
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .coming-soon-section p {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+  }
+
+  @media (max-width: 768px) {
+    .locations-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

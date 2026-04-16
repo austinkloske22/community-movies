@@ -182,7 +182,7 @@ const moreThanItems = [
 
   .experience-list li {
     position: relative;
-    padding-left: var(--space-lg);
+    padding-inline-start: var(--space-lg);
     margin-bottom: var(--space-sm);
     color: var(--color-text-muted);
   }
@@ -190,7 +190,7 @@ const moreThanItems = [
   .experience-list li::before {
     content: '✓';
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     color: var(--color-accent);
     font-weight: 700;
   }
@@ -231,7 +231,7 @@ const moreThanItems = [
     font-size: 0.9rem;
     line-height: 1.7;
     color: var(--color-text-muted);
-    border-left: 2px solid var(--color-accent);
+    border-inline-start: 2px solid var(--color-accent);
     opacity: 0.85;
   }
 
