@@ -94,6 +94,8 @@ export const ui = {
     'movie.location': 'Locatie',
     'movie.kijkwijzer': 'Kijkwijzer',
     'movie.trailerComingSoon': 'Trailer komt binnenkort',
+    'movie.silentDisco': 'Silent Disco',
+    'movie.filmStart': 'Film',
     'movie.viewFullSchedule': 'Bekijk volledig programma',
 
     // About
@@ -286,6 +288,8 @@ export const ui = {
     'movie.location': 'Location',
     'movie.kijkwijzer': 'Age Rating',
     'movie.trailerComingSoon': 'Trailer coming soon',
+    'movie.silentDisco': 'Silent Disco',
+    'movie.filmStart': 'Film',
     'movie.viewFullSchedule': 'View full schedule',
 
     // About
@@ -477,6 +481,8 @@ export const ui = {
     'movie.location': 'الموقع',
     'movie.kijkwijzer': 'التصنيف العمري',
     'movie.trailerComingSoon': 'الإعلان الترويجي قريباً',
+    'movie.silentDisco': 'ديسكو صامت',
+    'movie.filmStart': 'الفيلم',
     'movie.viewFullSchedule': 'عرض البرنامج الكامل',
 
     // About

@@ -49,6 +49,7 @@ const nextMovie = getNextMovie(movies);
               headphones={movie.headphones}
               previewUrl={movie.previewUrl}
               location={movie.location}
+              silentDisco={movie.silentDisco}
               isNext={nextMovie?.date === movie.date}
             />
           ))}

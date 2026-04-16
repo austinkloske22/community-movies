@@ -18,6 +18,7 @@ export interface Movie {
   headphones: string;
   previewUrl: string;
   location: string;
+  silentDisco: boolean;
 }
 
 function parseCSV(csv: string): Movie[] {
@@ -59,6 +60,7 @@ function parseCSV(csv: string): Movie[] {
       headphones: values[9] || '',
       previewUrl: values[10] || '',
       location: values[11] || '',
+      silentDisco: (values[12] || '').toLowerCase() === 'true',
     };
   }).filter((movie) => movie.title && movie.date);
 }

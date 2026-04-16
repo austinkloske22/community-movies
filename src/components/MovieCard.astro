@@ -16,9 +16,10 @@ interface Props {
   imageUrl?: string;
   isNext?: boolean;
   location?: string;
+  silentDisco?: boolean;
 }
 
-const { title, descriptionNl, descriptionEn, rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext, location } = Astro.props;
+const { title, descriptionNl, descriptionEn, rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext, location, silentDisco } = Astro.props;
 
 // Get age icon path
 function getAgeIcon(age: string): string {
@@ -91,6 +92,13 @@ function getYouTubeThumbnail(url: string | undefined): string {
 
 const thumbnail = imageUrl || getYouTubeThumbnail(previewUrl);
 
+// Calculate silent disco start time (1 hour before showtime)
+function getDiscoTime(showtime: string): string {
+  const [h, m] = showtime.split(':').map(Number);
+  const discoH = h - 1 < 0 ? 23 : h - 1;
+  return `${String(discoH).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
 // Format date for display
 function formatDate(dateStr: string): string {
   try {
@@ -129,9 +137,22 @@ function formatDate(dateStr: string): string {
 
   <div class="movie-content">
     <div class="movie-meta">
-      <img src={getAgeIcon(rating)} alt={`Kijkwijzer ${rating}`} class="kijkwijzer-icon" />
-      <span class="movie-date">{formatDate(date)}</span>
-      <span class="movie-time">{time}</span>
+      <div class="meta-row meta-date">
+        <img src={getAgeIcon(rating)} alt={`Kijkwijzer ${rating}`} class="kijkwijzer-icon" />
+        <span class="movie-date">{formatDate(date)}</span>
+      </div>
+      {silentDisco && (
+        <div class="meta-row meta-disco">
+          <span>🪩</span>
+          <span>{t('movie.silentDisco')}</span>
+          <span class="meta-time">{getDiscoTime(time)}</span>
+        </div>
+      )}
+      <div class="meta-row meta-film">
+        <span>🎬</span>
+        <span>{t('movie.filmStart')}</span>
+        <span class="meta-time">{time}</span>
+      </div>
     </div>
 
     <h3 class="movie-title">{title}</h3>
@@ -249,10 +270,24 @@ function formatDate(dateStr: string): string {
 
   .movie-meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-sm);
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: var(--space-md);
     font-size: 0.875rem;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .meta-date {
+    color: var(--color-text-muted);
+  }
+
+  .meta-date .movie-date::before {
+    content: '📅 ';
   }
 
   .kijkwijzer-icon {
@@ -260,17 +295,14 @@ function formatDate(dateStr: string): string {
     height: 24px;
   }
 
-  .movie-date,
-  .movie-time {
+  .meta-disco,
+  .meta-film {
     color: var(--color-text-muted);
   }
 
-  .movie-date::before {
-    content: '📅 ';
-  }
-
-  .movie-time::before {
-    content: '🕐 ';
+  .meta-time {
+    margin-inline-start: auto;
+    font-weight: 600;
   }
 
   .movie-title {
