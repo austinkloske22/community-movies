@@ -2,111 +2,19 @@
 const { useState: useSigState, useRef: useSigRef, useEffect: useSigEffect } = React;
 
 function SignaturePad({ value, onChange, lang }) {
-  const [mode, setMode] = useSigState(value?.mode || 'draw');
-  const canvasRef = useSigRef(null);
-  const drawing = useSigRef(false);
-  const lastPt = useSigRef(null);
-
-  useSigEffect(() => {
-    if (mode !== 'draw') return;
-    const cv = canvasRef.current;
-    if (!cv) return;
-    const dpr = window.devicePixelRatio || 1;
-    const rect = cv.getBoundingClientRect();
-    cv.width = rect.width * dpr;
-    cv.height = rect.height * dpr;
-    const ctx = cv.getContext('2d');
-    ctx.scale(dpr, dpr);
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#1B2F4A';
-    ctx.lineWidth = 2.2;
-    // Restore prior drawing
-    if (value?.mode === 'draw' && value.data) {
-      const img = new Image();
-      img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
-      img.src = value.data;
-    }
-  }, [mode]);
-
-  const getPos = (e) => {
-    const cv = canvasRef.current;
-    const r = cv.getBoundingClientRect();
-    const ev = e.touches ? e.touches[0] : e;
-    return { x: ev.clientX - r.left, y: ev.clientY - r.top };
-  };
-  const startDraw = (e) => {
-    e.preventDefault();
-    drawing.current = true;
-    lastPt.current = getPos(e);
-  };
-  const moveDraw = (e) => {
-    if (!drawing.current) return;
-    e.preventDefault();
-    const ctx = canvasRef.current.getContext('2d');
-    const p = getPos(e);
-    ctx.beginPath();
-    ctx.moveTo(lastPt.current.x, lastPt.current.y);
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-    lastPt.current = p;
-  };
-  const endDraw = () => {
-    if (!drawing.current) return;
-    drawing.current = false;
-    const data = canvasRef.current.toDataURL('image/png');
-    onChange({ mode: 'draw', data });
-  };
-  const clearDraw = () => {
-    const cv = canvasRef.current;
-    const ctx = cv.getContext('2d');
-    ctx.clearRect(0, 0, cv.width, cv.height);
-    onChange({ mode: 'draw', data: '' });
-  };
-
-  const typedName = value?.mode === 'type' ? (value.data || '') : '';
+  const typedName = value?.data || '';
   const onTypeChange = (e) => onChange({ mode: 'type', data: e.target.value });
-
   return (
     <div>
-      <div className="om-sign-tabs">
-        <button className={`om-sign-tab ${mode === 'draw' ? 'active' : ''}`}
-          onClick={() => { setMode('draw'); onChange({ mode: 'draw', data: '' }); }}>
-          ✎ {lang === 'nl' ? 'Teken' : 'Draw'}
-        </button>
-        <button className={`om-sign-tab ${mode === 'type' ? 'active' : ''}`}
-          onClick={() => { setMode('type'); onChange({ mode: 'type', data: '' }); }}>
-          ⌨ {lang === 'nl' ? 'Typ je naam' : 'Type your name'}
-        </button>
-      </div>
-
-      {mode === 'draw' && (
-        <div className="om-sign-canvas-wrap">
-          <canvas ref={canvasRef} className="om-sign-canvas"
-            onMouseDown={startDraw} onMouseMove={moveDraw}
-            onMouseUp={endDraw} onMouseLeave={endDraw}
-            onTouchStart={startDraw} onTouchMove={moveDraw} onTouchEnd={endDraw} />
-          <div className="om-sign-guideline" />
-          <div className="om-sign-hint">{lang === 'nl' ? 'Teken hier je handtekening' : 'Draw your signature here'}</div>
-        </div>
-      )}
-      {mode === 'type' && (
-        <>
-          <div className="om-sign-typed-preview">{typedName || (lang === 'nl' ? 'Je handtekening verschijnt hier' : 'Your signature appears here')}</div>
-          <input className="om-sign-typed-input" value={typedName} onChange={onTypeChange}
-            placeholder={lang === 'nl' ? 'Voornaam Achternaam' : 'First Last'} />
-        </>
-      )}
-
+      <div className="om-sign-typed-preview">{typedName || (lang === 'nl' ? 'Je handtekening verschijnt hier' : 'Your signature appears here')}</div>
+      <input className="om-sign-typed-input" value={typedName} onChange={onTypeChange}
+        placeholder={lang === 'nl' ? 'Voornaam Achternaam' : 'First Last'} />
       <div className="om-sign-footer">
-        <span>{lang === 'nl' ? 'Ondertekend' : 'Signed'} · {new Date().toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-GB')} · IP {fakeIp()}</span>
-        {mode === 'draw' && <button className="om-sign-clear" onClick={clearDraw}>{lang === 'nl' ? 'Wissen' : 'Clear'}</button>}
+        <span>{lang === 'nl' ? 'Ondertekend' : 'Signed'} · {new Date().toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-GB')}</span>
       </div>
     </div>
   );
 }
-
-function fakeIp() { return '10.0.' + (Math.floor(Math.random() * 200) + 40) + '.' + (Math.floor(Math.random() * 200) + 10); }
 
 // ---- Answer formatter: turn a question + answer into display rows ----
 function formatAnswer(q, answers, lang) {

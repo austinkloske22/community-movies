@@ -128,7 +128,6 @@ function QMultiCards({ q, answer, setAnswer, lang }) {
           <button key={o.value} type="button"
             className={`om-card-option ${selected ? 'selected' : ''}`}
             onClick={() => toggle(o.value)}>
-            <div className="om-card-letter">Optie {o.value}</div>
             <div className="om-card-label">{o.label}</div>
             <div className="om-card-sub">{o.sub}</div>
             <div className="om-card-check">{selected ? '✓' : ''}</div>

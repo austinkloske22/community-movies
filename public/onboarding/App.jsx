@@ -48,6 +48,17 @@ function App() {
     setIndex(0);
   };
 
+  const resumeFromSaved = () => {
+    const newQs = visibleQuestions(answers);
+    for (let i = 0; i < newQs.length; i++) {
+      const res = window.validateQuestion(newQs[i], answers, lang);
+      if (!res.ok) { setIndex(i); setPhase('flow'); return; }
+    }
+    // All visible questions pass validation → send them to review
+    setIndex(Math.max(0, newQs.length - 1));
+    setPhase('review');
+  };
+
   const next = () => {
     if (!current) return;
     const res = window.validateQuestion(current, answers, lang);
@@ -66,6 +77,16 @@ function App() {
     const newQs = visibleQuestions(answers);
     const idx = newQs.findIndex(q => q.id === qid);
     if (idx >= 0) { setIndex(idx); setPhase('flow'); }
+  };
+
+  const gotoSection = (sectionId) => {
+    setErr(null);
+    if (sectionId === 8) { setPhase('review'); return; }
+    const newQs = visibleQuestions(answers);
+    const idx = newQs.findIndex(q => q.section === sectionId);
+    if (idx < 0) return; // section not currently visible (e.g. Organisation when behalfOf='self')
+    setIndex(idx);
+    setPhase('flow');
   };
 
   const submit = async () => {
@@ -107,13 +128,25 @@ function App() {
   const pct = phase === 'flow' ? Math.round((index / qs.length) * 100)
             : phase === 'review' ? 95 : phase === 'confirmed' ? 100 : 0;
 
+  const discardDraft = () => {
+    const msg = lang === 'nl'
+      ? 'Weet je zeker dat je opnieuw wilt beginnen? Je ingevulde antwoorden worden gewist.'
+      : 'Are you sure you want to start over? Your saved answers will be cleared.';
+    if (!window.confirm(msg)) return;
+    localStorage.removeItem(STORAGE_KEY);
+    setAnswers({}); setIndex(0); setSignature(null); setAgreed(false);
+    setErr(null); setSubmitErr(null);
+    setPhase('landing');
+  };
+
   return (
     <>
-      <Header lang={lang} setLang={setLang} />
+      <Header lang={lang} setLang={setLang}
+        onDiscard={phase !== 'landing' && phase !== 'confirmed' ? discardDraft : null} />
 
       {phase !== 'landing' && phase !== 'confirmed' && (
         <ProgressRail qs={qs} answers={answers} current={current} pct={pct}
-          lang={lang} phase={phase} />
+          lang={lang} phase={phase} onSectionClick={gotoSection} />
       )}
 
       {phase === 'landing' && (
@@ -121,8 +154,8 @@ function App() {
       )}
 
       {phase === 'resume' && (
-        <Landing lang={lang} hasSaved onCommit={startFlow}
-          onDiscard={() => { localStorage.removeItem(STORAGE_KEY); setAnswers({}); setIndex(0); setPhase('landing'); setSignature(null); }} />
+        <Landing lang={lang} hasSaved onCommit={resumeFromSaved}
+          onDiscard={discardDraft} />
       )}
 
       {phase === 'flow' && current && (
@@ -151,9 +184,10 @@ function App() {
   );
 }
 
-function Header({ lang, setLang }) {
+function Header({ lang, setLang, onDiscard }) {
   const L = window.I18N[lang];
   const siteHome = lang === 'en' ? '/en/' : lang === 'ara' ? '/ara/' : '/';
+  const startOverLabel = lang === 'nl' ? 'Opnieuw beginnen' : 'Start over';
   return (
     <header className="om-header">
       <div className="om-header-inner">
@@ -166,6 +200,11 @@ function Header({ lang, setLang }) {
         </a>
         <div className="om-header-right">
           <a className="om-back-link" href={siteHome}>← {L.backHome}</a>
+          {onDiscard && (
+            <button className="om-discard" onClick={onDiscard} title={startOverLabel}>
+              {startOverLabel}
+            </button>
+          )}
           <button className="om-lang" onClick={() => setLang(lang === 'nl' ? 'en' : 'nl')}>
             {L.langLabel} <span style={{ opacity: 0.4 }}>/</span> {L.langOther}
           </button>
@@ -175,9 +214,13 @@ function Header({ lang, setLang }) {
   );
 }
 
-function ProgressRail({ qs, answers, current, pct, lang, phase }) {
+function ProgressRail({ qs, answers, current, pct, lang, phase, onSectionClick }) {
   const sections = window.SECTIONS;
   const currentSection = phase === 'review' ? 8 : (current?.section || 0);
+  // A section is reachable if any of its questions are currently visible (sections
+  // 2 and 4 are conditional). Section 8 = review, always reachable.
+  const reachable = new Set(qs.map(q => q.section));
+  reachable.add(8);
   return (
     <div className="om-progress">
       <div className="om-progress-inner">
@@ -185,13 +228,17 @@ function ProgressRail({ qs, answers, current, pct, lang, phase }) {
           {sections.map((s, i) => {
             const done = s.id < currentSection;
             const active = s.id === currentSection;
+            const canClick = reachable.has(s.id);
             return (
               <React.Fragment key={s.id}>
                 {i > 0 && <div className="om-step-sep" />}
-                <div className={`om-step ${done ? 'done' : ''} ${active ? 'active' : ''}`}>
+                <button type="button"
+                  className={`om-step ${done ? 'done' : ''} ${active ? 'active' : ''} ${canClick ? 'clickable' : ''}`}
+                  onClick={() => canClick && onSectionClick && onSectionClick(s.id)}
+                  disabled={!canClick}>
                   <span className="om-step-num">{done ? '' : s.id}</span>
                   <span className="om-step-label">{s[lang]}</span>
-                </div>
+                </button>
               </React.Fragment>
             );
           })}

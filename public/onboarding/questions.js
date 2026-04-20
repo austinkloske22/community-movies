@@ -354,12 +354,12 @@ window.QUESTIONS = [
 
   // ---- SECTION 6 ----
   {
-    id: 'motivation', section: 6, kind: 'long', required: true, minWords: 100,
+    id: 'motivation', section: 6, kind: 'long', required: true, minWords: 20,
     nl: { title: 'Waarom steun jij Nelson\u2019s Film?',
-      help: 'Minimaal 100 woorden. Schrijf vanuit jezelf, in gewone taal. Dit is een van de zwaarst wegende onderdelen.',
+      help: 'Een paar zinnen is genoeg. Schrijf vanuit jezelf, in gewone taal.',
       placeholder: 'Vertel in eigen woorden waarom dit initiatief belangrijk is, vanuit jouw perspectief op de wijk…' },
     en: { title: 'Why do you support Nelson\u2019s Film?',
-      help: 'At least 100 words. Write from the heart, plain language. One of the most important parts.',
+      help: 'A couple of sentences is plenty. Write from the heart, in plain language.',
       placeholder: 'Tell us in your own words why this initiative matters, from your perspective on the neighbourhood…' },
   },
   {
@@ -367,14 +367,14 @@ window.QUESTIONS = [
     nl: { title: 'Is er behoefte aan een verbindend wijkprogramma?',
       help: 'Vertrouw op wat jij ziet en ervaart. Geen beleidsanalyse nodig.',
       options: [
-        { value: 'yes', label: 'Ja', freeText: 'Wat zie, hoor of ervaar je? (min. 50 woorden)' },
+        { value: 'yes', label: 'Ja', freeText: 'Wat zie, hoor of ervaar je?' },
         { value: 'no', label: 'Nee' },
         { value: 'dk', label: 'Ik weet het niet' },
       ]},
     en: { title: 'Is there a need for a connecting neighbourhood programme?',
       help: 'Trust what you see and experience. No policy analysis required.',
       options: [
-        { value: 'yes', label: 'Yes', freeText: 'What do you see, hear or experience? (min. 50 words)' },
+        { value: 'yes', label: 'Yes', freeText: 'What do you see, hear or experience?' },
         { value: 'no', label: 'No' },
         { value: 'dk', label: 'Not sure' },
       ]},

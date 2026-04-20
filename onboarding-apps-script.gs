@@ -33,21 +33,49 @@ const CONFIG = {
   ADMIN_EMAIL: 'austinkloske@gmail.com',  // who gets notified on every submission
   SEND_PARTNER_CONFIRMATION: true,         // auto-ack the person who submitted
   SHEET_NAME: 'Submissions',               // first tab in the Sheet
+  // If this Apps Script is STANDALONE (not created from inside a Sheet), paste the
+  // target Sheet's ID here. Find it in the Sheet URL:
+  //   https://docs.google.com/spreadsheets/d/{THIS_IS_THE_ID}/edit
+  // If the script is bound to a Sheet (Extensions → Apps Script from the Sheet),
+  // you can leave this empty.
+  SPREADSHEET_ID: '1UWGd7kBt1JSAxVAI10D27wUhIxLkAL4-7vlNKXDk64U',
 };
 
 function doPost(e) {
+  const t0 = Date.now();
+  console.log('[doPost] start', {
+    hasPostData: !!(e && e.postData),
+    contentLength: e && e.postData ? e.postData.contents.length : 0,
+    contentType: e && e.postData ? e.postData.type : null,
+  });
   try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error('No POST body received');
+    }
     const body = JSON.parse(e.postData.contents);
     const { lang = 'nl', answers = {}, signature, submittedAt, userAgent, pageUrl } = body;
+    console.log('[doPost] parsed', {
+      lang, submittedAt,
+      answerKeys: Object.keys(answers),
+      hasSignature: !!signature,
+      signatureMode: signature?.mode,
+    });
 
     const contact = answers.contact || {};
     const org = answers.orgDetails || {};
     const behalfOf = answers.behalfOf === 'org' ? 'Organisation' : 'Individual';
 
     // 1) Append row to Sheet
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = CONFIG.SPREADSHEET_ID
+      ? SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)
+      : SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) throw new Error('No spreadsheet available. Set CONFIG.SPREADSHEET_ID or bind the script to a Sheet via Extensions → Apps Script.');
+    console.log('[doPost] spreadsheet', { name: ss.getName(), id: ss.getId(), url: ss.getUrl() });
     let sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
-    if (!sheet) sheet = ss.insertSheet(CONFIG.SHEET_NAME);
+    if (!sheet) {
+      console.log('[doPost] creating sheet tab', CONFIG.SHEET_NAME);
+      sheet = ss.insertSheet(CONFIG.SHEET_NAME);
+    }
     sheet.appendRow([
       new Date(submittedAt || Date.now()),
       lang,
@@ -61,6 +89,7 @@ function doPost(e) {
       signature?.mode || '',
       JSON.stringify(answers),
     ]);
+    console.log('[doPost] row appended', { sheet: sheet.getName(), rows: sheet.getLastRow() });
 
     // 2) Admin email with a readable summary
     const partnerName = [contact.firstName, contact.lastName].filter(Boolean).join(' ') || '(no name)';
@@ -71,6 +100,8 @@ function doPost(e) {
     if (signature?.mode === 'draw' && signature.data && signature.data.startsWith('data:image/')) {
       attachments.push(dataUrlToBlob(signature.data, 'signature.png'));
     }
+    const quotaBefore = MailApp.getRemainingDailyQuota();
+    console.log('[doPost] sending admin email', { to: CONFIG.ADMIN_EMAIL, attachments: attachments.length, quotaBefore });
     MailApp.sendEmail({
       to: CONFIG.ADMIN_EMAIL,
       subject,
@@ -78,30 +109,63 @@ function doPost(e) {
       attachments,
       replyTo: contact.email || CONFIG.ADMIN_EMAIL,
     });
+    console.log('[doPost] admin email sent');
 
     // 3) Optional: confirmation to the partner
     if (CONFIG.SEND_PARTNER_CONFIRMATION && contact.email) {
       const thanksSubject = lang === 'en'
         ? 'Thank you — your collaboration statement was received'
         : 'Bedankt — je samenwerkingsverklaring is ontvangen';
+      console.log('[doPost] sending partner confirmation', { to: contact.email });
       MailApp.sendEmail({
         to: contact.email,
         subject: thanksSubject,
         htmlBody: buildPartnerHtml(lang, partnerName),
         replyTo: CONFIG.ADMIN_EMAIL,
       });
+      console.log('[doPost] partner confirmation sent');
+    } else {
+      console.log('[doPost] skipping partner confirmation', { configured: CONFIG.SEND_PARTNER_CONFIRMATION, hasEmail: !!contact.email });
     }
 
+    console.log('[doPost] done', { ms: Date.now() - t0 });
     return jsonResponse({ ok: true });
   } catch (err) {
-    console.error(err);
-    return jsonResponse({ ok: false, error: String(err) });
+    console.error('[doPost] FAILED', { message: err.message, stack: err.stack, ms: Date.now() - t0 });
+    return jsonResponse({ ok: false, error: String(err && err.message || err) });
   }
 }
 
 // Optional: GET returns a health check so you can sanity-test the URL in a browser.
 function doGet() {
+  console.log('[doGet] health check');
   return jsonResponse({ ok: true, service: 'nelsons-film-onboarding', time: new Date().toISOString() });
+}
+
+/**
+ * Run this manually from the Apps Script editor (select `debugTest` in the
+ * function dropdown, click Run) to verify Sheet + email without going through
+ * the frontend. Check the Execution log for step-by-step output.
+ */
+function debugTest() {
+  const fakeBody = {
+    lang: 'nl',
+    submittedAt: new Date().toISOString(),
+    userAgent: 'debugTest',
+    pageUrl: 'debug://local',
+    answers: {
+      contact: { firstName: 'Debug', lastName: 'User', email: CONFIG.ADMIN_EMAIL, phone: '' },
+      behalfOf: 'self',
+      contributions: ['A'],
+      permission: 'both',
+      motivation: 'This is a manual debug test submission to verify the pipeline end-to-end.',
+      need: 'dk',
+      reach: 'dk',
+    },
+    signature: { mode: 'type', data: 'Debug User' },
+  };
+  const result = doPost({ postData: { contents: JSON.stringify(fakeBody), type: 'text/plain' } });
+  console.log('[debugTest] result', result.getContent());
 }
 
 function jsonResponse(obj) {
