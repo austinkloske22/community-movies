@@ -3,11 +3,24 @@ const { useState: uS, useEffect: uE, useMemo: uM, useRef: uR } = React;
 
 const STORAGE_KEY = 'nf_onboarding_v1';
 
-// Initial language from the route path: /en/..., /ara/..., /... (nl)
+// Initial language. Preference order:
+// 1. ?lang= query param (set by locale redirects from /en/samenwerking etc.)
+// 2. URL path segment (defensive; the canonical route is bare /samenwerking)
+// 3. Default 'nl'
+// The form only supports 'nl' and 'en'; any other value falls back to 'nl'.
 function detectLang() {
+  try {
+    const qp = new URLSearchParams(window.location.search).get('lang');
+    if (qp === 'en' || qp === 'nl') {
+      // Strip the query param so the canonical URL is clean.
+      const url = new URL(window.location.href);
+      url.searchParams.delete('lang');
+      window.history.replaceState({}, '', url.pathname + (url.search || '') + url.hash);
+      return qp;
+    }
+  } catch (e) { /* ignore */ }
   const seg = window.location.pathname.split('/').filter(Boolean)[0];
   if (seg === 'en') return 'en';
-  if (seg === 'ara') return 'nl'; // Arabic translations not yet available; fall back to Dutch
   return 'nl';
 }
 
@@ -24,7 +37,10 @@ function visibleQuestions(answers) {
 
 function App() {
   const saved = uM(() => loadSaved(), []);
-  const [lang, setLang] = uS(saved?.lang || detectLang());
+  // URL-derived lang always wins on initial load — the user's last click on
+  // the site-wide language picker put them on this specific /samenwerking
+  // route, so respect it. They can still toggle in-page afterwards.
+  const [lang, setLang] = uS(detectLang());
   const [phase, setPhase] = uS(saved ? 'resume' : 'landing');
   const [answers, setAnswers] = uS(saved?.answers || {});
   const [index, setIndex] = uS(saved?.index || 0);
@@ -205,9 +221,16 @@ function Header({ lang, setLang, onDiscard }) {
               {startOverLabel}
             </button>
           )}
-          <button className="om-lang" onClick={() => setLang(lang === 'nl' ? 'en' : 'nl')}>
-            {L.langLabel} <span style={{ opacity: 0.4 }}>/</span> {L.langOther}
-          </button>
+          <div className="om-lang-toggle" role="group" aria-label="Language">
+            <button
+              className={`om-lang-opt ${lang === 'nl' ? 'active' : ''}`}
+              onClick={() => setLang('nl')}
+              aria-pressed={lang === 'nl'}>NL</button>
+            <button
+              className={`om-lang-opt ${lang === 'en' ? 'active' : ''}`}
+              onClick={() => setLang('en')}
+              aria-pressed={lang === 'en'}>EN</button>
+          </div>
         </div>
       </div>
     </header>

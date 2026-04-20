@@ -106,7 +106,7 @@ const connections = [
       <div class="collaboration-cta">
         <h2>{t('municipalities.collaborationTitle')}</h2>
         <p>{t('municipalities.collaborationText')}</p>
-        <a href={getLocalizedPath('/samenwerking', lang)} class="btn btn-primary btn-lg">
+        <a href={`/samenwerking/${lang === 'en' ? '?lang=en' : ''}`} class="btn btn-primary btn-lg">
           {t('municipalities.collaborationCta')}
           <span aria-hidden="true">→</span>
         </a>

@@ -99,6 +99,26 @@
   transition: all 150ms var(--ease);
 }
 .om-lang:hover { border-color: var(--color-gold); color: var(--color-gold); }
+.om-lang-toggle {
+  display: inline-flex; align-items: center;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--color-line);
+  border-radius: 999px; padding: 3px;
+  font-family: var(--font-mono);
+}
+.om-lang-opt {
+  background: transparent; border: none;
+  color: var(--color-text-muted);
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 0.78rem; letter-spacing: 0.08em;
+  font-family: inherit; cursor: pointer;
+  transition: all 150ms var(--ease);
+}
+.om-lang-opt:hover { color: var(--color-text); }
+.om-lang-opt.active {
+  background: var(--color-accent);
+  color: white;
+}
 .om-save {
   background: transparent; border: 1px solid var(--color-line); color: var(--color-text-dim);
   padding: 8px 14px; border-radius: 999px; font-size: 0.8rem; cursor: pointer;
