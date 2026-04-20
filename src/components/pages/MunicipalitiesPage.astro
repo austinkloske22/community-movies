@@ -101,6 +101,16 @@ const connections = [
           </a>
         </div>
       </div>
+
+      <!-- Collaboration Statement Onboarding CTA -->
+      <div class="collaboration-cta">
+        <h2>{t('municipalities.collaborationTitle')}</h2>
+        <p>{t('municipalities.collaborationText')}</p>
+        <a href={getLocalizedPath('/samenwerking', lang)} class="btn btn-primary btn-lg">
+          {t('municipalities.collaborationCta')}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -283,6 +293,40 @@ const connections = [
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-md);
+  }
+
+  .collaboration-cta {
+    max-width: 800px;
+    margin: var(--space-xl) auto 0;
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, rgba(242, 199, 92, 0.08), rgba(215, 110, 77, 0.04));
+    border: 1px solid rgba(242, 199, 92, 0.25);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .collaboration-cta h2 {
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .collaboration-cta p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+  }
+
+  .btn-lg {
+    padding: var(--space-md) var(--space-xl);
+    font-size: 1.05rem;
+  }
+
+  .btn-lg span {
+    transition: transform var(--transition-fast);
+  }
+
+  .btn-lg:hover span {
+    transform: translateX(4px);
   }
 
   @media (max-width: 768px) {

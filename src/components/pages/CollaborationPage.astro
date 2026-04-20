@@ -1,0 +1,61 @@
+---
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const meta = {
+  nl: {
+    title: 'Samenwerkingsverklaring',
+    description: 'Breng Nelsons Film naar jouw wijk — teken de samenwerkingsverklaring.',
+  },
+  en: {
+    title: 'Collaboration Statement',
+    description: 'Bring Nelsons Film to your neighbourhood — sign the collaboration statement.',
+  },
+  ara: {
+    title: 'Samenwerkingsverklaring',
+    description: 'Breng Nelsons Film naar jouw wijk — teken de samenwerkingsverklaring.',
+  },
+};
+const m = meta[lang] || meta.nl;
+---
+<!DOCTYPE html>
+<html lang={lang === 'ara' ? 'nl' : lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={m.description} />
+    <title>{m.title} | Nelsons Film</title>
+    <link rel="icon" type="image/png" href="/images/brand/icon-logo-clear-background.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Homemade+Apple&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/onboarding/styles.css" />
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <div id="om-root" class="om-root"></div>
+
+    <script is:inline src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+    <script is:inline src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+    <script is:inline src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+
+    <script is:inline src="/onboarding/config.js"></script>
+    <script is:inline src="/onboarding/i18n.js"></script>
+    <script is:inline src="/onboarding/questions.js"></script>
+
+    <script is:inline type="text/babel" src="/onboarding/QuestionInput.jsx"></script>
+    <script is:inline type="text/babel" src="/onboarding/Signature.jsx"></script>
+    <script is:inline type="text/babel" src="/onboarding/App.jsx"></script>
+
+    <script is:inline data-goatcounter="https://nelsonsfilm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  </body>
+</html>
+
+<style is:global>
+  body { margin: 0; }
+</style>

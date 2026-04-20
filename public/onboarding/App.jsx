@@ -1,0 +1,417 @@
+// Main App — orchestrates landing, question flow, review, confirmation
+const { useState: uS, useEffect: uE, useMemo: uM, useRef: uR } = React;
+
+const STORAGE_KEY = 'nf_onboarding_v1';
+
+// Initial language from the route path: /en/..., /ara/..., /... (nl)
+function detectLang() {
+  const seg = window.location.pathname.split('/').filter(Boolean)[0];
+  if (seg === 'en') return 'en';
+  if (seg === 'ara') return 'nl'; // Arabic translations not yet available; fall back to Dutch
+  return 'nl';
+}
+
+function loadSaved() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { return null; }
+}
+function saveState(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function visibleQuestions(answers) {
+  return window.QUESTIONS.filter(q => !q.deps || q.deps(answers));
+}
+
+function App() {
+  const saved = uM(() => loadSaved(), []);
+  const [lang, setLang] = uS(saved?.lang || detectLang());
+  const [phase, setPhase] = uS(saved ? 'resume' : 'landing');
+  const [answers, setAnswers] = uS(saved?.answers || {});
+  const [index, setIndex] = uS(saved?.index || 0);
+  const [err, setErr] = uS(null);
+  const [signature, setSignature] = uS(saved?.signature || null);
+  const [agreed, setAgreed] = uS(false);
+  const [showPdf, setShowPdf] = uS(false);
+  const [submitting, setSubmitting] = uS(false);
+  const [submitErr, setSubmitErr] = uS(null);
+
+  const qs = uM(() => visibleQuestions(answers), [answers]);
+  const current = qs[index];
+
+  uE(() => { saveState({ lang, answers, index, signature }); }, [lang, answers, index, signature]);
+
+  const setAns = (id, v) => setAnswers(a => ({ ...a, [id]: v }));
+
+  const startFlow = () => {
+    if (!answers.__committed) setAnswers(a => ({ ...a, __committed: true }));
+    setPhase('flow');
+    setIndex(0);
+  };
+
+  const next = () => {
+    if (!current) return;
+    const res = window.validateQuestion(current, answers, lang);
+    if (!res.ok) { setErr(res.msg); return; }
+    setErr(null);
+    const newQs = visibleQuestions(answers);
+    if (index + 1 >= newQs.length) { setPhase('review'); return; }
+    setIndex(index + 1);
+  };
+  const back = () => {
+    setErr(null);
+    if (index === 0) { setPhase('landing'); return; }
+    setIndex(index - 1);
+  };
+  const gotoQuestion = (qid) => {
+    const newQs = visibleQuestions(answers);
+    const idx = newQs.findIndex(q => q.id === qid);
+    if (idx >= 0) { setIndex(idx); setPhase('flow'); }
+  };
+
+  const submit = async () => {
+    if (!agreed || !signature?.data || submitting) return;
+    setSubmitting(true);
+    setSubmitErr(null);
+    try {
+      const url = window.NF_SUBMIT_URL;
+      if (!url || /PASTE|YOUR_/.test(url)) {
+        throw new Error('Submit endpoint not configured');
+      }
+      const payload = {
+        lang,
+        answers,
+        signature,
+        submittedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        pageUrl: window.location.href,
+      };
+      // text/plain avoids a CORS preflight that Apps Script doesn't answer.
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json().catch(() => ({}));
+      if (data && data.ok === false) throw new Error(data.error || 'Server rejected submission');
+      localStorage.removeItem(STORAGE_KEY);
+      setPhase('confirmed');
+    } catch (e) {
+      console.error('Submit failed', e);
+      setSubmitErr(e.message || String(e));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const pct = phase === 'flow' ? Math.round((index / qs.length) * 100)
+            : phase === 'review' ? 95 : phase === 'confirmed' ? 100 : 0;
+
+  return (
+    <>
+      <Header lang={lang} setLang={setLang} />
+
+      {phase !== 'landing' && phase !== 'confirmed' && (
+        <ProgressRail qs={qs} answers={answers} current={current} pct={pct}
+          lang={lang} phase={phase} />
+      )}
+
+      {phase === 'landing' && (
+        <Landing lang={lang} onCommit={startFlow} hasSaved={false} />
+      )}
+
+      {phase === 'resume' && (
+        <Landing lang={lang} hasSaved onCommit={startFlow}
+          onDiscard={() => { localStorage.removeItem(STORAGE_KEY); setAnswers({}); setIndex(0); setPhase('landing'); setSignature(null); }} />
+      )}
+
+      {phase === 'flow' && current && (
+        <QuestionScreen key={current.id + index} q={current} answers={answers} setAns={setAns}
+          next={next} back={back} err={err} lang={lang}
+          index={index} total={qs.length} />
+      )}
+
+      {phase === 'review' && (
+        <ReviewScreen answers={answers} lang={lang} back={() => { setPhase('flow'); setIndex(qs.length - 1); }}
+          onEdit={gotoQuestion}
+          signature={signature} setSignature={setSignature}
+          agreed={agreed} setAgreed={setAgreed}
+          onSubmit={submit} submitting={submitting} submitErr={submitErr}
+          onPreviewPdf={() => setShowPdf(true)} />
+      )}
+
+      {phase === 'confirmed' && (
+        <Confirmation lang={lang} answers={answers} signature={signature} onPreviewPdf={() => setShowPdf(true)} />
+      )}
+
+      {showPdf && (
+        <PdfPreview answers={answers} signature={signature} lang={lang} onClose={() => setShowPdf(false)} />
+      )}
+    </>
+  );
+}
+
+function Header({ lang, setLang }) {
+  const L = window.I18N[lang];
+  const siteHome = lang === 'en' ? '/en/' : lang === 'ara' ? '/ara/' : '/';
+  return (
+    <header className="om-header">
+      <div className="om-header-inner">
+        <a className="om-brand" href={siteHome}>
+          <img src="/images/brand/icon-logo-clear-background.png" alt="Nelsons Film" className="om-brand-logo" />
+          <div>
+            <div className="om-brand-name">Nelsons Film</div>
+          </div>
+          <span className="om-brand-tag">{L.brandTag}</span>
+        </a>
+        <div className="om-header-right">
+          <a className="om-back-link" href={siteHome}>← {L.backHome}</a>
+          <button className="om-lang" onClick={() => setLang(lang === 'nl' ? 'en' : 'nl')}>
+            {L.langLabel} <span style={{ opacity: 0.4 }}>/</span> {L.langOther}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function ProgressRail({ qs, answers, current, pct, lang, phase }) {
+  const sections = window.SECTIONS;
+  const currentSection = phase === 'review' ? 8 : (current?.section || 0);
+  return (
+    <div className="om-progress">
+      <div className="om-progress-inner">
+        <div className="om-steps">
+          {sections.map((s, i) => {
+            const done = s.id < currentSection;
+            const active = s.id === currentSection;
+            return (
+              <React.Fragment key={s.id}>
+                {i > 0 && <div className="om-step-sep" />}
+                <div className={`om-step ${done ? 'done' : ''} ${active ? 'active' : ''}`}>
+                  <span className="om-step-num">{done ? '' : s.id}</span>
+                  <span className="om-step-label">{s[lang]}</span>
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </div>
+        <div className="om-percent"><strong>{pct}%</strong></div>
+      </div>
+    </div>
+  );
+}
+
+function Landing({ lang, onCommit, hasSaved, onDiscard }) {
+  const L = window.I18N[lang];
+  const title = lang === 'nl'
+    ? <>Breng <em>Nelsons Film</em><br/>naar jouw wijk.</>
+    : <>Bring <em>Nelsons Film</em><br/>to your neighbourhood.</>;
+  return (
+    <main className="om-landing om-fade-in">
+      <div className="om-landing-content">
+        {hasSaved && (
+          <div className="om-resume-pill">
+            <strong>✓ {L.resumeLabel}</strong>
+            <button onClick={onDiscard}>{L.resumeDiscard}</button>
+          </div>
+        )}
+        <div className="om-landing-kicker">{L.kicker}</div>
+        <h1 className="om-landing-title">{title}</h1>
+        <p className="om-landing-lede">{L.landingLede}</p>
+        <div className="om-landing-meta">
+          <span>{L.landingMeta1}</span>
+          <span>{L.landingMeta2}</span>
+          <span>{L.landingMeta3}</span>
+        </div>
+        <button className="om-commit" onClick={onCommit}>
+          {hasSaved ? L.resumeCta : L.commitCta}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+        <p className="om-commit-hint">{L.commitHint}</p>
+      </div>
+      <div className="om-landing-art">
+        <div className="om-marquee-lights">
+          {Array.from({ length: 18 }).map((_, i) => <span key={i} className="om-bulb" />)}
+        </div>
+        <img src="/images/outdoor-sunset.jpg" alt="" />
+        <div className="om-landing-art-caption">
+          "Het publiek staarde naar het scherm alsof ze de sterren zagen opkomen."
+          <small>{lang === 'nl' ? 'Haarlem Noord — Zomer 2025' : 'Haarlem Noord — Summer 2025'}</small>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function QuestionScreen({ q, answers, setAns, next, back, err, lang, index, total }) {
+  const L = window.I18N[lang];
+  const section = window.SECTIONS.find(s => s.id === q.section);
+  return (
+    <main className="om-main om-fade-in">
+      <div className="om-q-meta">
+        <span>{L.sectionWord} {q.section} · {section[lang]}</span>
+        <span className="dot" />
+        <span>{L.questionWord} {index + 1} / {total}</span>
+        {q.required && <><span className="dot" /><span className="om-q-required">{L.required}</span></>}
+        {!q.required && <><span className="dot" /><span>{L.optional}</span></>}
+      </div>
+      <h1 className="om-q-title">{q[lang].title}</h1>
+      {q[lang].help && <p className="om-q-help">{q[lang].help}</p>}
+
+      <QuestionInput q={q} answer={answers[q.id]} setAnswer={(v) => setAns(q.id, v)} lang={lang} />
+
+      {err && <div className="om-err">⚠ {err}</div>}
+
+      <div className="om-q-actions">
+        <button className="om-btn om-btn-ghost" onClick={back}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          {L.back}
+        </button>
+        <button className="om-btn om-btn-primary" onClick={next}>
+          {index + 1 === total ? L.review : L.next}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </main>
+  );
+}
+
+function formatAnswerShort(q, ans, lang) {
+  if (ans == null || ans === '' || (Array.isArray(ans) && !ans.length)) return null;
+  const L = q[lang];
+  if (q.kind === 'text-group') {
+    return L.fields.map(f => ans[f.key] ? `${f.label}: ${ans[f.key]}` : null).filter(Boolean).join(' · ');
+  }
+  if (q.kind === 'single' || q.kind === 'single-text') {
+    const v = typeof ans === 'object' ? ans.value : ans;
+    const opt = L.options?.find(o => o.value === v);
+    const base = opt?.label || v;
+    const extra = typeof ans === 'object' && ans.text ? ` — "${ans.text}"` : '';
+    return base + extra;
+  }
+  if (q.kind === 'multi') {
+    const arr = Array.isArray(ans) ? ans : (ans.values || []);
+    const others = ans.others || {};
+    return arr.map(v => {
+      const o = L.options.find(o => o.value === v);
+      return o ? (others[v] ? `${o.label} (${others[v]})` : o.label) : v;
+    }).join(', ');
+  }
+  if (q.kind === 'multi-cards') {
+    return ans.map(v => L.options.find(o => o.value === v)?.label).filter(Boolean).join(', ');
+  }
+  if (q.kind === 'long') return ans.length > 200 ? ans.slice(0, 200) + '…' : ans;
+  if (q.kind === 'euro') return `€${Number(ans).toLocaleString(lang === 'nl' ? 'nl-NL' : 'en-GB')} ${lang === 'nl' ? 'per editie' : 'per screening'}`;
+  return String(ans);
+}
+
+function ReviewScreen({ answers, lang, back, onEdit, signature, setSignature, agreed, setAgreed, onSubmit, submitting, submitErr, onPreviewPdf }) {
+  const L = window.I18N[lang];
+  const qs = visibleQuestions(answers);
+  const bySection = {};
+  qs.forEach(q => { (bySection[q.section] ||= []).push(q); });
+  return (
+    <main className="om-main om-fade-in om-review-wrap">
+      <div className="om-q-meta">
+        <span>{L.sectionWord} 8 · {window.SECTIONS[7][lang]}</span>
+        <span className="dot" />
+        <span>{lang === 'nl' ? 'Laatste stap' : 'Final step'}</span>
+      </div>
+      <h1 className="om-q-title">{L.reviewTitle}</h1>
+      <p className="om-q-help">{L.reviewLede}</p>
+
+      <div className="om-review-list">
+        {Object.keys(bySection).map(sid => (
+          <React.Fragment key={sid}>
+            <div className="om-review-section-head">{window.SECTIONS.find(s => s.id === Number(sid))[lang]}</div>
+            {bySection[sid].map(q => {
+              const a = formatAnswerShort(q, answers[q.id], lang);
+              return (
+                <div key={q.id} className="om-review-row">
+                  <div className="om-review-q">{q[lang].title}</div>
+                  <div className={`om-review-a ${!a ? 'empty' : ''}`}>{a || (lang === 'nl' ? '— niet ingevuld' : '— not filled')}</div>
+                  <button className="om-review-edit" onClick={() => onEdit(q.id)}>{L.edit}</button>
+                </div>
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <button className="om-pdf-preview-btn" onClick={onPreviewPdf}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        </svg>
+        {L.previewPdf}
+      </button>
+
+      <div className="om-sign-wrap">
+        <h2 className="om-sign-title">{L.signTitle}</h2>
+        <p className="om-sign-body">{L.signBody}</p>
+        <SignaturePad value={signature} onChange={setSignature} lang={lang} />
+      </div>
+
+      <label className="om-agree">
+        <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
+        <span>{L.signAgree}</span>
+      </label>
+
+      {submitErr && (
+        <div className="om-err" style={{ marginBottom: 16 }}>
+          ⚠ {lang === 'nl'
+            ? 'Versturen mislukt. Controleer je verbinding en probeer opnieuw.'
+            : 'Submission failed. Check your connection and try again.'} <span style={{ opacity: 0.6 }}>({submitErr})</span>
+        </div>
+      )}
+
+      <div className="om-q-actions">
+        <button className="om-btn om-btn-ghost" onClick={back} disabled={submitting}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          {L.back}
+        </button>
+        <button className="om-btn om-btn-primary" disabled={!agreed || !signature?.data || submitting} onClick={onSubmit}>
+          {submitting ? (lang === 'nl' ? 'Versturen…' : 'Sending…') : L.submit}
+          {!submitting && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>}
+        </button>
+      </div>
+    </main>
+  );
+}
+
+function Confirmation({ lang, onPreviewPdf }) {
+  const L = window.I18N[lang];
+  return (
+    <main className="om-main om-conf">
+      <div className="om-conf-badge">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h1 className="om-conf-title">{L.confTitle}</h1>
+      <p className="om-conf-lede">{L.confLede}</p>
+
+      <div className="om-timeline">
+        <div className="om-tl-step"><div className="om-tl-num">1</div>
+          <div className="om-tl-body"><h3>{L.confStep1Title}</h3><p>{L.confStep1Body}</p></div></div>
+        <div className="om-tl-step"><div className="om-tl-num">2</div>
+          <div className="om-tl-body"><h3>{L.confStep2Title}</h3><p>{L.confStep2Body}</p></div></div>
+        <div className="om-tl-step"><div className="om-tl-num">3</div>
+          <div className="om-tl-body"><h3>{L.confStep3Title}</h3><p>{L.confStep3Body}</p></div></div>
+      </div>
+
+      <div className="om-conf-actions">
+        <button className="om-btn om-btn-primary" onClick={onPreviewPdf}>{L.previewPdf}</button>
+        <button className="om-btn om-btn-secondary" onClick={onPreviewPdf}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          {L.downloadAnswers}
+        </button>
+      </div>
+    </main>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('om-root'));
+root.render(<App />);

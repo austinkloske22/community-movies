@@ -167,6 +167,9 @@ export const ui = {
     'municipalities.curiousTitle': 'Benieuwd hoe Nelsons Film eruitziet in jouw gemeente?',
     'municipalities.curiousText': 'Plan een vrijblijvend gesprek. Wij denken graag mee over de mogelijkheden.',
     'municipalities.meetingCta': 'Plan een kennismakingsgesprek',
+    'municipalities.collaborationTitle': 'Klaar om samen te werken?',
+    'municipalities.collaborationText': 'Teken de samenwerkingsverklaring. In ongeveer 12 minuten vertel je wie je bent, wat je kunt bijdragen en waarom deze wijk deze avond nodig heeft.',
+    'municipalities.collaborationCta': 'Start samenwerkingsverklaring',
 
     // Location
     'location.title': 'Locatie',
@@ -361,6 +364,9 @@ export const ui = {
     'municipalities.curiousTitle': 'Curious what Nelsons Film could look like in your municipality?',
     'municipalities.curiousText': 'Schedule a no-obligation conversation — we are happy to explore the possibilities with you.',
     'municipalities.meetingCta': 'Schedule a meeting',
+    'municipalities.collaborationTitle': 'Ready to collaborate?',
+    'municipalities.collaborationText': 'Sign the collaboration statement. In about 12 minutes, tell us who you are, what you can contribute, and why this neighbourhood deserves this evening.',
+    'municipalities.collaborationCta': 'Start collaboration statement',
 
     // Location
     'location.title': 'Location',
@@ -554,6 +560,9 @@ export const ui = {
     'municipalities.curiousTitle': 'هل تتساءل كيف سيبدو نيلسونز فيلم في بلديتك؟',
     'municipalities.curiousText': 'حدد موعداً لمحادثة بدون التزام — يسعدنا استكشاف الإمكانيات معك.',
     'municipalities.meetingCta': 'حدد موعداً لاجتماع',
+    'municipalities.collaborationTitle': 'جاهز للتعاون؟',
+    'municipalities.collaborationText': 'وقّع إعلان التعاون. في حوالي 12 دقيقة، أخبرنا من أنت، وما يمكنك المساهمة به، ولماذا يستحق هذا الحي هذه الأمسية.',
+    'municipalities.collaborationCta': 'ابدأ إعلان التعاون',
 
     // Location
     'location.title': 'الموقع',
