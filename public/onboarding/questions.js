@@ -306,10 +306,10 @@ window.QUESTIONS = [
     id: 'f_financial', section: 4, kind: 'euro', required: false,
     deps: (a) => (a.contributions || []).includes('F'),
     nl: { title: 'Financiële bijdrage',
-      help: 'Kosten per editie liggen tussen €3.000–€3.500. Minimum €100 per editie.',
+      help: 'Een editie kost all-in rond de €4.000, maar dit kan variëren afhankelijk van de omstandigheden en afspraken over meerdere edities. Minimum €100 per editie.',
       min: 100, suggest: [100, 250, 500, 1000, 2500] },
     en: { title: 'Financial contribution',
-      help: 'Cost per screening €3,000–€3,500. Minimum €100.',
+      help: 'A screening costs all-in around €4,000, though this can vary depending on circumstances and multi-screening commitments. Minimum €100.',
       min: 100, suggest: [100, 250, 500, 1000, 2500] },
   },
   {
