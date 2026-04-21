@@ -11,8 +11,8 @@ export interface NumbersData {
 
 // TODO: replace placeholders with real figures before launch.
 export const numbers: NumbersData = {
-  sinceYear: 2022,
-  screenings: 20,
-  neighbours: 1200,
+  sinceYear: 2025,
+  screenings: 15,
+  neighbours: 900,
   municipalities: 3,
 };
