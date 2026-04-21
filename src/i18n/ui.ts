@@ -224,6 +224,16 @@ export const ui = {
     'sponsors.title': 'Gesteund door',
     'sponsors.subtitle': 'Deze partners maken Nelsons Film mogelijk.',
 
+    // Numbers strip
+    'numbers.sinceWord': 'Sinds',
+    'numbers.since': 'Begonnen in',
+    'numbers.screenings': 'Filmavonden',
+    'numbers.neighbours': 'Buurtgenoten',
+    'numbers.municipalities': 'Gemeenten',
+
+    // Testimonials
+    'testimonials.title': 'Wat buurtgenoten en partners zeggen',
+
     // Common
     'common.watchTrailer': 'Bekijk trailer',
     'common.moreInfo': 'Meer informatie',
@@ -450,6 +460,16 @@ export const ui = {
     'sponsors.title': 'Supported by',
     'sponsors.subtitle': 'These partners make Nelsons Film possible.',
 
+    // Numbers strip
+    'numbers.sinceWord': 'Since',
+    'numbers.since': 'Running since',
+    'numbers.screenings': 'Screenings',
+    'numbers.neighbours': 'Neighbours reached',
+    'numbers.municipalities': 'Municipalities',
+
+    // Testimonials
+    'testimonials.title': 'What neighbours and partners say',
+
     // Common
     'common.watchTrailer': 'Watch trailer',
     'common.moreInfo': 'More info',
@@ -674,6 +694,16 @@ export const ui = {
     'footer.sponsors': 'الشركاء',
     'sponsors.title': 'بدعم من',
     'sponsors.subtitle': 'هؤلاء الشركاء يجعلون نيلسونز فيلم ممكناً.',
+
+    // Numbers strip
+    'numbers.sinceWord': 'منذ',
+    'numbers.since': 'بدأنا',
+    'numbers.screenings': 'أمسيات سينمائية',
+    'numbers.neighbours': 'جيران وصلنا إليهم',
+    'numbers.municipalities': 'بلديات',
+
+    // Testimonials
+    'testimonials.title': 'ماذا يقول الجيران والشركاء',
 
     // Common
     'common.watchTrailer': 'شاهد الإعلان',

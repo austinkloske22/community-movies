@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DonateButton from '../DonateButton.astro';
 import Icon from '../Icon.astro';
 import SponsorStrip from '../SponsorStrip.astro';
+import Numbers from '../Numbers.astro';
+import Testimonial from '../Testimonial.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -112,6 +114,15 @@ const values = [
           </div>
         </div>
 
+        <!-- Numbers strip -->
+        <Numbers />
+
+        <!-- Testimonials -->
+        <div class="tl-section">
+          <h2 class="tl-section-title">{t('testimonials.title')}</h2>
+          <Testimonial variant="row" limit={2} />
+        </div>
+
         <!-- Sponsors / partners -->
         <SponsorStrip variant="full" />
 
@@ -139,6 +150,17 @@ const values = [
 </BaseLayout>
 
 <style>
+  .tl-section {
+    max-width: 1100px;
+    margin: var(--space-xl) auto;
+    padding: 0 var(--space-md);
+  }
+  .tl-section-title {
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--space-lg);
+  }
+
   .about-page {
     min-height: 80vh;
   }
