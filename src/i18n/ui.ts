@@ -46,14 +46,6 @@ export const ui = {
     'rsvp.success': 'Top, tot dan.',
     'rsvp.error': 'Versturen mislukt. Probeer het nog eens, of stuur ons een mailtje.',
 
-    // Notify signup (announced locations)
-    'notify.title': 'Binnenkort in jouw stad',
-    'notify.body': 'We hebben nog geen datum, maar de wijk krijgt op een dag een Nelsons Film-avond. Laat je e-mail achter en we laten weten zodra de eerste editie staat ingepland.',
-    'notify.placeholder': 'naam@voorbeeld.nl',
-    'notify.submit': 'Hou me op de hoogte',
-    'notify.success': 'Top — we mailen zodra er een datum is.',
-    'notify.gdpr': 'We mailen alleen wanneer we een datum hebben. Uitschrijven met 1 klik.',
-
     // Home page sections
     'home.forEveryoneTitle': 'Een filmavond voor iedereen. Echt iedereen.',
     'home.forEveryoneText': 'Met Nelsons Film verandert een park of centrale plek in een warme ontmoetingsplek waar buurtbewoners samenkomen voor een bijzondere filmervaring. Met Nelsons Film breken we muren tussen mensen af en bouwen we bruggen. Niet met geforceerde concepten maar met unieke laagdrempelige films gratis en in eigen taal.',
@@ -321,14 +313,6 @@ export const ui = {
     'rsvp.submitting': 'Sending…',
     'rsvp.success': 'Great, see you then.',
     'rsvp.error': 'Something went wrong. Try again, or send us an email.',
-
-    // Notify signup (announced locations)
-    'notify.title': 'Coming to your city',
-    'notify.body': "We don't have a date yet, but a Nelsons Film night is on the way. Leave your email and we'll let you know the moment the first screening is scheduled.",
-    'notify.placeholder': 'name@example.com',
-    'notify.submit': 'Keep me posted',
-    'notify.success': "Got it — we'll email you as soon as there's a date.",
-    'notify.gdpr': 'One email when we have a date. Unsubscribe with a single click.',
 
     // Home page sections
     'home.forEveryoneTitle': 'A film night for everyone. Truly everyone.',
@@ -598,14 +582,6 @@ export const ui = {
     'rsvp.submitting': 'جارٍ الإرسال…',
     'rsvp.success': 'رائع، نراك حينها.',
     'rsvp.error': 'تعذر الإرسال. حاول مرة أخرى أو راسلنا بالبريد.',
-
-    // Notify signup (announced locations)
-    'notify.title': 'قريباً في مدينتك',
-    'notify.body': 'ليس لدينا موعد بعد، لكن أمسية نيلسونز فيلم في الطريق. اترك بريدك الإلكتروني وسنخبرك فور جدولة الأمسية الأولى.',
-    'notify.placeholder': 'name@example.com',
-    'notify.submit': 'أعلمني',
-    'notify.success': 'حسناً — سنرسل لك بريداً فور تحديد الموعد.',
-    'notify.gdpr': 'بريد واحد عند تحديد الموعد. إلغاء الاشتراك بنقرة واحدة.',
 
     // Home page sections
     'home.forEveryoneTitle': 'أمسية سينمائية للجميع. حقاً للجميع.',
