@@ -41,19 +41,21 @@ const locations: Loc[] = [
           <a href={getLocalizedPath(loc.href, lang)}
              class:list={['location-tile', !loc.active && 'location-tile-announced']}>
             <span class="tile-icon" aria-hidden="true">
-              <Icon name="map-pin" size={28} />
+              <Icon name="map-pin" size={26} />
             </span>
             <div class="tile-content">
-              <span class="tile-city">{loc.city}</span>
+              <div class="tile-heading">
+                <span class="tile-city">{loc.city}</span>
+                <span class:list={['tile-badge', !loc.active && 'tile-badge-announced']}>
+                  {loc.active ? t('hero.badgeActive') : t('hero.badgeAnnounced')}
+                </span>
+              </div>
               <span class="tile-count">
                 {loc.active
                   ? `${loc.count} ${t('schedule.activeScreenings')}`
                   : t('schedule.datesToBeAnnounced')}
               </span>
             </div>
-            <span class:list={['tile-badge', !loc.active && 'tile-badge-announced']}>
-              {loc.active ? t('hero.badgeActive') : t('hero.badgeAnnounced')}
-            </span>
             <span class="tile-arrow" aria-hidden="true">→</span>
           </a>
         ))}
@@ -116,7 +118,7 @@ const locations: Loc[] = [
 
   .location-tile {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: var(--space-md);
     padding: var(--space-lg);
@@ -150,20 +152,28 @@ const locations: Loc[] = [
     display: flex;
     flex-direction: column;
     min-width: 0;
+    gap: 4px;
+  }
+
+  .tile-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
   }
 
   .tile-city {
     font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 500;
     line-height: 1.2;
     color: var(--color-text);
   }
 
   .tile-count {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: var(--color-text-muted);
-    margin-top: 4px;
+    line-height: 1.4;
   }
 
   .tile-badge {
@@ -206,30 +216,6 @@ const locations: Loc[] = [
     color: var(--color-accent);
   }
 
-  @media (max-width: 480px) {
-    .location-tile {
-      grid-template-columns: auto 1fr auto;
-      grid-template-rows: auto auto;
-      row-gap: var(--space-xs);
-    }
-    .tile-badge {
-      grid-column: 3;
-      grid-row: 1;
-      justify-self: end;
-    }
-    .tile-arrow {
-      grid-column: 3;
-      grid-row: 2;
-      justify-self: end;
-    }
-    .tile-icon {
-      grid-row: 1 / span 2;
-    }
-    .tile-content {
-      grid-column: 2;
-      grid-row: 1 / span 2;
-    }
-  }
 
   /* Coming Soon Section */
   .coming-soon-section {
