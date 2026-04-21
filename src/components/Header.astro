@@ -63,24 +63,27 @@ const navItems = [
           <li class={item.hasDropdown ? 'has-dropdown' : ''}>
             {item.hasDropdown ? (
               <>
-                <a href={getLocalizedPath(item.href, lang)} class="nav-link">
+                <a href={getLocalizedPath(item.href, lang)}
+                   class="nav-link dropdown-toggle"
+                   aria-haspopup="true"
+                   aria-expanded="false">
                   {item.label}
-                  <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M6 9l6 6 6-6"/>
                   </svg>
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu" role="menu">
                   <div class="dropdown-header">
                     <span class="dropdown-title">{t('schedule.locations')}</span>
                   </div>
                   {locations.map((location) => (
-                    <a href={getLocalizedPath(location.href!, lang)} class="dropdown-item">
+                    <a href={getLocalizedPath(location.href!, lang)} class="dropdown-item" role="menuitem">
                       <span class="location-name">{location.name}</span>
                     </a>
                   ))}
-                  <a href={getLocalizedPath('/voor-gemeenten', lang)} class="dropdown-cta">
+                  <a href={getLocalizedPath('/voor-gemeenten', lang)} class="dropdown-cta" role="menuitem">
                     {t('nav.municipalityBanner')}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </a>
@@ -185,14 +188,28 @@ const navItems = [
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
 
-  .has-dropdown:hover .dropdown-menu {
+  .has-dropdown[data-open="true"] > .dropdown-menu,
+  .has-dropdown:focus-within > .dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
   }
 
-  .has-dropdown:hover .dropdown-arrow {
+  .has-dropdown[data-open="true"] > .nav-link > .dropdown-arrow,
+  .has-dropdown:focus-within > .nav-link > .dropdown-arrow {
     transform: rotate(180deg);
+  }
+
+  /* Hover is a convenience on real pointer devices only — not on touch. */
+  @media (hover: hover) and (pointer: fine) {
+    .has-dropdown:hover > .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .has-dropdown:hover > .nav-link > .dropdown-arrow {
+      transform: rotate(180deg);
+    }
   }
 
   .dropdown-header {
@@ -356,11 +373,71 @@ const navItems = [
 </style>
 
 <script>
-  const menuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinks = document.querySelector('.nav-links');
+  const menuBtn = document.querySelector<HTMLButtonElement>('.mobile-menu-btn');
+  const navLinks = document.querySelector<HTMLUListElement>('.nav-links');
 
   menuBtn?.addEventListener('click', () => {
     const isOpen = navLinks?.classList.toggle('open');
     menuBtn.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // --- Dropdown disclosure (click + keyboard, not hover-only) ---
+  const dropdowns = document.querySelectorAll<HTMLLIElement>('.has-dropdown');
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+  const closeAll = (except?: HTMLLIElement) => {
+    dropdowns.forEach((d) => {
+      if (d === except) return;
+      d.dataset.open = 'false';
+      const toggle = d.querySelector<HTMLElement>('.dropdown-toggle');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+  };
+
+  dropdowns.forEach((dd) => {
+    const toggle = dd.querySelector<HTMLAnchorElement>('.dropdown-toggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', (e) => {
+      // On desktop, tapping the parent link should still navigate — but on
+      // touch/coarse pointers, first tap opens the menu, second tap navigates.
+      const open = dd.dataset.open === 'true';
+      if (isTouch && !open) {
+        e.preventDefault();
+        closeAll(dd);
+        dd.dataset.open = 'true';
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    toggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        closeAll(dd);
+        dd.dataset.open = 'true';
+        toggle.setAttribute('aria-expanded', 'true');
+        // Focus first menu item so keyboard users can arrow through.
+        const first = dd.querySelector<HTMLAnchorElement>('.dropdown-menu a');
+        first?.focus();
+      }
+    });
+  });
+
+  // Escape closes any open dropdown and returns focus to its toggle.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const openDd = document.querySelector<HTMLLIElement>('.has-dropdown[data-open="true"]');
+    if (!openDd) return;
+    openDd.dataset.open = 'false';
+    const toggle = openDd.querySelector<HTMLElement>('.dropdown-toggle');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.focus();
+  });
+
+  // Click anywhere outside closes open dropdowns.
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.has-dropdown')) return;
+    closeAll();
   });
 </script>

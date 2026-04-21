@@ -10,7 +10,7 @@ const nextMovie = getNextMovie(movies);
 ---
 
 <BaseLayout title="Home">
-  <Hero />
+  <Hero movie={nextMovie} />
   <NextScreening movie={nextMovie} />
   <Features />
 </BaseLayout>

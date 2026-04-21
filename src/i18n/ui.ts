@@ -25,6 +25,7 @@ export const ui = {
     'hero.badgeActive': 'Actief',
     'hero.badgeAnnounced': 'Aangekondigd',
     'hero.badgeYourNeighborhood': 'Jouw buurt?',
+    'hero.nextLabel': 'Volgende',
 
     // Home page sections
     'home.forEveryoneTitle': 'Een filmavond voor iedereen. Echt iedereen.',
@@ -221,6 +222,7 @@ export const ui = {
     'hero.badgeActive': 'Active',
     'hero.badgeAnnounced': 'Announced',
     'hero.badgeYourNeighborhood': 'Your neighborhood?',
+    'hero.nextLabel': 'Next',
 
     // Home page sections
     'home.forEveryoneTitle': 'A film night for everyone. Truly everyone.',
@@ -418,6 +420,7 @@ export const ui = {
     'hero.badgeActive': 'نشط',
     'hero.badgeAnnounced': 'قريباً',
     'hero.badgeYourNeighborhood': 'حيّك؟',
+    'hero.nextLabel': 'التالي',
 
     // Home page sections
     'home.forEveryoneTitle': 'أمسية سينمائية للجميع. حقاً للجميع.',
