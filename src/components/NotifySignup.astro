@@ -58,32 +58,32 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
 </form>
 
 <script>
-  document.querySelectorAll<HTMLFormElement>('form.notify').forEach((form) => {
+  document.querySelectorAll('form.notify').forEach((form) => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = form.dataset.submitUrl;
       if (!url || url.includes('PASTE')) return;
       const fd = new FormData(form);
-      const email = String(fd.get('email') ?? '').trim();
+      const email = String(fd.get('email') || '').trim();
       if (!email.includes('@')) return;
 
-      const bodyEl = form.querySelector<HTMLElement>('.notify-body');
-      const successEl = form.querySelector<HTMLElement>('.notify-success');
-      const errorEl = form.querySelector<HTMLElement>('.notify-error');
-      const label = form.querySelector<HTMLElement>('.submit-label');
-      const loading = form.querySelector<HTMLElement>('.submit-loading');
-      const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const bodyEl = form.querySelector('.notify-body');
+      const successEl = form.querySelector('.notify-success');
+      const errorEl = form.querySelector('.notify-error');
+      const label = form.querySelector('.submit-label');
+      const loading = form.querySelector('.submit-loading');
+      const btn = form.querySelector('button[type="submit"]');
 
-      btn?.setAttribute('disabled', '');
-      label?.setAttribute('hidden', '');
-      loading?.removeAttribute('hidden');
-      errorEl?.setAttribute('hidden', '');
+      if (btn) btn.setAttribute('disabled', '');
+      if (label) label.setAttribute('hidden', '');
+      if (loading) loading.removeAttribute('hidden');
+      if (errorEl) errorEl.setAttribute('hidden', '');
 
       const payload = {
         type: 'notify',
-        location: form.dataset.location ?? '',
+        location: form.dataset.location || '',
         email,
-        locale: form.dataset.locale ?? 'nl',
+        locale: form.dataset.locale || 'nl',
         submittedAt: new Date().toISOString(),
         referrer: document.referrer || '',
         pageUrl: window.location.href,
@@ -98,17 +98,18 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json().catch(() => ({}));
         if (data && data.ok === false) throw new Error(data.error || 'rejected');
-        bodyEl?.setAttribute('hidden', '');
-        successEl?.removeAttribute('hidden');
+        if (bodyEl) bodyEl.setAttribute('hidden', '');
+        if (successEl) successEl.removeAttribute('hidden');
         try {
-          const anyWindow = window as unknown as { goatcounter?: { count: (p: Record<string, unknown>) => void } };
-          anyWindow.goatcounter?.count({ path: `notify_${form.dataset.location || 'unknown'}`, event: true });
-        } catch { /* ignore */ }
-      } catch {
-        loading?.setAttribute('hidden', '');
-        label?.removeAttribute('hidden');
-        btn?.removeAttribute('disabled');
-        errorEl?.removeAttribute('hidden');
+          if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+            window.goatcounter.count({ path: 'notify_' + (form.dataset.location || 'unknown'), event: true });
+          }
+        } catch (e) { /* ignore */ }
+      } catch (err) {
+        if (loading) loading.setAttribute('hidden', '');
+        if (label) label.removeAttribute('hidden');
+        if (btn) btn.removeAttribute('disabled');
+        if (errorEl) errorEl.removeAttribute('hidden');
       }
     });
   });

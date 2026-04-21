@@ -101,11 +101,11 @@ const secondaryLinks = [
 
 <script>
   // Copy-to-clipboard for the email address, with a transient "Copied" state.
-  document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+  document.querySelectorAll('.copy-btn').forEach((btn) => {
     const value = btn.dataset.copy;
     if (!value) return;
     const labelEl = btn.querySelector('.copy-label');
-    const original = labelEl?.textContent ?? '';
+    const original = labelEl && labelEl.textContent ? labelEl.textContent : '';
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(value);
@@ -114,7 +114,7 @@ const secondaryLinks = [
           labelEl.textContent = btn.dataset.copied || 'Copied';
           setTimeout(() => { labelEl.textContent = original; }, 1500);
         }
-      } catch {
+      } catch (e) {
         // clipboard API blocked — no-op, user can still select the link.
       }
     });

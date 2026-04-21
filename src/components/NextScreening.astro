@@ -184,7 +184,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
   </section>
   <script>
     // --- Calendar download ---
-    document.querySelectorAll<HTMLButtonElement>('.action-calendar').forEach((btn) => {
+    document.querySelectorAll('.action-calendar').forEach((btn) => {
       btn.addEventListener('click', () => {
         const text = btn.dataset.ics;
         const filename = btn.dataset.icsFilename || 'nelsonsfilm.ics';
@@ -202,7 +202,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
     });
 
     // --- RSVP disclosure ---
-    document.querySelectorAll<HTMLButtonElement>('.action-rsvp-toggle').forEach((btn) => {
+    document.querySelectorAll('.action-rsvp-toggle').forEach((btn) => {
       btn.addEventListener('click', () => {
         const panel = document.getElementById('rsvp-panel');
         if (!panel) return;
@@ -213,7 +213,8 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
         } else {
           panel.removeAttribute('hidden');
           btn.setAttribute('aria-expanded', 'true');
-          panel.querySelector<HTMLInputElement>('input[type="email"]')?.focus();
+          const input = panel.querySelector('input[type="email"]');
+          if (input) input.focus();
           panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
       });

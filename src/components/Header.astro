@@ -373,29 +373,29 @@ const navItems = [
 </style>
 
 <script>
-  const menuBtn = document.querySelector<HTMLButtonElement>('.mobile-menu-btn');
-  const navLinks = document.querySelector<HTMLUListElement>('.nav-links');
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
 
-  menuBtn?.addEventListener('click', () => {
-    const isOpen = navLinks?.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', String(isOpen));
+  if (menuBtn) menuBtn.addEventListener('click', () => {
+    const isOpen = navLinks && navLinks.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(Boolean(isOpen)));
   });
 
   // --- Dropdown disclosure (click + keyboard, not hover-only) ---
-  const dropdowns = document.querySelectorAll<HTMLLIElement>('.has-dropdown');
+  const dropdowns = document.querySelectorAll('.has-dropdown');
   const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-  const closeAll = (except?: HTMLLIElement) => {
+  const closeAll = (except) => {
     dropdowns.forEach((d) => {
       if (d === except) return;
       d.dataset.open = 'false';
-      const toggle = d.querySelector<HTMLElement>('.dropdown-toggle');
-      toggle?.setAttribute('aria-expanded', 'false');
+      const toggle = d.querySelector('.dropdown-toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
     });
   };
 
   dropdowns.forEach((dd) => {
-    const toggle = dd.querySelector<HTMLAnchorElement>('.dropdown-toggle');
+    const toggle = dd.querySelector('.dropdown-toggle');
     if (!toggle) return;
 
     toggle.addEventListener('click', (e) => {
@@ -417,8 +417,8 @@ const navItems = [
         dd.dataset.open = 'true';
         toggle.setAttribute('aria-expanded', 'true');
         // Focus first menu item so keyboard users can arrow through.
-        const first = dd.querySelector<HTMLAnchorElement>('.dropdown-menu a');
-        first?.focus();
+        const first = dd.querySelector('.dropdown-menu a');
+        if (first) first.focus();
       }
     });
   });
@@ -426,18 +426,17 @@ const navItems = [
   // Escape closes any open dropdown and returns focus to its toggle.
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    const openDd = document.querySelector<HTMLLIElement>('.has-dropdown[data-open="true"]');
+    const openDd = document.querySelector('.has-dropdown[data-open="true"]');
     if (!openDd) return;
     openDd.dataset.open = 'false';
-    const toggle = openDd.querySelector<HTMLElement>('.dropdown-toggle');
-    toggle?.setAttribute('aria-expanded', 'false');
-    toggle?.focus();
+    const toggle = openDd.querySelector('.dropdown-toggle');
+    if (toggle) { toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
   });
 
   // Click anywhere outside closes open dropdowns.
   document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('.has-dropdown')) return;
+    const target = e.target;
+    if (target && target.closest && target.closest('.has-dropdown')) return;
     closeAll();
   });
 </script>

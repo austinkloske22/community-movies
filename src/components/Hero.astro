@@ -59,7 +59,7 @@ const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
   // Hero card actions delegate to the same handlers used on NextScreening.astro
   // — the ICS download wiring lives there, but the button copies sit on the hero
   // card too. Hook up the calendar button and the "RSVP" scroll-and-open.
-  document.querySelectorAll<HTMLButtonElement>('.ns-action.action-calendar').forEach((btn) => {
+  document.querySelectorAll('.ns-action.action-calendar').forEach((btn) => {
     btn.addEventListener('click', () => {
       const text = btn.dataset.ics;
       const filename = btn.dataset.icsFilename || 'nelsonsfilm.ics';
@@ -79,13 +79,13 @@ const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
   // When the hero-card "Let us know you're coming" anchor is clicked, also
   // open the collapsed RSVP panel below (so the user doesn't have to click
   // the toggle again).
-  document.querySelectorAll<HTMLAnchorElement>('.ns-rsvp-scroll').forEach((a) => {
+  document.querySelectorAll('.ns-rsvp-scroll').forEach((a) => {
     a.addEventListener('click', () => {
       const panel = document.getElementById('rsvp-panel');
-      const toggle = document.querySelector<HTMLButtonElement>('.action-rsvp-toggle');
+      const toggle = document.querySelector('.action-rsvp-toggle');
       if (panel && panel.hasAttribute('hidden')) {
         panel.removeAttribute('hidden');
-        toggle?.setAttribute('aria-expanded', 'true');
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
       }
     });
   });

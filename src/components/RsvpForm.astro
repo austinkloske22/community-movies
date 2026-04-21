@@ -75,34 +75,34 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
 )}
 
 <script>
-  document.querySelectorAll<HTMLFormElement>('form.rsvp-form').forEach((form) => {
+  document.querySelectorAll('form.rsvp-form').forEach((form) => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = form.dataset.submitUrl;
       if (!url || url.includes('PASTE')) return;
-      const submitBtn = form.querySelector<HTMLButtonElement>('.rsvp-submit');
-      const label = form.querySelector<HTMLElement>('.rsvp-submit-label');
-      const loading = form.querySelector<HTMLElement>('.rsvp-submit-loading');
-      const successEl = form.querySelector<HTMLElement>('.rsvp-success');
-      const errorEl = form.querySelector<HTMLElement>('.rsvp-error');
+      const submitBtn = form.querySelector('.rsvp-submit');
+      const label = form.querySelector('.rsvp-submit-label');
+      const loading = form.querySelector('.rsvp-submit-loading');
+      const successEl = form.querySelector('.rsvp-success');
+      const errorEl = form.querySelector('.rsvp-error');
       const fd = new FormData(form);
 
       if (!fd.get('email') || !fd.get('partySize')) return;
 
-      submitBtn?.setAttribute('disabled', '');
-      label?.setAttribute('hidden', '');
-      loading?.removeAttribute('hidden');
-      errorEl?.setAttribute('hidden', '');
+      if (submitBtn) submitBtn.setAttribute('disabled', '');
+      if (label) label.setAttribute('hidden', '');
+      if (loading) loading.removeAttribute('hidden');
+      if (errorEl) errorEl.setAttribute('hidden', '');
 
       const payload = {
         type: 'rsvp',
-        movieId: form.dataset.movieId ?? '',
-        movieTitle: form.dataset.movieTitle ?? '',
-        screeningDate: form.dataset.screeningDate ?? '',
-        locale: form.dataset.locale ?? 'nl',
-        email: String(fd.get('email') ?? ''),
-        partySize: Number(fd.get('partySize') ?? 0),
-        notes: String(fd.get('notes') ?? ''),
+        movieId: form.dataset.movieId || '',
+        movieTitle: form.dataset.movieTitle || '',
+        screeningDate: form.dataset.screeningDate || '',
+        locale: form.dataset.locale || 'nl',
+        email: String(fd.get('email') || ''),
+        partySize: Number(fd.get('partySize') || 0),
+        notes: String(fd.get('notes') || ''),
         submittedAt: new Date().toISOString(),
         referrer: document.referrer || '',
         pageUrl: window.location.href,
@@ -118,19 +118,20 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
         const data = await res.json().catch(() => ({}));
         if (data && data.ok === false) throw new Error(data.error || 'Server rejected');
         // Success: swap form for success message.
-        form.querySelectorAll('.rsvp-grid, .rsvp-field, .rsvp-fine-print, .rsvp-actions').forEach((el) => (el as HTMLElement).setAttribute('hidden', ''));
-        successEl?.removeAttribute('hidden');
+        form.querySelectorAll('.rsvp-grid, .rsvp-field, .rsvp-fine-print, .rsvp-actions').forEach((el) => el.setAttribute('hidden', ''));
+        if (successEl) successEl.removeAttribute('hidden');
         // Analytics — single no-PII event. GoatCounter auto-pings on anchor
         // clicks; this is a synthetic custom event via the image tag API.
         try {
-          const anyWindow = window as unknown as { goatcounter?: { count: (p: Record<string, unknown>) => void } };
-          anyWindow.goatcounter?.count({ path: 'rsvp_submitted', event: true });
-        } catch { /* ignore */ }
-      } catch {
-        loading?.setAttribute('hidden', '');
-        label?.removeAttribute('hidden');
-        submitBtn?.removeAttribute('disabled');
-        errorEl?.removeAttribute('hidden');
+          if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+            window.goatcounter.count({ path: 'rsvp_submitted', event: true });
+          }
+        } catch (e) { /* ignore */ }
+      } catch (err) {
+        if (loading) loading.setAttribute('hidden', '');
+        if (label) label.removeAttribute('hidden');
+        if (submitBtn) submitBtn.removeAttribute('disabled');
+        if (errorEl) errorEl.removeAttribute('hidden');
       }
     });
   });
