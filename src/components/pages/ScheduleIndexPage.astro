@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
 import { getHaarlemMovies, getTielMovies, getIJmuidenMovies, getUpcomingMovies } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
@@ -23,7 +24,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
 
       <div class="locations-grid">
         <a href={getLocalizedPath('/programma/haarlem', lang)} class="location-tile">
-          <span class="tile-icon">📍</span>
+          <span class="tile-icon"><Icon name="map-pin" size={20} /></span>
           <div class="tile-content">
             <img src="/images/location-icons/HaarlemGroteMarkt1.JPG" alt="Haarlem" class="tile-logo" />
             <span class="tile-count">{haarlemUpcoming.length} {t('schedule.activeScreenings')}</span>
@@ -33,7 +34,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
         </a>
 
         <a href={getLocalizedPath('/programma/tiel', lang)} class="location-tile location-tile-announced">
-          <span class="tile-icon">📍</span>
+          <span class="tile-icon"><Icon name="map-pin" size={20} /></span>
           <div class="tile-content">
             <img src="/images/location-icons/Tiel-Flipje.png" alt="Tiel" class="tile-logo" />
             <span class="tile-count">{tielUpcoming.length} {t('schedule.activeScreenings')}</span>
@@ -43,7 +44,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
         </a>
 
         <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="location-tile location-tile-announced">
-          <span class="tile-icon">📍</span>
+          <span class="tile-icon"><Icon name="map-pin" size={20} /></span>
           <div class="tile-content">
             <img src="/images/location-icons/Velsen-logo.png" alt="IJmuiden" class="tile-logo" />
             <span class="tile-count">{ijmuidenUpcoming.length} {t('schedule.activeScreenings')}</span>
@@ -56,7 +57,7 @@ const ijmuidenUpcoming = getUpcomingMovies(getIJmuidenMovies());
       <!-- Coming Soon Section -->
       <div class="coming-soon-section">
         <div class="coming-soon-content">
-          <div class="coming-soon-icon">🌍</div>
+          <div class="coming-soon-icon"><Icon name="globe" size={42} /></div>
           <h2>{t('schedule.expandingTitle')}</h2>
           <p>{t('schedule.expandingText')}</p>
           <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-primary">

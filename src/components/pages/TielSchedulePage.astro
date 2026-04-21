@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
+import Icon from '../Icon.astro';
 import { getTielMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
@@ -25,7 +26,7 @@ const nextMovie = getNextMovie(movies);
           <a href="/programma/tiel.ics" class="calendar-btn"
              data-goatcounter-click="calendar-tiel"
              data-goatcounter-title="Calendar download">
-            📅 {t('schedule.addToCalendar')}
+            <Icon name="calendar" size={18} /> {t('schedule.addToCalendar')}
           </a>
         )}
         <p class="page-subtitle">{t('schedule.datesToBeAnnounced')}</p>
@@ -62,17 +63,17 @@ const nextMovie = getNextMovie(movies);
 
       <div class="schedule-info">
         <div class="info-card">
-          <h3>🎧 {t('schedule.multilingualTitle')}</h3>
+          <h3><Icon name="headphones" size={22} /> {t('schedule.multilingualTitle')}</h3>
           <p>{t('schedule.multilingualText')}</p>
         </div>
 
         <div class="info-card">
-          <h3>🪑 {t('schedule.whatToBringTitle')}</h3>
+          <h3><Icon name="users" size={22} /> {t('schedule.whatToBringTitle')}</h3>
           <p>{t('schedule.whatToBringText')}</p>
         </div>
 
         <div class="info-card location-card">
-          <h3>📍 {t('location.title')}</h3>
+          <h3><Icon name="map-pin" size={22} /> {t('location.title')}</h3>
           <p>{t('schedule.locationTiel')}</p>
         </div>
       </div>

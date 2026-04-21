@@ -1,80 +1,85 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DonateButton from '../DonateButton.astro';
+import Icon from '../Icon.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const emailAddress = 'Nelsons.film.Haarlem@gmail.com';
+
+const secondaryLinks = [
+  { icon: 'phone', label: t('contact.callUs'), sub: '+31 6 57576047', href: 'tel:+31657576047', external: false },
+  { icon: 'instagram', label: t('contact.instagram'), sub: '@nelsonsfilm', href: 'https://instagram.com/nelsonsfilm', external: true },
+  { icon: 'heart', label: t('contact.donate'), sub: null, href: null, external: false, donate: true },
+  { icon: 'handshake', label: t('contact.sponsor'), sub: null, href: `mailto:${emailAddress}?subject=Sponsor`, external: false },
+  { icon: 'landmark', label: t('contact.municipalitiesLink'), sub: null, href: getLocalizedPath('/voor-gemeenten', lang), external: false },
+] as const;
 ---
 
 <BaseLayout title={t('nav.contact')} description={t('contact.text')}>
   <section class="contact-page section">
     <div class="container">
       <header class="page-header">
+        <p class="page-kicker">{t('contact.subtitle')}</p>
         <h1>{t('contact.title')}</h1>
-        <p class="page-subtitle">{t('contact.subtitle')}</p>
         <p class="page-text">{t('contact.text')}</p>
       </header>
 
-      <div class="contact-grid">
-        <div class="contact-card">
-          <span class="card-icon">📧</span>
-          <h2>{t('contact.email')}</h2>
-          <a href="mailto:Nelsons.film.Haarlem@gmail.com" class="contact-link">
-            Nelsons.film.Haarlem@gmail.com
-          </a>
-        </div>
-
-        <div class="contact-card">
-          <span class="card-icon">📞</span>
-          <h2>{t('contact.phone')}</h2>
-          <a href="tel:+31657576047" class="contact-link">
-            +31 6 57576047
-          </a>
-        </div>
-
-        <div class="contact-card">
-          <span class="card-icon">📱</span>
-          <h2>{t('contact.followUs')}</h2>
-          <div class="social-links">
-            <a href="https://instagram.com/nelsonsfilm" target="_blank" rel="noopener" class="social-link">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-              Instagram
-            </a>
+      <!-- Primary action: email -->
+      <div class="primary-contact">
+        <div class="primary-icon" aria-hidden="true"><Icon name="mail" size={32} /></div>
+        <div class="primary-body">
+          <h2>{t('contact.emailUs')}</h2>
+          <div class="primary-email-row">
+            <a href={`mailto:${emailAddress}`} class="primary-email">{emailAddress}</a>
+            <button type="button" class="copy-btn"
+                    data-copy={emailAddress}
+                    data-copied={t('contact.copied')}
+                    aria-label={t('contact.copy')}>
+              <Icon name="copy" size={16} />
+              <span class="copy-label">{t('contact.copy')}</span>
+            </button>
           </div>
-        </div>
-
-        <div class="contact-card highlight">
-          <span class="card-icon">💝</span>
-          <h2>{t('contact.donate')}</h2>
-          <p>{t('contact.donateText')}</p>
-          <DonateButton lang={lang} variant="primary" />
-        </div>
-
-        <div class="contact-card highlight">
-          <span class="card-icon">🤝</span>
-          <h2>{t('contact.sponsor')}</h2>
-          <p>{t('contact.sponsorText')}</p>
-          <a href="mailto:Nelsons.film.Haarlem@gmail.com?subject=Sponsor" class="btn btn-secondary">
-            {t('contact.becomeSponsor')}
-          </a>
-        </div>
-
-        <div class="contact-card highlight">
-          <span class="card-icon">🏛️</span>
-          <h2>{t('nav.municipalities')}</h2>
-          <p>{t('contact.municipalityText')}</p>
-          <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-secondary">
-            {t('common.learnMore')}
-          </a>
+          <p class="reply-time">{t('contact.replyTime')}</p>
         </div>
       </div>
 
+      <!-- Secondary options -->
+      <ul class="secondary-list" aria-label={t('contact.followUs')}>
+        {secondaryLinks.map((item) => (
+          <li class="secondary-item">
+            {item.donate ? (
+              <div class="secondary-inner">
+                <Icon name={item.icon} size={20} />
+                <div class="secondary-content">
+                  <span class="secondary-label">{item.label}</span>
+                </div>
+                <DonateButton lang={lang} variant="secondary" />
+              </div>
+            ) : (
+              <a href={item.href!} class="secondary-inner secondary-link"
+                 target={item.external ? '_blank' : undefined}
+                 rel={item.external ? 'noopener' : undefined}>
+                <Icon name={item.icon} size={20} />
+                <div class="secondary-content">
+                  <span class="secondary-label">{item.label}</span>
+                  {item.sub && <span class="secondary-sub">{item.sub}</span>}
+                </div>
+                <span class="secondary-arrow" aria-hidden="true">→</span>
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+
       <div class="location-section">
         <h2>{t('location.title')}</h2>
-        <p class="location-name">📍 Nelson Mandelapark, Haarlem Noord</p>
+        <p class="location-name">
+          <Icon name="map-pin" size={18} />
+          Nelson Mandelapark, Haarlem Noord
+        </p>
         <div class="map-container">
           <iframe
             src="https://www.google.com/maps?q=Nelson+Mandelapark,+Haarlem+Noord,+Netherlands&output=embed"
@@ -94,6 +99,28 @@ const t = useTranslations(lang);
   </section>
 </BaseLayout>
 
+<script>
+  // Copy-to-clipboard for the email address, with a transient "Copied" state.
+  document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+    const value = btn.dataset.copy;
+    if (!value) return;
+    const labelEl = btn.querySelector('.copy-label');
+    const original = labelEl?.textContent ?? '';
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(value);
+        if (labelEl) {
+          // Fall back to the shared i18n 'copied' label via data-attribute.
+          labelEl.textContent = btn.dataset.copied || 'Copied';
+          setTimeout(() => { labelEl.textContent = original; }, 1500);
+        }
+      } catch {
+        // clipboard API blocked — no-op, user can still select the link.
+      }
+    });
+  });
+</script>
+
 <style>
   .contact-page {
     min-height: 80vh;
@@ -102,86 +129,158 @@ const t = useTranslations(lang);
   .page-header {
     text-align: center;
     margin-bottom: var(--space-xl);
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .page-subtitle {
-    color: var(--color-text);
-    font-size: 1.25rem;
-    margin-top: var(--space-sm);
-    margin-bottom: var(--space-md);
+  .page-kicker {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    color: var(--color-gold);
+    margin-bottom: var(--space-sm);
   }
 
   .page-text {
     color: var(--color-text-muted);
-    font-size: 1.125rem;
-    max-width: 600px;
-    margin: 0 auto;
+    font-size: 1.0625rem;
+    margin-top: var(--space-md);
     line-height: 1.7;
   }
 
-  .contact-grid {
+  .primary-contact {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: auto 1fr;
     gap: var(--space-lg);
-    max-width: 1000px;
+    align-items: start;
+    max-width: 720px;
     margin: 0 auto var(--space-xl);
-  }
-
-  .contact-card {
-    background: var(--color-card);
-    border-radius: var(--radius-lg);
     padding: var(--space-xl);
-    text-align: center;
+    background: linear-gradient(135deg, rgba(215, 110, 77, 0.12), rgba(242, 199, 92, 0.04));
+    border: 1px solid rgba(215, 110, 77, 0.25);
+    border-radius: var(--radius-lg);
   }
 
-  .contact-card.highlight {
-    background: linear-gradient(135deg, rgba(215, 110, 77, 0.1), rgba(242, 199, 92, 0.05));
-    border: 1px solid rgba(215, 110, 77, 0.2);
-  }
-
-  .card-icon {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: var(--space-md);
-  }
-
-  .contact-card h2 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-md);
-  }
-
-  .contact-card p {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
-    line-height: 1.6;
-  }
-
-  .contact-link {
-    font-size: 1rem;
-    word-break: break-word;
-  }
-
-  .social-links {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
-  .social-link {
+  .primary-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-md);
+  }
+
+  .primary-body h2 {
+    font-size: 1.4rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .primary-email-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .primary-email {
+    font-size: 1.15rem;
+    font-weight: 500;
     color: var(--color-text);
+    word-break: break-word;
+  }
+
+  .primary-email:hover {
+    color: var(--color-accent-light);
+  }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid rgba(239, 230, 216, 0.18);
+    color: var(--color-text-muted);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
     transition: all var(--transition-fast);
   }
 
-  .social-link:hover {
-    background: var(--color-accent);
-    color: white;
+  .copy-btn:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .reply-time {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-top: var(--space-sm);
+    line-height: 1.6;
+  }
+
+  /* Secondary compact list */
+  .secondary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto var(--space-xl);
+    max-width: 720px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .secondary-item {
+    background: var(--color-bg);
+  }
+
+  .secondary-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background var(--transition-fast);
+  }
+
+  .secondary-link:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .secondary-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .secondary-label {
+    font-weight: 500;
+  }
+
+  .secondary-sub {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  .secondary-arrow {
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .secondary-link:hover .secondary-arrow {
+    color: var(--color-accent);
+    transform: translateX(3px);
   }
 
   .location-section {
@@ -195,8 +294,12 @@ const t = useTranslations(lang);
   }
 
   .location-name {
-    font-size: 1.125rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.0625rem;
     margin-bottom: var(--space-lg);
+    color: var(--color-text);
   }
 
   .map-container {
@@ -216,15 +319,14 @@ const t = useTranslations(lang);
     color: var(--color-accent-light);
   }
 
-  @media (max-width: 900px) {
-    .contact-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 600px) {
-    .contact-grid {
+  @media (max-width: 640px) {
+    .primary-contact {
       grid-template-columns: 1fr;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+    }
+    .primary-icon {
+      margin: 0 auto;
     }
   }
 </style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -97,7 +98,7 @@ const connections = [
             {t('municipalities.meetingCta')}
           </a>
           <a href="tel:+31657576047" class="btn btn-secondary">
-            📞 +31 6 57576047
+            <Icon name="phone" size={18} /> +31 6 57576047
           </a>
         </div>
       </div>

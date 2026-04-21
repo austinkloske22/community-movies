@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 interface Props {
@@ -143,13 +144,13 @@ function formatDate(dateStr: string): string {
       </div>
       {silentDisco && (
         <div class="meta-row meta-disco">
-          <span>🪩</span>
+          <span aria-hidden="true">🪩</span>
           <span>{t('movie.silentDisco')}</span>
           <span class="meta-time">{getDiscoTime(time)}</span>
         </div>
       )}
       <div class="meta-row meta-film">
-        <span>🎬</span>
+        <span class="meta-icon-wrap"><Icon name="film" size={14} /></span>
         <span>{t('movie.filmStart')}</span>
         <span class="meta-time">{time}</span>
       </div>
@@ -162,22 +163,22 @@ function formatDate(dateStr: string): string {
       <div class="movie-languages">
         {language && !['TBA', 'n/a', 'N/A', ''].includes(language) && (
           <span class="lang-tag" title={t('movie.spokenLanguage')}>
-            🗣️ {t('movie.language')}: {getLanguageName(language)}
+            <Icon name="languages" size={14} /> {t('movie.language')}: {getLanguageName(language)}
           </span>
         )}
         {subtitles && !['TBA', 'n/a', 'N/A', ''].includes(subtitles) && (
           <span class="lang-tag" title={t('movie.subtitles')}>
-            💬 {t('movie.subtitles')}: {getLanguageName(subtitles)}
+            <Icon name="message-circle" size={14} /> {t('movie.subtitles')}: {getLanguageName(subtitles)}
           </span>
         )}
         {headphones && !['TBA', 'n/a', 'N/A', ''].includes(headphones) && (
           <span class="lang-tag" title={t('movie.headphones')}>
-            🎧 {headphones}
+            <Icon name="headphones" size={14} /> {headphones}
           </span>
         )}
         {location && (
           <span class="lang-tag location-tag" title={t('movie.location')}>
-            📍 {location}
+            <Icon name="map-pin" size={14} /> {location}
           </span>
         )}
       </div>
@@ -286,8 +287,9 @@ function formatDate(dateStr: string): string {
     color: var(--color-text-muted);
   }
 
-  .meta-date .movie-date::before {
-    content: '📅 ';
+  .meta-icon-wrap {
+    display: inline-flex;
+    align-items: center;
   }
 
   .kijkwijzer-icon {

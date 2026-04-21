@@ -1,6 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
+import Icon from './Icon.astro';
 
 interface Props {
   movie: Movie | null;
@@ -70,7 +71,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
 
         <div class="screening-details">
           <div class="detail-card">
-            <span class="detail-icon">📅</span>
+            <span class="detail-icon"><Icon name="calendar" size={22} /></span>
             <div class="detail-content">
               <span class="detail-label">{t('schedule.date')}</span>
               <span class="detail-value">{formatDate(movie.date)}</span>
@@ -78,7 +79,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
           </div>
 
           <div class="detail-card">
-            <span class="detail-icon">🕐</span>
+            <span class="detail-icon"><Icon name="clock" size={22} /></span>
             <div class="detail-content">
               <span class="detail-label">{t('schedule.time')}</span>
               <span class="detail-value">{movie.time}</span>
@@ -86,7 +87,7 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
           </div>
 
           <div class="detail-card">
-            <span class="detail-icon">📍</span>
+            <span class="detail-icon"><Icon name="map-pin" size={22} /></span>
             <div class="detail-content">
               <span class="detail-label">{t('location.title')}</span>
               <span class="detail-value">{movie.location || 'Nelson Mandelapark, Haarlem'}</span>
@@ -102,21 +103,21 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
             <div class="language-info">
               {movie.language && !['TBA', 'n/a', 'N/A', ''].includes(movie.language) && (
                 <div class="lang-item">
-                  <span class="lang-icon">🗣️</span>
+                  <span class="lang-icon"><Icon name="languages" size={16} /></span>
                   <span class="lang-label">{t('movie.language')}:</span>
                   <span class="lang-value">{movie.language}</span>
                 </div>
               )}
               {movie.subtitles && !['TBA', 'n/a', 'N/A', ''].includes(movie.subtitles) && (
                 <div class="lang-item">
-                  <span class="lang-icon">💬</span>
+                  <span class="lang-icon"><Icon name="message-circle" size={16} /></span>
                   <span class="lang-label">{t('movie.subtitles')}:</span>
                   <span class="lang-value">{movie.subtitles}</span>
                 </div>
               )}
               {movie.headphones && !['TBA', 'n/a', 'N/A', ''].includes(movie.headphones) && (
                 <div class="lang-item">
-                  <span class="lang-icon">🎧</span>
+                  <span class="lang-icon"><Icon name="headphones" size={16} /></span>
                   <span class="lang-label">{t('movie.headphones')}:</span>
                   <span class="lang-value">{movie.headphones}</span>
                 </div>

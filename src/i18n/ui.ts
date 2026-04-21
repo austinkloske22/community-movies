@@ -191,6 +191,13 @@ export const ui = {
     'contact.becomeSponsor': 'Word sponsor',
     'contact.openMaps': 'Open in Google Maps',
     'contact.municipalityText': 'Benieuwd wat Nelsons Film voor jouw gemeente kan betekenen?',
+    'contact.replyTime': 'We lezen alles. Je hoort meestal binnen 2 dagen wat van ons.',
+    'contact.copy': 'Kopieer',
+    'contact.copied': 'Gekopieerd',
+    'contact.emailUs': 'Stuur ons een e-mail',
+    'contact.callUs': 'Bel ons',
+    'contact.instagram': 'Instagram',
+    'contact.municipalitiesLink': 'Voor gemeenten',
 
     // Footer
     'footer.madeWith': 'Gemaakt met liefde voor de buurt',
@@ -389,6 +396,13 @@ export const ui = {
     'contact.becomeSponsor': 'Become a sponsor',
     'contact.openMaps': 'Open in Google Maps',
     'contact.municipalityText': 'Curious what Nelsons Film can offer your municipality?',
+    'contact.replyTime': 'We read everything. You\'ll usually hear back within 2 days.',
+    'contact.copy': 'Copy',
+    'contact.copied': 'Copied',
+    'contact.emailUs': 'Email us',
+    'contact.callUs': 'Call us',
+    'contact.instagram': 'Instagram',
+    'contact.municipalitiesLink': 'For municipalities',
 
     // Footer
     'footer.madeWith': 'Made with love for the neighborhood',
@@ -586,6 +600,13 @@ export const ui = {
     'contact.becomeSponsor': 'كن راعياً',
     'contact.openMaps': 'افتح في خرائط جوجل',
     'contact.municipalityText': 'هل تتساءل ماذا يمكن أن يقدم نيلسونز فيلم لبلديتك؟',
+    'contact.replyTime': 'نقرأ كل شيء. عادةً ما ترد خلال يومين.',
+    'contact.copy': 'نسخ',
+    'contact.copied': 'تم النسخ',
+    'contact.emailUs': 'راسلنا بالبريد',
+    'contact.callUs': 'اتصل بنا',
+    'contact.instagram': 'إنستغرام',
+    'contact.municipalitiesLink': 'للبلديات',
 
     // Footer
     'footer.madeWith': 'صُنع بحب للحي',

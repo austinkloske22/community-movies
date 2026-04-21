@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
+import Icon from './Icon.astro';
 import heroImg from '../assets/outdoor-sunset.jpg';
 
 interface Props {
@@ -44,22 +45,22 @@ const nextDate = movie
       </p>
       <div class="hero-info fade-in">
         <a href={getLocalizedPath('/programma/haarlem', lang)} class="hero-badge hero-badge-link hero-badge-active">
-          <span class="badge-icon">📍</span>
+          <span class="badge-icon"><Icon name="map-pin" size={18} /></span>
           <span>Haarlem</span>
           <span class="active-indicator">{t('hero.badgeActive')}</span>
         </a>
         <a href={getLocalizedPath('/programma/tiel', lang)} class="hero-badge hero-badge-link hero-badge-announced">
-          <span class="badge-icon">📍</span>
+          <span class="badge-icon"><Icon name="map-pin" size={18} /></span>
           <span>Tiel</span>
           <span class="announced-indicator">{t('hero.badgeAnnounced')}</span>
         </a>
         <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="hero-badge hero-badge-link hero-badge-announced">
-          <span class="badge-icon">📍</span>
+          <span class="badge-icon"><Icon name="map-pin" size={18} /></span>
           <span>IJmuiden</span>
           <span class="announced-indicator">{t('hero.badgeAnnounced')}</span>
         </a>
         <div class="hero-badge">
-          <span class="badge-icon">🏘️</span>
+          <span class="badge-icon"><Icon name="home" size={18} /></span>
           <span>{t('hero.badgeYourNeighborhood')}</span>
         </div>
       </div>

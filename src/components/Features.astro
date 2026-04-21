@@ -1,16 +1,17 @@
 ---
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
+import Icon from './Icon.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const features = [
-  { icon: '🎧', key: 'home.feature1' },
-  { icon: '🌍', key: 'home.feature2' },
-  { icon: '🤝', key: 'home.feature3' },
-  { icon: '🎥', key: 'home.feature4' },
-  { icon: '⭐', key: 'home.feature5' },
-];
+  { icon: 'headphones', key: 'home.feature1' },
+  { icon: 'globe', key: 'home.feature2' },
+  { icon: 'handshake', key: 'home.feature3' },
+  { icon: 'film', key: 'home.feature4' },
+  { icon: 'star', key: 'home.feature5' },
+] as const;
 
 const moreThanItems = [
   { title: t('home.moreThanItem1'), detail: t('home.moreThanDetail1') },
@@ -35,7 +36,7 @@ const moreThanItems = [
         <div class="features-grid">
           {features.map((feature) => (
             <div class="feature-item">
-              <span class="feature-icon">{feature.icon}</span>
+              <span class="feature-icon"><Icon name={feature.icon} size={22} /></span>
               <span class="feature-text">{t(feature.key)}</span>
             </div>
           ))}

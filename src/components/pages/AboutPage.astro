@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DonateButton from '../DonateButton.astro';
+import Icon from '../Icon.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -115,15 +116,15 @@ const values = [
           <h2>{t('about.inTheNews')}</h2>
           <div class="press-links">
             <a href="https://www.023magazine.nl/cultuur-uitgaan/3149-succesvolle-bewonersinitiatieven" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon">📰</span>
+              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
               <span>{t('about.newsItem023')}</span>
             </a>
             <a href="https://www.haarlemlink.nl/nieuws/pitch-nelson-film" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon">📰</span>
+              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
               <span>{t('about.newsItemHaarlemlink')}</span>
             </a>
             <a href="https://www.haarlemmerdagblad.nl/uitgaan/nelsons-film-brengt-buurt-samen-met-gratis-pop-up-bioscoop-in-haarlem-noord" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon">📰</span>
+              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
               <span>{t('about.newsItemDagblad')}</span>
             </a>
           </div>
