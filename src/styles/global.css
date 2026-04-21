@@ -178,29 +178,6 @@ a:hover {
   animation: fadeIn 0.6s ease forwards;
 }
 
-/* RTL support */
-[dir="rtl"] body {
-  line-height: 1.8;
-}
-
-[dir="rtl"] .tile-arrow,
-[dir="rtl"] .press-link svg {
-  transform: scaleX(-1);
-}
-
-[dir="rtl"] .screening-badge,
-[dir="rtl"] .tile-badge,
-[dir="rtl"] .dropdown-title,
-[dir="rtl"] .detail-label,
-[dir="rtl"] .kijkwijzer-label,
-[dir="rtl"] .active-indicator,
-[dir="rtl"] .announced-indicator,
-[dir="rtl"] .hero-slogan,
-[dir="rtl"] .next-badge {
-  letter-spacing: normal;
-  text-transform: none;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .container {
