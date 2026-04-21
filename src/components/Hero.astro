@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
-import Icon from './Icon.astro';
+import NextScreeningCard from './NextScreeningCard.astro';
 import heroImg from '../assets/outdoor-sunset.jpg';
 
 interface Props {
@@ -13,10 +13,8 @@ const { movie = null } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const localeMap: Record<string, string> = { nl: 'nl-NL', en: 'en-GB', ara: 'ar-SA' };
-const nextDate = movie
-  ? new Date(movie.date).toLocaleDateString(localeMap[lang] || 'en-GB', { day: 'numeric', month: 'short' })
-  : '';
+const siteUrl = Astro.site?.toString() ?? 'https://nelsonsfilm.nl';
+const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
 ---
 
 <section class="hero">
@@ -32,60 +30,66 @@ const nextDate = movie
       class="hero-image"
     />
   </div>
-  <div class="container">
+  <div class="container hero-container">
     <div class="hero-content">
       <h1 class="hero-title fade-in">
         <img src="/images/brand/text-logo-clear-background.png" alt={t('hero.title')} class="hero-logo" />
       </h1>
-      <p class="hero-slogan fade-in">
-        {t('hero.slogan')}
-      </p>
-      <p class="hero-subtitle fade-in">
-        {t('hero.subtitle')}
-      </p>
-      <div class="hero-info fade-in">
-        <a href={getLocalizedPath('/programma/haarlem', lang)} class="hero-badge hero-badge-link hero-badge-active">
-          <span class="badge-icon"><Icon name="map-pin" size={18} /></span>
-          <span>Haarlem</span>
-          <span class="active-indicator">{t('hero.badgeActive')}</span>
-        </a>
-        <a href={getLocalizedPath('/programma/tiel', lang)} class="hero-badge hero-badge-link hero-badge-announced">
-          <span class="badge-icon"><Icon name="map-pin" size={18} /></span>
-          <span>Tiel</span>
-          <span class="announced-indicator">{t('hero.badgeAnnounced')}</span>
-        </a>
-        <a href={getLocalizedPath('/programma/ijmuiden', lang)} class="hero-badge hero-badge-link hero-badge-announced">
-          <span class="badge-icon"><Icon name="map-pin" size={18} /></span>
-          <span>IJmuiden</span>
-          <span class="announced-indicator">{t('hero.badgeAnnounced')}</span>
-        </a>
-        <div class="hero-badge">
-          <span class="badge-icon"><Icon name="home" size={18} /></span>
-          <span>{t('hero.badgeYourNeighborhood')}</span>
-        </div>
-      </div>
-      <div class="hero-ctas fade-in">
+      <p class="hero-slogan fade-in">{t('hero.slogan')}</p>
+      <p class="hero-subtitle fade-in">{t('hero.subtitle')}</p>
+      <div class="hero-cta-row fade-in">
         <a href={getLocalizedPath('/programma', lang)} class="btn btn-primary hero-cta">
           {t('hero.cta')}
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </a>
-        <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-secondary hero-cta-secondary">
-          {t('hero.ctaMunicipalities')}
-        </a>
       </div>
     </div>
+
+    {movie && (
+      <div class="hero-card fade-in">
+        <NextScreeningCard movie={movie} lang={lang} pageUrl={pageUrl} />
+      </div>
+    )}
   </div>
-  {movie && (
-    <a class="hero-next-strip" href="#next-screening">
-      <span class="hero-next-label">{t('hero.nextLabel')}</span>
-      <span class="hero-next-date">{nextDate}</span>
-      <span class="hero-next-title">{movie.title}</span>
-      <span class="hero-next-arrow" aria-hidden="true">→</span>
-    </a>
-  )}
 </section>
+
+<script>
+  // Hero card actions delegate to the same handlers used on NextScreening.astro
+  // — the ICS download wiring lives there, but the button copies sit on the hero
+  // card too. Hook up the calendar button and the "RSVP" scroll-and-open.
+  document.querySelectorAll<HTMLButtonElement>('.ns-action.action-calendar').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.ics;
+      const filename = btn.dataset.icsFilename || 'nelsonsfilm.ics';
+      if (!text) return;
+      const blob = new Blob([text], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  });
+
+  // When the hero-card "Let us know you're coming" anchor is clicked, also
+  // open the collapsed RSVP panel below (so the user doesn't have to click
+  // the toggle again).
+  document.querySelectorAll<HTMLAnchorElement>('.ns-rsvp-scroll').forEach((a) => {
+    a.addEventListener('click', () => {
+      const panel = document.getElementById('rsvp-panel');
+      const toggle = document.querySelector<HTMLButtonElement>('.action-rsvp-toggle');
+      if (panel && panel.hasAttribute('hidden')) {
+        panel.removeAttribute('hidden');
+        toggle?.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
 
 <style>
   .hero {
@@ -113,15 +117,23 @@ const nextDate = movie
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(180deg, rgba(26, 26, 46, 0.5) 0%, rgba(26, 26, 46, 0.7) 50%, var(--color-primary) 100%),
+      linear-gradient(180deg, rgba(26, 26, 46, 0.45) 0%, rgba(26, 26, 46, 0.6) 50%, var(--color-primary) 100%),
       radial-gradient(ellipse at 20% 50%, rgba(215, 110, 77, 0.12) 0%, transparent 50%),
       radial-gradient(ellipse at 80% 80%, rgba(242, 199, 92, 0.08) 0%, transparent 50%);
   }
 
-  .hero-content {
+  .hero-container {
     position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+
+  .hero-content {
     text-align: center;
-    max-width: 900px;
+    max-width: 760px;
     margin: 0 auto;
   }
 
@@ -133,153 +145,86 @@ const nextDate = movie
   }
 
   .hero-logo {
-    width: clamp(300px, 50vw, 600px);
+    width: clamp(260px, 42vw, 500px);
     height: auto;
     object-fit: contain;
-    margin-bottom: clamp(-80px, -12vw, -40px);
+    margin-bottom: clamp(-60px, -9vw, -30px);
   }
 
   .hero-slogan {
     font-family: var(--font-display);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-size: clamp(1.35rem, 3.2vw, 2rem);
     font-weight: 500;
     color: var(--color-accent);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
   .hero-subtitle {
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
     color: var(--color-text-muted);
     margin-bottom: var(--space-lg);
     line-height: 1.7;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 600px;
+    margin-inline: auto;
   }
 
-  .hero-info {
+  .hero-cta-row {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-xl);
-  }
-
-  .hero-badge {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.9rem;
-  }
-
-  .badge-icon {
-    font-size: 1.25rem;
-  }
-
-  .hero-badge-link {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .hero-badge-link:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-  }
-
-  .hero-badge-active {
-    background: rgba(215, 110, 77, 0.1);
-    border-color: rgba(215, 110, 77, 0.3);
-  }
-
-  .active-indicator {
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: var(--color-accent);
-    color: white;
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
-    margin-inline-start: var(--space-xs);
-  }
-
-  .hero-badge-announced {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .announced-indicator {
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--color-text-muted);
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
-    margin-inline-start: var(--space-xs);
-  }
-
-  .hero-ctas {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-md);
   }
 
   .hero-cta {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
     padding: var(--space-md) var(--space-xl);
   }
 
-  .hero-cta-secondary {
-    font-size: 1rem;
-    padding: var(--space-md) var(--space-lg);
+  .hero-card {
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
   }
 
   .fade-in {
     opacity: 0;
-    animation: fadeIn 0.8s ease forwards;
+    animation: fadeIn 0.7s ease forwards;
   }
 
-  .hero-title.fade-in {
-    animation-delay: 0.1s;
-  }
+  .hero-title.fade-in { animation-delay: 0.1s; }
+  .hero-slogan.fade-in { animation-delay: 0.2s; }
+  .hero-subtitle.fade-in { animation-delay: 0.3s; }
+  .hero-cta-row.fade-in { animation-delay: 0.4s; }
+  .hero-card.fade-in { animation-delay: 0.5s; }
 
-  .hero-slogan.fade-in {
-    animation-delay: 0.15s;
-  }
-
-  .hero-subtitle.fade-in {
-    animation-delay: 0.2s;
-  }
-
-  .hero-info.fade-in {
-    animation-delay: 0.3s;
-  }
-
-  .hero-ctas.fade-in {
-    animation-delay: 0.4s;
-  }
-
-  /* Pinned next-screening sliver — mobile only, teases the block below */
-  .hero-next-strip {
-    display: none;
+  @media (min-width: 960px) {
+    .hero-container {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-xl);
+      align-items: center;
+    }
+    .hero-content {
+      text-align: start;
+      margin: 0;
+    }
+    .hero-title {
+      justify-content: flex-start;
+    }
+    .hero-cta-row {
+      justify-content: flex-start;
+    }
+    .hero-subtitle {
+      margin-inline: 0;
+    }
+    .hero-card {
+      margin: 0;
+    }
   }
 
   @media (max-width: 768px) {
     .hero {
-      min-height: 65vh;
-      padding-bottom: 56px;
+      min-height: auto;
+      padding: var(--space-lg) 0;
     }
 
     .hero-title {
@@ -287,63 +232,14 @@ const nextDate = movie
       gap: var(--space-sm);
     }
 
-    .hero-info {
+    .hero-cta-row {
       flex-direction: column;
       align-items: center;
     }
 
-    .hero-ctas {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .hero-cta,
-    .hero-cta-secondary {
+    .hero-cta {
       width: 100%;
-      max-width: 300px;
-    }
-
-    .hero-next-strip {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-      padding: 0 var(--space-md);
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(6px);
-      color: var(--color-text);
-      text-decoration: none;
-      font-size: 0.85rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      z-index: 3;
-    }
-    .hero-next-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-gold);
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    .hero-next-date {
-      color: var(--color-accent);
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    .hero-next-title {
-      color: var(--color-text);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-    }
-    .hero-next-arrow {
-      color: var(--color-text-muted);
-      flex-shrink: 0;
+      max-width: 320px;
     }
   }
 </style>
