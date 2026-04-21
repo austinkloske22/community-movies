@@ -48,11 +48,11 @@ export const ui = {
 
     // Notify signup (announced locations)
     'notify.title': 'Binnenkort in jouw stad',
-    'notify.body': 'We hebben nog geen datum, maar de wijk krijgt op een dag een Nelsons Film-avond. Laat je e-mail achter en we laten weten zodra de eerste editie staat ingepland.',
+    'notify.body': 'We hebben nog geen datum, maar een Nelsons Film-avond komt deze kant op. Laat je e-mail achter en we laten het weten zodra er een datum is.',
     'notify.placeholder': 'naam@voorbeeld.nl',
     'notify.submit': 'Hou me op de hoogte',
-    'notify.success': 'Top — we mailen zodra er een datum is.',
-    'notify.gdpr': 'We mailen alleen wanneer we een datum hebben. Uitschrijven met 1 klik.',
+    'notify.success': 'Top — we laten het weten zodra er een datum is.',
+    'notify.gdpr': 'We bewaren je e-mail alleen voor dit doel. Geen nieuwsbrief.',
 
     // Home page sections
     'home.forEveryoneTitle': 'Een filmavond voor iedereen. Echt iedereen.',
@@ -324,11 +324,11 @@ export const ui = {
 
     // Notify signup (announced locations)
     'notify.title': 'Coming to your city',
-    'notify.body': "We don't have a date yet, but a Nelsons Film night is on the way. Leave your email and we'll let you know the moment the first screening is scheduled.",
+    'notify.body': "We don't have a date yet, but a Nelsons Film night is on the way. Leave your email and we'll let you know as soon as there's one.",
     'notify.placeholder': 'name@example.com',
     'notify.submit': 'Keep me posted',
-    'notify.success': "Got it — we'll email you as soon as there's a date.",
-    'notify.gdpr': 'One email when we have a date. Unsubscribe with a single click.',
+    'notify.success': "Got it — we'll let you know once there's a date.",
+    'notify.gdpr': 'We keep your email only for this. No newsletter.',
 
     // Home page sections
     'home.forEveryoneTitle': 'A film night for everyone. Truly everyone.',
@@ -601,11 +601,11 @@ export const ui = {
 
     // Notify signup (announced locations)
     'notify.title': 'قريباً في مدينتك',
-    'notify.body': 'ليس لدينا موعد بعد، لكن أمسية نيلسونز فيلم في الطريق. اترك بريدك الإلكتروني وسنخبرك فور جدولة الأمسية الأولى.',
+    'notify.body': 'ليس لدينا موعد بعد، لكن أمسية نيلسونز فيلم في الطريق. اترك بريدك الإلكتروني وسنخبرك فور تحديد الموعد.',
     'notify.placeholder': 'name@example.com',
     'notify.submit': 'أعلمني',
-    'notify.success': 'حسناً — سنرسل لك بريداً فور تحديد الموعد.',
-    'notify.gdpr': 'بريد واحد عند تحديد الموعد. إلغاء الاشتراك بنقرة واحدة.',
+    'notify.success': 'حسناً — سنخبرك فور تحديد الموعد.',
+    'notify.gdpr': 'نحتفظ ببريدك فقط لهذا الغرض. لا توجد رسائل إخبارية.',
 
     // Home page sections
     'home.forEveryoneTitle': 'أمسية سينمائية للجميع. حقاً للجميع.',

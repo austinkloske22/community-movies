@@ -3,14 +3,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
 import Icon from '../Icon.astro';
 import NotifySignup from '../NotifySignup.astro';
-import { getIJmuidenMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
+import { getIJmuidenMovies, getAnnouncedUpcoming, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const movies = getIJmuidenMovies();
-const upcomingMovies = getUpcomingMovies(movies);
+const announced = getAnnouncedUpcoming(movies);
 const nextMovie = getNextMovie(movies);
 ---
 
@@ -23,7 +23,7 @@ const nextMovie = getNextMovie(movies);
 
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationIJmuiden')}</h1>
-        {upcomingMovies.length > 0 && (
+        {announced.length > 0 && (
           <a href="/programma/ijmuiden.ics" class="calendar-btn"
              data-goatcounter-click="calendar-ijmuiden"
              data-goatcounter-title="Calendar download">
@@ -35,9 +35,9 @@ const nextMovie = getNextMovie(movies);
         <p class="page-free">{t('schedule.freeInfo')}</p>
       </header>
 
-      {upcomingMovies.length > 0 ? (
+      {announced.length > 0 ? (
         <div class="movies-grid grid grid-2">
-          {upcomingMovies.map((movie) => (
+          {announced.map((movie) => (
             <MovieCard
               title={movie.title}
               descriptionNl={movie.descriptionNl}

@@ -93,7 +93,22 @@ export function getUpcomingMovies(movies: Movie[]): Movie[] {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 
+/**
+ * A movie row is "announced" if it has a real title — i.e. not "TBA".
+ * Use this for user-facing surfaces: a row with title TBA is internal
+ * bookkeeping (a placeholder saying "this city is coming") and should
+ * drive an "in preparation" state, not a movie card.
+ */
+export function isAnnounced(movie: Movie): boolean {
+  const t = (movie.title || '').trim().toUpperCase();
+  return t.length > 0 && t !== 'TBA';
+}
+
+export function getAnnouncedUpcoming(movies: Movie[]): Movie[] {
+  return getUpcomingMovies(movies).filter(isAnnounced);
+}
+
 export function getNextMovie(movies: Movie[]): Movie | null {
-  const upcoming = getUpcomingMovies(movies);
+  const upcoming = getAnnouncedUpcoming(movies);
   return upcoming[0] || null;
 }
