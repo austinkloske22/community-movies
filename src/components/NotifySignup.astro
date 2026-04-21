@@ -1,0 +1,229 @@
+---
+import Icon from './Icon.astro';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  /** Short machine-friendly tag e.g. "tiel" or "ijmuiden" — stored with the
+   * email so the admin can filter by location in the sheet. */
+  location: string;
+  lang: 'nl' | 'en' | 'ara';
+}
+
+const { location, lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Same Apps Script /exec URL used by the RSVP and samenwerking flows.
+// Dispatches on payload.type === 'notify'.
+const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycby7Sn4K5lWKriC0cuedxpgA0Ymk5Pn5BZ2SHSCmfOp9sPDxyE5G6LN6yfRgUG4G3HbJ/exec';
+const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeURIComponent(`Notify me — ${location}`)}`;
+---
+
+<form class="notify"
+      data-submit-url={SUBMIT_URL}
+      data-location={location}
+      data-locale={lang}
+      data-mailto-fallback={mailtoFallback}
+      novalidate>
+  <div class="notify-body">
+    <h2 class="notify-title">{t('notify.title')}</h2>
+    <p class="notify-lede">{t('notify.body')}</p>
+
+    <div class="notify-row">
+      <label class="sr-only" for={`notify-email-${location}`}>Email</label>
+      <input
+        id={`notify-email-${location}`}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder={t('notify.placeholder')}
+      />
+      <button type="submit" class="btn btn-primary">
+        <span class="submit-label">{t('notify.submit')}</span>
+        <span class="submit-loading" hidden>…</span>
+      </button>
+    </div>
+
+    <p class="notify-gdpr">{t('notify.gdpr')}</p>
+  </div>
+
+  <div class="notify-success" role="status" aria-live="polite" hidden>
+    <div class="success-badge" aria-hidden="true"><Icon name="check" size={22} /></div>
+    <p>{t('notify.success')}</p>
+  </div>
+
+  <div class="notify-error" role="alert" aria-live="assertive" hidden>
+    <p>{t('rsvp.error')}</p>
+  </div>
+</form>
+
+<script>
+  document.querySelectorAll('form.notify').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = form.dataset.submitUrl;
+      if (!url || url.includes('PASTE')) return;
+      const fd = new FormData(form);
+      const email = String(fd.get('email') || '').trim();
+      if (!email.includes('@')) return;
+
+      const bodyEl = form.querySelector('.notify-body');
+      const successEl = form.querySelector('.notify-success');
+      const errorEl = form.querySelector('.notify-error');
+      const label = form.querySelector('.submit-label');
+      const loading = form.querySelector('.submit-loading');
+      const btn = form.querySelector('button[type="submit"]');
+
+      if (btn) btn.setAttribute('disabled', '');
+      if (label) label.setAttribute('hidden', '');
+      if (loading) loading.removeAttribute('hidden');
+      if (errorEl) errorEl.setAttribute('hidden', '');
+
+      const payload = {
+        type: 'notify',
+        location: form.dataset.location || '',
+        email,
+        locale: form.dataset.locale || 'nl',
+        submittedAt: new Date().toISOString(),
+        referrer: document.referrer || '',
+        pageUrl: window.location.href,
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json().catch(() => ({}));
+        if (data && data.ok === false) throw new Error(data.error || 'rejected');
+        if (bodyEl) bodyEl.setAttribute('hidden', '');
+        if (successEl) successEl.removeAttribute('hidden');
+        try {
+          if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+            window.goatcounter.count({ path: 'notify_' + (form.dataset.location || 'unknown'), event: true });
+          }
+        } catch (e) { /* ignore */ }
+      } catch (err) {
+        if (loading) loading.setAttribute('hidden', '');
+        if (label) label.removeAttribute('hidden');
+        if (btn) btn.removeAttribute('disabled');
+        if (errorEl) errorEl.removeAttribute('hidden');
+      }
+    });
+  });
+</script>
+
+<style>
+  .notify {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    background: linear-gradient(135deg, rgba(215, 110, 77, 0.08), rgba(242, 199, 92, 0.03));
+    border: 1px solid rgba(242, 199, 92, 0.2);
+    border-radius: var(--radius-lg);
+  }
+
+  .notify-title {
+    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+    margin-bottom: var(--space-sm);
+  }
+
+  .notify-lede {
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin-bottom: var(--space-md);
+  }
+
+  .notify-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .notify input[type="email"] {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font: inherit;
+  }
+
+  .notify input[type="email"]:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(215, 110, 77, 0.15);
+  }
+
+  .notify button[disabled] {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .notify-gdpr {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .notify-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    padding: var(--space-md) 0;
+  }
+
+  .success-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notify-success p {
+    color: var(--color-text);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .notify-error {
+    color: var(--color-accent);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(215, 110, 77, 0.08);
+    border: 1px solid rgba(215, 110, 77, 0.3);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-sm);
+  }
+
+  @media (max-width: 520px) {
+    .notify-row {
+      grid-template-columns: 1fr;
+    }
+    .notify {
+      padding: var(--space-lg);
+    }
+  }
+</style>

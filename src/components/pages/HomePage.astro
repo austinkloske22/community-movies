@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../Hero.astro';
 import NextScreening from '../NextScreening.astro';
+import Numbers from '../Numbers.astro';
 import Features from '../Features.astro';
 import { getMovies, getNextMovie } from '../../lib/sheets';
 
@@ -12,5 +13,6 @@ const nextMovie = getNextMovie(movies);
 <BaseLayout title="Home">
   <Hero movie={nextMovie} />
   <NextScreening movie={nextMovie} />
+  <Numbers />
   <Features />
 </BaseLayout>

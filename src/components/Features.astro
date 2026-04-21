@@ -70,10 +70,10 @@ const moreThanItems = [
       <p class="community-note">{t('home.communityProject')}</p>
     </div>
 
-    <!-- Municipality CTA — full width -->
-    <div class="content-block highlight-block">
-      <h2 class="section-title">{t('home.municipalityTitle')}</h2>
-      <p class="section-text">{t('home.municipalityText')}</p>
+    <!-- Municipality CTA — minimal bleed, not a card -->
+    <div class="muni-cta">
+      <h2 class="muni-cta-title">{t('home.municipalityTitle')}</h2>
+      <p class="muni-cta-text">{t('home.municipalityText')}</p>
       <a href={getLocalizedPath('/voor-gemeenten', lang)} class="btn btn-primary">
         {t('home.municipalityCta')}
       </a>
@@ -129,6 +129,29 @@ const moreThanItems = [
     background: linear-gradient(135deg, rgba(215, 110, 77, 0.1), rgba(242, 199, 92, 0.05));
     border: 1px solid rgba(215, 110, 77, 0.2);
     text-align: center;
+  }
+
+  .muni-cta {
+    max-width: 720px;
+    margin: var(--space-xl) auto 0;
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .muni-cta-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--space-sm);
+    color: var(--color-accent);
+  }
+
+  .muni-cta-text {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+    max-width: 560px;
+    margin-inline: auto;
   }
 
   .section-title {

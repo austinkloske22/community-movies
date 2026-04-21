@@ -1,0 +1,118 @@
+---
+import { getLangFromUrl } from '../i18n/utils';
+import { testimonials, pickQuote, type Testimonial } from '../data/testimonials';
+
+interface Props {
+  variant?: 'single' | 'row';
+  /** Filter by kind. Omit for all. */
+  kind?: Testimonial['kind'];
+  /** Pre-filtered list overrides the kind filter. */
+  items?: Testimonial[];
+  /** Max shown in row variant (default 3). */
+  limit?: number;
+}
+
+const { variant = 'row', kind, items, limit = 3 } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+
+let list = items ?? testimonials;
+if (kind) list = list.filter((t) => t.kind === kind);
+if (variant === 'single') list = list.slice(0, 1);
+else list = list.slice(0, limit);
+---
+
+<div class:list={['tl-wrap', `tl-${variant}`]}>
+  {list.map((t) => (
+    <figure class="tl">
+      <blockquote class="tl-quote">
+        <span class="tl-mark" aria-hidden="true">&ldquo;</span>
+        <p>{pickQuote(t.quote, lang)}</p>
+      </blockquote>
+      <figcaption class="tl-cite">
+        <span class="tl-author">{t.author}</span>
+        <span class="tl-role">{pickQuote(t.role, lang)}</span>
+      </figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .tl-wrap {
+    display: grid;
+    gap: var(--space-lg);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .tl-wrap.tl-row {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .tl-wrap.tl-single {
+    grid-template-columns: 1fr;
+    max-width: 760px;
+  }
+
+  .tl {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    position: relative;
+  }
+
+  .tl-quote {
+    margin: 0;
+    position: relative;
+    color: var(--color-text);
+  }
+
+  .tl-quote p {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .tl-mark {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    line-height: 0.8;
+    color: var(--color-accent);
+    opacity: 0.45;
+    position: absolute;
+    top: -14px;
+    inset-inline-start: -8px;
+    pointer-events: none;
+  }
+
+  .tl-cite {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: var(--space-sm);
+  }
+
+  .tl-author {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .tl-role {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+  }
+
+  .tl-single .tl {
+    padding: var(--space-xl);
+  }
+
+  .tl-single .tl-quote p {
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  }
+</style>

@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DonateButton from '../DonateButton.astro';
 import Icon from '../Icon.astro';
 import SponsorStrip from '../SponsorStrip.astro';
+import Numbers from '../Numbers.astro';
+import Testimonial from '../Testimonial.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -42,28 +44,44 @@ const values = [
           </div>
         </div>
 
-        <!-- Photo Gallery -->
-        <div class="photo-gallery">
-          <h2>{t('about.ourEvents')}</h2>
-          <div class="gallery-grid">
-            <div class="gallery-item featured">
-              <img src="/images/outdoor-sunset.jpg" alt={t('about.altSunset')} loading="lazy" />
-            </div>
-            <div class="gallery-item">
+        <!-- Photo essay -->
+        <div class="photo-essay">
+          <h2 class="photo-essay-title">{t('about.ourEvents')}</h2>
+
+          <!-- (a) 21:9 full-bleed hero -->
+          <figure class="pe-hero">
+            <img src="/images/outdoor-sunset.jpg" alt={t('about.altSunset')} loading="lazy" />
+            <figcaption>{t('about.altSunset')}</figcaption>
+          </figure>
+
+          <!-- (b) 2-up asymmetric -->
+          <div class="pe-duo">
+            <figure class="pe-duo-lg">
               <img src="/images/park-screening.jpg" alt={t('about.altPark')} loading="lazy" />
-            </div>
-            <div class="gallery-item">
-              <img src="/images/family-screening.jpg" alt={t('about.altFamily')} loading="lazy" />
-            </div>
-            <div class="gallery-item">
+              <figcaption>{t('about.altPark')}</figcaption>
+            </figure>
+            <figure class="pe-duo-sm">
               <img src="/images/audience-indoor.jpg" alt={t('about.altCozy')} loading="lazy" />
-            </div>
-            <div class="gallery-item">
-              <img src="/images/venue-screening.jpg" alt={t('about.altWinter')} loading="lazy" />
-            </div>
-            <div class="gallery-item">
+              <figcaption>{t('about.altCozy')}</figcaption>
+            </figure>
+          </div>
+
+          <!-- (c) centered portrait -->
+          <figure class="pe-portrait">
+            <img src="/images/family-screening.jpg" alt={t('about.altFamily')} loading="lazy" />
+            <figcaption>{t('about.altFamily')}</figcaption>
+          </figure>
+
+          <!-- (d) landscape strip -->
+          <div class="pe-strip">
+            <figure>
               <img src="/images/event-party.jpg" alt={t('about.altFestive')} loading="lazy" />
-            </div>
+              <figcaption>{t('about.altFestive')}</figcaption>
+            </figure>
+            <figure>
+              <img src="/images/venue-screening.jpg" alt={t('about.altWinter')} loading="lazy" />
+              <figcaption>{t('about.altWinter')}</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -95,21 +113,13 @@ const values = [
           <DonateButton lang={lang} variant="primary" />
         </div>
 
-        <!-- Sponsors Section -->
-        <div class="sponsors">
-          <h2>{t('footer.sponsors')}</h2>
-          <p class="text-muted">
-            {t('about.madePossibleBy')}
-          </p>
-          <div class="sponsor-list">
-            <a href="https://buurtamsterdam.nl" target="_blank" rel="noopener" class="sponsor">BUURT / Fjörd</a>
-            <a href="https://cronje.nl" target="_blank" rel="noopener" class="sponsor">Cronjé</a>
-            <a href="https://desnuffelmug.nl" target="_blank" rel="noopener" class="sponsor">De Snuffelmug</a>
-            <a href="https://www.coa.nl" target="_blank" rel="noopener" class="sponsor">COA</a>
-            <a href="https://www.haarlem.nl" target="_blank" rel="noopener" class="sponsor">Gemeente Haarlem</a>
-            <a href="https://hbphoorne.nl" target="_blank" rel="noopener" class="sponsor">HBP Hoorne</a>
-            <a href="https://duizend1.nl" target="_blank" rel="noopener" class="sponsor">Duizend1</a>
-          </div>
+        <!-- Numbers strip -->
+        <Numbers />
+
+        <!-- Testimonials -->
+        <div class="tl-section">
+          <h2 class="tl-section-title">{t('testimonials.title')}</h2>
+          <Testimonial variant="row" limit={2} />
         </div>
 
         <!-- Sponsors / partners -->
@@ -120,15 +130,18 @@ const values = [
           <h2>{t('about.inTheNews')}</h2>
           <div class="press-links">
             <a href="https://www.023magazine.nl/cultuur-uitgaan/3149-succesvolle-bewonersinitiatieven" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
+              <img src="https://www.google.com/s2/favicons?domain=023magazine.nl&sz=64"
+                   alt="" width="24" height="24" loading="lazy" class="press-favicon" />
               <span>{t('about.newsItem023')}</span>
             </a>
             <a href="https://www.haarlemlink.nl/nieuws/pitch-nelson-film" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
+              <img src="https://www.google.com/s2/favicons?domain=haarlemlink.nl&sz=64"
+                   alt="" width="24" height="24" loading="lazy" class="press-favicon" />
               <span>{t('about.newsItemHaarlemlink')}</span>
             </a>
             <a href="https://www.haarlemmerdagblad.nl/uitgaan/nelsons-film-brengt-buurt-samen-met-gratis-pop-up-bioscoop-in-haarlem-noord" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
+              <img src="https://www.google.com/s2/favicons?domain=haarlemmerdagblad.nl&sz=64"
+                   alt="" width="24" height="24" loading="lazy" class="press-favicon" />
               <span>{t('about.newsItemDagblad')}</span>
             </a>
           </div>
@@ -139,6 +152,17 @@ const values = [
 </BaseLayout>
 
 <style>
+  .tl-section {
+    max-width: 1100px;
+    margin: var(--space-xl) auto;
+    padding: 0 var(--space-md);
+  }
+  .tl-section-title {
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--space-lg);
+  }
+
   .about-page {
     min-height: 80vh;
   }
@@ -226,41 +250,107 @@ const values = [
     color: var(--color-accent-light);
   }
 
-  .photo-gallery {
-    margin-bottom: var(--space-xl);
+  /* ---- Photo essay (B13) ---- */
+  .photo-essay {
+    margin: var(--space-xl) 0;
   }
 
-  .photo-gallery h2 {
+  .photo-essay-title {
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-text-muted);
     margin-bottom: var(--space-lg);
   }
 
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-  }
-
-  .gallery-item {
-    border-radius: var(--radius-lg);
+  .photo-essay figure {
+    margin: 0;
+    position: relative;
     overflow: hidden;
-    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
   }
 
-  .gallery-item.featured {
-    grid-column: span 2;
-    grid-row: span 2;
-    aspect-ratio: auto;
-  }
-
-  .gallery-item img {
+  .photo-essay img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform var(--transition-normal);
   }
 
-  .gallery-item:hover img {
-    transform: scale(1.05);
+  .photo-essay figure:hover img {
+    transform: scale(1.02);
+  }
+
+  .photo-essay figcaption {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--color-text);
+    opacity: 0.9;
+    font-size: 0.95rem;
+    margin-top: var(--space-sm);
+    padding: 0 var(--space-xs);
+  }
+
+  /* (a) 21:9 hero */
+  .pe-hero {
+    aspect-ratio: 21 / 9;
+    margin-bottom: var(--space-xl);
+  }
+
+  .pe-hero figcaption {
+    position: absolute;
+    bottom: var(--space-md);
+    inset-inline-start: var(--space-lg);
+    inset-inline-end: var(--space-lg);
+    color: var(--color-text);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .pe-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 50%, rgba(27, 47, 74, 0.7) 100%);
+  }
+
+  /* (b) 2-up asymmetric */
+  .pe-duo {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .pe-duo-lg {
+    aspect-ratio: 4 / 3;
+  }
+
+  .pe-duo-sm {
+    aspect-ratio: 3 / 4;
+    align-self: end;
+  }
+
+  /* (c) centered portrait */
+  .pe-portrait {
+    max-width: 560px;
+    margin: 0 auto var(--space-xl);
+    aspect-ratio: 4 / 5;
+  }
+
+  /* (d) landscape strip */
+  .pe-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .pe-strip figure {
+    aspect-ratio: 16 / 10;
   }
 
   .donate-section {
@@ -276,39 +366,6 @@ const values = [
     color: var(--color-text-muted);
     margin-bottom: var(--space-lg);
     line-height: 1.7;
-  }
-
-  .sponsors {
-    margin-bottom: var(--space-xl);
-  }
-
-  .sponsors h2 {
-    margin-bottom: var(--space-md);
-  }
-
-  .sponsor-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-top: var(--space-md);
-  }
-
-  .sponsor {
-    background: var(--color-card);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
-    color: var(--color-text);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-    border: 1px solid transparent;
-  }
-
-  .sponsor:hover {
-    background: var(--color-card-hover);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    transform: translateY(-2px);
   }
 
   .press-section {
@@ -346,6 +403,14 @@ const values = [
     font-size: 1.5rem;
   }
 
+  .press-favicon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
   .split-section {
     display: grid;
     gap: var(--space-lg);
@@ -366,15 +431,13 @@ const values = [
   }
 
   @media (max-width: 768px) {
-    .gallery-grid {
-      grid-template-columns: repeat(2, 1fr);
+    .pe-hero { aspect-ratio: 16 / 11; }
+    .pe-duo,
+    .pe-strip {
+      grid-template-columns: 1fr;
     }
-
-    .gallery-item.featured {
-      grid-column: span 2;
-      grid-row: span 1;
-      aspect-ratio: 16 / 9;
-    }
+    .pe-duo-lg,
+    .pe-duo-sm { aspect-ratio: 16 / 10; }
 
     .content-section {
       padding: var(--space-lg);

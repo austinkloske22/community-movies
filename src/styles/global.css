@@ -40,6 +40,11 @@
   padding: 0;
 }
 
+/* Honor the [hidden] attribute even on flex/grid containers.
+ * Without !important, class rules like `.rsvp-actions { display: flex }`
+ * win the specificity battle and the "hidden" element still renders. */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
 }

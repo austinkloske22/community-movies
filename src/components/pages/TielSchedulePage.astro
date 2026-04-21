@@ -2,14 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
 import Icon from '../Icon.astro';
-import { getTielMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
+import NotifySignup from '../NotifySignup.astro';
+import { getTielMovies, getAnnouncedUpcoming, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const movies = getTielMovies();
-const upcomingMovies = getUpcomingMovies(movies);
+// "Announced" filters out TBA placeholder rows — a TBA-only CSV triggers
+// the in-preparation state (NotifySignup) instead of a fake movie card.
+const announced = getAnnouncedUpcoming(movies);
 const nextMovie = getNextMovie(movies);
 ---
 
@@ -22,7 +25,7 @@ const nextMovie = getNextMovie(movies);
 
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationTiel')}</h1>
-        {upcomingMovies.length > 0 && (
+        {announced.length > 0 && (
           <a href="/programma/tiel.ics" class="calendar-btn"
              data-goatcounter-click="calendar-tiel"
              data-goatcounter-title="Calendar download">
@@ -34,9 +37,9 @@ const nextMovie = getNextMovie(movies);
         <p class="page-free">{t('schedule.freeInfo')}</p>
       </header>
 
-      {upcomingMovies.length > 0 ? (
+      {announced.length > 0 ? (
         <div class="movies-grid grid grid-2">
-          {upcomingMovies.map((movie) => (
+          {announced.map((movie) => (
             <MovieCard
               title={movie.title}
               descriptionNl={movie.descriptionNl}
@@ -57,7 +60,7 @@ const nextMovie = getNextMovie(movies);
         </div>
       ) : (
         <div class="no-movies">
-          <p class="text-muted text-center">{t('schedule.noUpcoming')}</p>
+          <NotifySignup location="tiel" lang={lang} />
         </div>
       )}
 

@@ -46,6 +46,14 @@ export const ui = {
     'rsvp.success': 'Top, tot dan.',
     'rsvp.error': 'Versturen mislukt. Probeer het nog eens, of stuur ons een mailtje.',
 
+    // Notify signup (announced locations)
+    'notify.title': 'Binnenkort in jouw stad',
+    'notify.body': 'We hebben nog geen datum, maar een Nelsons Film-avond komt deze kant op. Laat je e-mail achter en we laten het weten zodra er een datum is.',
+    'notify.placeholder': 'naam@voorbeeld.nl',
+    'notify.submit': 'Hou me op de hoogte',
+    'notify.success': 'Top — we laten het weten zodra er een datum is.',
+    'notify.gdpr': 'We bewaren je e-mail alleen voor dit doel. Geen nieuwsbrief.',
+
     // Home page sections
     'home.forEveryoneTitle': 'Een filmavond voor iedereen. Echt iedereen.',
     'home.forEveryoneText': 'Met Nelsons Film verandert een park of centrale plek in een warme ontmoetingsplek waar buurtbewoners samenkomen voor een bijzondere filmervaring. Met Nelsons Film breken we muren tussen mensen af en bouwen we bruggen. Niet met geforceerde concepten maar met unieke laagdrempelige films gratis en in eigen taal.',
@@ -113,6 +121,7 @@ export const ui = {
     'movie.headphones': 'Koptelefoon',
     'movie.location': 'Locatie',
     'movie.kijkwijzer': 'Kijkwijzer',
+    'movie.kijkwijzerExplain': 'De Nederlandse leeftijdsindicatie voor film en TV. AL = alle leeftijden.',
     'movie.trailerComingSoon': 'Trailer komt binnenkort',
     'movie.silentDisco': 'Silent Disco',
     'movie.filmStart': 'Film',
@@ -190,6 +199,39 @@ export const ui = {
     'municipalities.collaborationTitle': 'Klaar om samen te werken?',
     'municipalities.collaborationText': 'Teken de samenwerkingsverklaring. In ongeveer 12 minuten vertel je wie je bent, wat je kunt bijdragen en waarom deze wijk deze avond nodig heeft.',
     'municipalities.collaborationCta': 'Start samenwerkingsverklaring',
+    // Partner / municipalities — new structure
+    'partner.kicker': 'Voor gemeenten en organisaties',
+    'partner.heroTitle': 'Breng Nelsons Film naar jouw wijk',
+    'partner.heroLede': 'Een bewezen buurtconcept — meertalig, gratis voor bewoners, volledig verzorgd achter de schermen. Jullie wijk krijgt de schijnwerpers; wij dragen de logistiek.',
+    'partner.primaryCta': 'Start samenwerkingsverklaring',
+    'partner.secondaryCta': 'Plan een gesprek',
+    'partner.whatYouGetTitle': 'Wat krijg je?',
+    'partner.whatYouGetIntro': 'Eén partner, één rekening, alles geregeld. Zes bewezen bouwstenen:',
+    'partner.whatYouGet1': 'Filmcuratie en rechten',
+    'partner.whatYouGet2': 'Meertalige silent-disco met ondertiteling',
+    'partner.whatYouGet3': 'Techniek: scherm, licht, geluid, energie',
+    'partner.whatYouGet4': 'Aankleding, decor en sfeerverlichting',
+    'partner.whatYouGet5': 'Communicatie en promotie in de wijk',
+    'partner.whatYouGet6': 'Koppeling aan buurtpartners en ambassadeurs',
+    'partner.howTitle': 'Zo gaat het verder',
+    'partner.howStep1': 'Onderteken de verklaring',
+    'partner.howStep1Body': '5 minuten online. Geen kosten, geen verplichting — het markeert alleen wederzijdse interesse.',
+    'partner.howStep2': 'Wij bellen binnen 48 uur',
+    'partner.howStep2Body': 'Korte kennismaking. Wat je wilt, wat wij nodig hebben, en of de wijk klaar is.',
+    'partner.howStep3': 'Plan een pilot-avond',
+    'partner.howStep3Body': 'Vanaf 6–8 weken voorbereidingstijd. We leveren een draaiboek; jullie leveren de wijk.',
+    'partner.faqTitle': 'Vaak gestelde vragen',
+    'partner.faqQ1': 'Wat kost een editie?',
+    'partner.faqA1': 'Een editie kost tussen €3.000 en €3.500, afhankelijk van locatie en schaal. Als stichting rekenen we een eerlijke vergoeding — niet voor winst, maar om het initiatief duurzaam te houden en gratis voor bewoners.',
+    'partner.faqQ2': 'Wie regelt wat?',
+    'partner.faqA2': 'Wij regelen de volledige organisatie achter de schermen — film, techniek, productie, communicatie. Jullie dragen de wijk: lokale ambassadeurs, buurtpartners en de locatie. Samen maken we het een avond waar bewoners over napraten.',
+    'partner.faqQ3': 'Hoe snel kunnen we starten?',
+    'partner.faqA3': 'Vanaf ondertekening tot eerste vertoning rekenen we 6 tot 8 weken. Sneller kan in uitzonderingsgevallen, maar promotie in de wijk vraagt minimaal die tijd voor écht bereik.',
+    'partner.faqQ4': 'Welke locaties werken?',
+    'partner.faqA4': 'Een groene plek in de wijk met stroom binnen 50 meter en ruimte voor 50+ bezoekers. Parken, pleinen en binnenterreinen werken allemaal. Wij komen langs om de plek te beoordelen.',
+    'partner.endCtaTitle': 'Klaar om te beginnen?',
+    'partner.endCtaBody': 'Teken de samenwerkingsverklaring. In ongeveer 12 minuten vertel je wie je bent en wat je kunt bijdragen.',
+    'partner.callPrompt': 'Liever eerst bellen?',
 
     // Location
     'location.title': 'Locatie',
@@ -223,6 +265,16 @@ export const ui = {
     'footer.sponsors': 'Partners',
     'sponsors.title': 'Gesteund door',
     'sponsors.subtitle': 'Deze partners maken Nelsons Film mogelijk.',
+
+    // Numbers strip
+    'numbers.sinceWord': 'Sinds',
+    'numbers.since': 'Begonnen in',
+    'numbers.screenings': 'Filmavonden',
+    'numbers.neighbours': 'Buurtgenoten',
+    'numbers.municipalities': 'Gemeenten',
+
+    // Testimonials
+    'testimonials.title': 'Wat buurtgenoten en partners zeggen',
 
     // Common
     'common.watchTrailer': 'Bekijk trailer',
@@ -270,6 +322,14 @@ export const ui = {
     'rsvp.submitting': 'Sending…',
     'rsvp.success': 'Great, see you then.',
     'rsvp.error': 'Something went wrong. Try again, or send us an email.',
+
+    // Notify signup (announced locations)
+    'notify.title': 'Coming to your city',
+    'notify.body': "We don't have a date yet, but a Nelsons Film night is on the way. Leave your email and we'll let you know as soon as there's one.",
+    'notify.placeholder': 'name@example.com',
+    'notify.submit': 'Keep me posted',
+    'notify.success': "Got it — we'll let you know once there's a date.",
+    'notify.gdpr': 'We keep your email only for this. No newsletter.',
 
     // Home page sections
     'home.forEveryoneTitle': 'A film night for everyone. Truly everyone.',
@@ -339,6 +399,7 @@ export const ui = {
     'movie.headphones': 'Headphones',
     'movie.location': 'Location',
     'movie.kijkwijzer': 'Age Rating',
+    'movie.kijkwijzerExplain': 'Dutch age rating for film and TV. AL = all ages.',
     'movie.trailerComingSoon': 'Trailer coming soon',
     'movie.silentDisco': 'Silent Disco',
     'movie.filmStart': 'Film',
@@ -416,6 +477,39 @@ export const ui = {
     'municipalities.collaborationTitle': 'Ready to collaborate?',
     'municipalities.collaborationText': 'Sign the collaboration statement. In about 12 minutes, tell us who you are, what you can contribute, and why this neighbourhood deserves this evening.',
     'municipalities.collaborationCta': 'Start collaboration statement',
+    // Partner / municipalities — new structure
+    'partner.kicker': 'For municipalities and organisations',
+    'partner.heroTitle': 'Bring Nelsons Film to your neighbourhood',
+    'partner.heroLede': 'A proven neighbourhood concept — multilingual, free for residents, fully managed behind the scenes. Your neighbourhood gets the spotlight; we carry the logistics.',
+    'partner.primaryCta': 'Start collaboration statement',
+    'partner.secondaryCta': 'Plan a meeting',
+    'partner.whatYouGetTitle': "What you get",
+    'partner.whatYouGetIntro': 'One partner, one invoice, everything handled. Six proven building blocks:',
+    'partner.whatYouGet1': 'Film curation and licensing',
+    'partner.whatYouGet2': 'Multilingual silent-disco with subtitles',
+    'partner.whatYouGet3': 'Technical production: screen, light, sound, power',
+    'partner.whatYouGet4': 'Styling, décor and ambient lighting',
+    'partner.whatYouGet5': 'Neighbourhood communication and promotion',
+    'partner.whatYouGet6': 'Connection to local partners and ambassadors',
+    'partner.howTitle': 'How it works from here',
+    'partner.howStep1': 'Sign the statement',
+    'partner.howStep1Body': '5 minutes, online. No fee, no commitment — it simply marks mutual interest.',
+    'partner.howStep2': "We'll call within 48 hours",
+    'partner.howStep2Body': 'A short intro. What you want, what we need, and whether the neighbourhood is ready.',
+    'partner.howStep3': 'Plan a pilot evening',
+    'partner.howStep3Body': '6–8 weeks lead time. We bring the playbook; you bring the neighbourhood.',
+    'partner.faqTitle': 'Frequently asked questions',
+    'partner.faqQ1': 'What does one screening cost?',
+    'partner.faqA1': 'A screening costs between €3,000 and €3,500, depending on location and scale. As a non-profit foundation we charge a fair fee — not for profit, but to keep the initiative sustainable and free for residents.',
+    'partner.faqQ2': 'Who handles what?',
+    'partner.faqA2': "We handle the full production behind the scenes — film, tech, logistics, communications. You carry the neighbourhood: local ambassadors, community partners and the venue. Together we make a night residents will talk about.",
+    'partner.faqQ3': 'How quickly can we start?',
+    'partner.faqA3': "From signing to first screening we budget 6–8 weeks. Faster is possible in special cases, but neighbourhood promotion needs at least that long for real reach.",
+    'partner.faqQ4': 'What locations work?',
+    'partner.faqA4': "A green spot in the neighbourhood with power within 50 metres and room for 50+ visitors. Parks, squares and courtyards all work. We visit in person to confirm the location.",
+    'partner.endCtaTitle': 'Ready to start?',
+    'partner.endCtaBody': 'Sign the collaboration statement. In about 12 minutes, tell us who you are and what you can contribute.',
+    'partner.callPrompt': 'Prefer to call first?',
 
     // Location
     'location.title': 'Location',
@@ -449,6 +543,16 @@ export const ui = {
     'footer.sponsors': 'Partners',
     'sponsors.title': 'Supported by',
     'sponsors.subtitle': 'These partners make Nelsons Film possible.',
+
+    // Numbers strip
+    'numbers.sinceWord': 'Since',
+    'numbers.since': 'Running since',
+    'numbers.screenings': 'Screenings',
+    'numbers.neighbours': 'Neighbours reached',
+    'numbers.municipalities': 'Municipalities',
+
+    // Testimonials
+    'testimonials.title': 'What neighbours and partners say',
 
     // Common
     'common.watchTrailer': 'Watch trailer',
@@ -496,6 +600,14 @@ export const ui = {
     'rsvp.submitting': 'جارٍ الإرسال…',
     'rsvp.success': 'رائع، نراك حينها.',
     'rsvp.error': 'تعذر الإرسال. حاول مرة أخرى أو راسلنا بالبريد.',
+
+    // Notify signup (announced locations)
+    'notify.title': 'قريباً في مدينتك',
+    'notify.body': 'ليس لدينا موعد بعد، لكن أمسية نيلسونز فيلم في الطريق. اترك بريدك الإلكتروني وسنخبرك فور تحديد الموعد.',
+    'notify.placeholder': 'name@example.com',
+    'notify.submit': 'أعلمني',
+    'notify.success': 'حسناً — سنخبرك فور تحديد الموعد.',
+    'notify.gdpr': 'نحتفظ ببريدك فقط لهذا الغرض. لا توجد رسائل إخبارية.',
 
     // Home page sections
     'home.forEveryoneTitle': 'أمسية سينمائية للجميع. حقاً للجميع.',
@@ -564,6 +676,7 @@ export const ui = {
     'movie.headphones': 'سماعات الرأس',
     'movie.location': 'الموقع',
     'movie.kijkwijzer': 'التصنيف العمري',
+    'movie.kijkwijzerExplain': 'التصنيف العمري الهولندي للأفلام والتلفزيون. AL = لجميع الأعمار.',
     'movie.trailerComingSoon': 'الإعلان الترويجي قريباً',
     'movie.silentDisco': 'ديسكو صامت',
     'movie.filmStart': 'الفيلم',
@@ -641,6 +754,39 @@ export const ui = {
     'municipalities.collaborationTitle': 'جاهز للتعاون؟',
     'municipalities.collaborationText': 'وقّع إعلان التعاون. في حوالي 12 دقيقة، أخبرنا من أنت، وما يمكنك المساهمة به، ولماذا يستحق هذا الحي هذه الأمسية.',
     'municipalities.collaborationCta': 'ابدأ إعلان التعاون',
+    // Partner / municipalities — new structure
+    'partner.kicker': 'للبلديات والمنظمات',
+    'partner.heroTitle': 'أحضر نيلسونز فيلم إلى حيك',
+    'partner.heroLede': 'مفهوم حي مجرب — متعدد اللغات، مجاني للسكان، مُدار بالكامل خلف الكواليس.',
+    'partner.primaryCta': 'ابدأ إعلان التعاون',
+    'partner.secondaryCta': 'احجز موعداً',
+    'partner.whatYouGetTitle': 'ماذا تحصل عليه؟',
+    'partner.whatYouGetIntro': 'شريك واحد، فاتورة واحدة، كل شيء معالج. ست ركائز مجربة:',
+    'partner.whatYouGet1': 'اختيار الأفلام والتراخيص',
+    'partner.whatYouGet2': 'صامت-ديسكو متعدد اللغات مع ترجمة',
+    'partner.whatYouGet3': 'الإنتاج التقني: شاشة وإضاءة وصوت وطاقة',
+    'partner.whatYouGet4': 'التصميم والديكور',
+    'partner.whatYouGet5': 'التواصل والترويج في الحي',
+    'partner.whatYouGet6': 'الربط مع الشركاء المحليين والسفراء',
+    'partner.howTitle': 'كيف نتقدم من هنا',
+    'partner.howStep1': 'وقّع البيان',
+    'partner.howStep1Body': '5 دقائق عبر الإنترنت. لا رسوم ولا التزام — إنه فقط يدل على الاهتمام المتبادل.',
+    'partner.howStep2': 'سنتصل خلال 48 ساعة',
+    'partner.howStep2Body': 'مقدمة قصيرة. ما تريده، ما نحتاجه، وما إذا كان الحي جاهزاً.',
+    'partner.howStep3': 'خطط لأمسية تجريبية',
+    'partner.howStep3Body': 'من 6 إلى 8 أسابيع من التحضير.',
+    'partner.faqTitle': 'أسئلة شائعة',
+    'partner.faqQ1': 'كم تكلفة أمسية واحدة؟',
+    'partner.faqA1': 'تتراوح تكلفة الأمسية بين 3000 و3500 يورو حسب الموقع والحجم.',
+    'partner.faqQ2': 'من يتولى ماذا؟',
+    'partner.faqA2': 'نحن نتولى الإنتاج خلف الكواليس، وأنتم تحملون الحي: السفراء المحليون والشركاء والموقع.',
+    'partner.faqQ3': 'ما مدى سرعة البدء؟',
+    'partner.faqA3': 'من التوقيع إلى أول عرض نخطط لمدة 6-8 أسابيع.',
+    'partner.faqQ4': 'ما المواقع المناسبة؟',
+    'partner.faqA4': 'مكان أخضر في الحي مع كهرباء في نطاق 50 متراً ومساحة لأكثر من 50 زائراً.',
+    'partner.endCtaTitle': 'جاهز للبدء؟',
+    'partner.endCtaBody': 'وقّع إعلان التعاون. في حوالي 12 دقيقة، أخبرنا من أنت وما يمكنك المساهمة به.',
+    'partner.callPrompt': 'تفضل الاتصال أولاً؟',
 
     // Location
     'location.title': 'الموقع',
@@ -674,6 +820,16 @@ export const ui = {
     'footer.sponsors': 'الشركاء',
     'sponsors.title': 'بدعم من',
     'sponsors.subtitle': 'هؤلاء الشركاء يجعلون نيلسونز فيلم ممكناً.',
+
+    // Numbers strip
+    'numbers.sinceWord': 'منذ',
+    'numbers.since': 'بدأنا',
+    'numbers.screenings': 'أمسيات سينمائية',
+    'numbers.neighbours': 'جيران وصلنا إليهم',
+    'numbers.municipalities': 'بلديات',
+
+    // Testimonials
+    'testimonials.title': 'ماذا يقول الجيران والشركاء',
 
     // Common
     'common.watchTrailer': 'شاهد الإعلان',

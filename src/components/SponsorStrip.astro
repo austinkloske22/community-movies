@@ -10,24 +10,28 @@ const { variant = 'strip', class: extraClass = '' } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Sponsor slugs must match filenames in /public/images/sponsors/{slug}.svg.
-// Placeholder SVGs ship with the repo — swap for real logos (same filename)
-// when they're available. Optionally add ?url= to link each logo out.
 interface Sponsor {
-  slug: string;
   name: string;
-  url?: string;
+  url: string;
+  /** Domain used to fetch the favicon. Usually url without the protocol. */
+  domain: string;
 }
 
+// Favicons come from Google's s2 service (same one the About press links
+// use). Reliable, cached, always current — no repo files to keep updated.
+// If you want to swap in a handcrafted logo for any sponsor later, drop an
+// SVG in /public/images/sponsors/{slug}.svg and switch the img src below.
 const sponsors: Sponsor[] = [
-  { slug: 'coa',              name: 'COA' },
-  { slug: 'gemeente-haarlem', name: 'Gemeente Haarlem', url: 'https://www.haarlem.nl' },
-  { slug: 'buurt',            name: 'BUURT' },
-  { slug: 'cronje',           name: 'Cronjé' },
-  { slug: 'de-snuffelmug',    name: 'De Snuffelmug' },
-  { slug: 'hbp-hoorne',       name: 'HBP Hoorne' },
-  { slug: 'duizend1',         name: 'Duizend1' },
+  { name: 'COA',              url: 'https://www.coa.nl',          domain: 'coa.nl' },
+  { name: 'Gemeente Haarlem', url: 'https://www.haarlem.nl',      domain: 'haarlem.nl' },
+  { name: 'BUURT',            url: 'https://buurtamsterdam.nl',   domain: 'buurtamsterdam.nl' },
+  { name: 'Cronjé',           url: 'https://cronje.nl',           domain: 'cronje.nl' },
+  { name: 'De Snuffelmug',    url: 'https://desnuffelmug.nl',     domain: 'desnuffelmug.nl' },
+  { name: 'HBP Hoorne',       url: 'https://hoornevastgoed.nl',   domain: 'hoornevastgoed.nl' },
+  { name: 'Duizend1',         url: 'https://duizend1.nl',         domain: 'duizend1.nl' },
 ];
+
+const faviconSrc = (domain: string) => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 ---
 
 <section class:list={['sponsor-strip', `variant-${variant}`, extraClass]}>
@@ -41,15 +45,14 @@ const sponsors: Sponsor[] = [
   <ul class="sponsor-list">
     {sponsors.map((s) => (
       <li class="sponsor-item">
-        {s.url ? (
-          <a href={s.url} target="_blank" rel="noopener" class="sponsor-link" aria-label={s.name}>
-            <img src={`/images/sponsors/${s.slug}.svg`} alt={s.name} loading="lazy" width="200" height="80" />
-          </a>
-        ) : (
-          <span class="sponsor-link sponsor-static">
-            <img src={`/images/sponsors/${s.slug}.svg`} alt={s.name} loading="lazy" width="200" height="80" />
-          </span>
-        )}
+        <a href={s.url} target="_blank" rel="noopener" class="sponsor-card" aria-label={s.name}>
+          <img src={faviconSrc(s.domain)}
+               alt=""
+               width="40" height="40"
+               loading="lazy"
+               class="sponsor-favicon" />
+          <span class="sponsor-name">{s.name}</span>
+        </a>
       </li>
     ))}
   </ul>
@@ -85,57 +88,84 @@ const sponsors: Sponsor[] = [
   .sponsor-list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-md);
+    gap: var(--space-sm);
     justify-content: center;
-    align-items: center;
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-
-  .variant-strip .sponsor-list {
-    gap: var(--space-lg);
   }
 
   .sponsor-item {
     flex: 0 0 auto;
   }
 
-  .sponsor-link {
-    display: flex;
+  .sponsor-card {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
+    gap: var(--space-sm);
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    color: var(--color-text);
+    text-decoration: none;
     transition: all var(--transition-fast);
   }
 
-  .sponsor-link img {
-    display: block;
-    max-width: 160px;
-    height: auto;
-    filter: grayscale(1) brightness(1.1);
-    opacity: 0.6;
-    transition: filter var(--transition-fast), opacity var(--transition-fast);
+  .sponsor-card:hover {
+    background: rgba(242, 199, 92, 0.06);
+    border-color: rgba(242, 199, 92, 0.4);
+    color: var(--color-text);
+    transform: translateY(-1px);
   }
 
-  a.sponsor-link:hover img,
-  a.sponsor-link:focus-visible img {
-    filter: none;
-    opacity: 1;
-  }
-
-  a.sponsor-link:focus-visible {
+  .sponsor-card:focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
   }
 
+  .sponsor-favicon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .sponsor-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Full variant (About page) — a bit larger, centred under a heading */
+  .variant-full .sponsor-list {
+    gap: var(--space-md);
+  }
+
+  .variant-full .sponsor-card {
+    padding: 12px 20px;
+  }
+
+  .variant-full .sponsor-favicon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .variant-full .sponsor-name {
+    font-size: 0.95rem;
+  }
+
   @media (max-width: 640px) {
-    .sponsor-link img {
-      max-width: 130px;
+    .sponsor-card {
+      padding: 8px 14px;
     }
-    .variant-strip .sponsor-list {
-      gap: var(--space-md);
+    .sponsor-favicon {
+      width: 20px;
+      height: 20px;
+    }
+    .sponsor-name {
+      font-size: 0.85rem;
     }
   }
 </style>
