@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
 import Icon from '../Icon.astro';
+import NotifySignup from '../NotifySignup.astro';
 import { getTielMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
@@ -57,7 +58,7 @@ const nextMovie = getNextMovie(movies);
         </div>
       ) : (
         <div class="no-movies">
-          <p class="text-muted text-center">{t('schedule.noUpcoming')}</p>
+          <NotifySignup location="tiel" lang={lang} />
         </div>
       )}
 

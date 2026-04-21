@@ -34,6 +34,7 @@ const CONFIG = {
   SEND_PARTNER_CONFIRMATION: true,         // auto-ack the person who submitted
   SHEET_NAME: 'Submissions',               // samenwerking/collaboration statements
   RSVP_SHEET_NAME: 'RSVPs',                // neighbour RSVPs for individual screenings
+  NOTIFY_SHEET_NAME: 'Notify',             // "tell me when you're in my city" signups
   // If this Apps Script is STANDALONE (not created from inside a Sheet), paste the
   // target Sheet's ID here. Find it in the Sheet URL:
   //   https://docs.google.com/spreadsheets/d/{THIS_IS_THE_ID}/edit
@@ -59,6 +60,12 @@ function doPost(e) {
     // the email engine migration happens later.
     if (body && body.type === 'rsvp') {
       return handleRsvp(body);
+    }
+
+    // "Notify me when you're in my city" signups — also no emails, just
+    // rows in the Notify sheet tab grouped by location.
+    if (body && body.type === 'notify') {
+      return handleNotify(body);
     }
 
     const { lang = 'nl', answers = {}, signature, submittedAt, userAgent, pageUrl } = body;
@@ -183,6 +190,38 @@ function handleRsvp(body) {
     return jsonResponse({ ok: true });
   } catch (err) {
     console.error('[rsvp] FAILED', { message: err.message, stack: err.stack });
+    return jsonResponse({ ok: false, error: String(err && err.message || err) });
+  }
+}
+
+// Notify handler — appends one row to the Notify tab. No emails. Same
+// no-PII-beyond-necessary philosophy as handleRsvp.
+function handleNotify(body) {
+  const t0 = Date.now();
+  try {
+    console.log('[notify] received', { location: body.location, locale: body.locale });
+    const ss = CONFIG.SPREADSHEET_ID
+      ? SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)
+      : SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) throw new Error('No spreadsheet available.');
+    let sheet = ss.getSheetByName(CONFIG.NOTIFY_SHEET_NAME);
+    if (!sheet) {
+      console.log('[notify] creating sheet tab', CONFIG.NOTIFY_SHEET_NAME);
+      sheet = ss.insertSheet(CONFIG.NOTIFY_SHEET_NAME);
+      sheet.appendRow(['Timestamp', 'Location', 'Email', 'Locale', 'Referrer', 'Page URL']);
+    }
+    sheet.appendRow([
+      new Date(body.submittedAt || Date.now()),
+      body.location || '',
+      body.email || '',
+      body.locale || '',
+      body.referrer || '',
+      body.pageUrl || '',
+    ]);
+    console.log('[notify] row appended', { rows: sheet.getLastRow(), ms: Date.now() - t0 });
+    return jsonResponse({ ok: true });
+  } catch (err) {
+    console.error('[notify] FAILED', { message: err.message, stack: err.stack });
     return jsonResponse({ ok: false, error: String(err && err.message || err) });
   }
 }
