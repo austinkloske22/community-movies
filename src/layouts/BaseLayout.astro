@@ -7,10 +7,23 @@ import { getLangFromUrl } from '../i18n/utils';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = 'Gratis openluchtbioscoop in het Nelson Mandelapark, Haarlem Noord' } = Astro.props;
+const {
+  title,
+  description = 'Gratis openluchtbioscoop in het Nelson Mandelapark, Haarlem Noord',
+  ogImage = '/images/brand/og-default.jpg',
+  ogType = 'website',
+} = Astro.props;
 const lang = getLangFromUrl(Astro.url);
+
+const siteUrl = Astro.site ?? new URL('https://nelsonsfilm.nl');
+const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageAbs = new URL(ogImage, siteUrl).toString();
+const ogLocale = lang === 'en' ? 'en_GB' : lang === 'ara' ? 'ar_SA' : 'nl_NL';
+const fullTitle = `${title} | Nelsons Film`;
 ---
 
 <!DOCTYPE html>
@@ -20,10 +33,29 @@ const lang = getLangFromUrl(Astro.url);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" href="/images/brand/icon-logo-clear-background.png" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Nelsons Film" />
+    <meta property="og:locale" content={ogLocale} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbs} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
-    <title>{title} | Nelsons Film</title>
+    <title>{fullTitle}</title>
   </head>
   <body>
     <Header />

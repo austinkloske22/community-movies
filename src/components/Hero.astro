@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
+import heroImg from '../assets/outdoor-sunset.jpg';
 
 interface Props {
   movie?: Movie | null;
@@ -18,7 +20,16 @@ const nextDate = movie
 
 <section class="hero">
   <div class="hero-bg">
-    <img src="/images/outdoor-sunset.jpg" alt="" class="hero-image" />
+    <Image
+      src={heroImg}
+      alt=""
+      widths={[800, 1200, 1600, 2400]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+      loading="eager"
+      fetchpriority="high"
+      class="hero-image"
+    />
   </div>
   <div class="container">
     <div class="hero-content">
