@@ -47,25 +47,19 @@ const moreThanItems = [
     <!-- More Than a Film Night -->
     <div class="content-block alt-bg" style="max-width: 800px; margin: 0 auto var(--space-xl);">
       <h2 class="section-title">{t('home.moreThanTitle')}</h2>
-      <details class="expand-item subtitle-expand">
-        <summary class="section-text">{t('home.moreThanText')}</summary>
-        <p class="expand-detail">{t('home.moreThanDetail')}</p>
-      </details>
+      <p class="section-text">{t('home.moreThanText')}</p>
 
-      <ul class="experience-list">
+      <div class="mt-faq-list">
         {moreThanItems.map((item) => (
-          <li>
-            {item.detail ? (
-              <details class="expand-item">
-                <summary>{item.title}</summary>
-                <p class="expand-detail">{item.detail}</p>
-              </details>
-            ) : (
+          <details class="mt-faq-item">
+            <summary>
               <span>{item.title}</span>
-            )}
-          </li>
+              <Icon name="chevron-down" size={20} class="mt-faq-chev" />
+            </summary>
+            <p>{item.detail}</p>
+          </details>
         ))}
-      </ul>
+      </div>
 
       <p class="community-note">{t('home.communityProject')}</p>
     </div>
@@ -198,65 +192,63 @@ const moreThanItems = [
     font-size: 0.95rem;
   }
 
-  .experience-list {
-    list-style: none;
-    padding: 0;
+  .mt-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
     margin: 0 0 var(--space-lg);
   }
 
-  .experience-list li {
-    position: relative;
-    padding-inline-start: var(--space-lg);
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-muted);
+  .mt-faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 0;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
   }
 
-  .experience-list li::before {
-    content: '✓';
-    position: absolute;
-    inset-inline-start: 0;
-    color: var(--color-accent);
-    font-weight: 700;
+  .mt-faq-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(215, 110, 77, 0.25);
   }
 
-  .expand-item {
+  .mt-faq-item[open] {
+    background: rgba(215, 110, 77, 0.06);
+    border-color: rgba(215, 110, 77, 0.3);
+  }
+
+  .mt-faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
     cursor: pointer;
-  }
-
-  .expand-item summary {
     list-style: none;
-    display: inline;
+    font-weight: 500;
+    color: var(--color-text);
   }
 
-  .expand-item summary::-webkit-details-marker {
+  .mt-faq-item summary::-webkit-details-marker {
     display: none;
   }
 
-  .expand-item summary::after {
-    content: ' +';
+  .mt-faq-chev {
     color: var(--color-accent);
-    font-weight: 700;
-    font-size: 0.85em;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
   }
 
-  .expand-item[open] summary::after {
-    content: ' −';
+  .mt-faq-item[open] .mt-faq-chev {
+    transform: rotate(180deg);
   }
 
-  .expand-item summary:hover::after {
-    opacity: 1;
-  }
-
-  .expand-detail {
-    margin: var(--space-sm) 0 0;
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.9rem;
-    line-height: 1.7;
+  .mt-faq-item p {
+    margin: 0;
+    padding: 0 var(--space-lg) var(--space-md);
     color: var(--color-text-muted);
-    border-inline-start: 2px solid var(--color-accent);
-    opacity: 0.85;
+    line-height: 1.7;
+    font-size: 0.95rem;
   }
 
   .community-note {
