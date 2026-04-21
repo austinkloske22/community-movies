@@ -148,7 +148,10 @@ const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
     width: clamp(260px, 42vw, 500px);
     height: auto;
     object-fit: contain;
-    margin-bottom: clamp(-60px, -9vw, -30px);
+    /* No negative margin — the logo now breathes into the slogan.
+     * Prior clamp(-60px, -9vw, -30px) clipped the wordmark at some
+     * viewport sizes and read as broken. */
+    margin-bottom: var(--space-xs);
   }
 
   .hero-slogan {
@@ -234,12 +237,13 @@ const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
     .hero-cta-row {
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
     }
 
     .hero-cta {
       width: 100%;
-      max-width: 320px;
+      min-height: 48px;
+      justify-content: center;
     }
   }
 </style>

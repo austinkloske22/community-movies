@@ -122,8 +122,11 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
           </div>
 
           <div class="kijkwijzer-badge">
-            <span class="kijkwijzer-label">{t('movie.kijkwijzer')}</span>
             <img src={getAgeIcon(movie.rating)} alt={`Kijkwijzer ${movie.rating}`} class="kijkwijzer-icon" />
+            <div class="kijkwijzer-text">
+              <span class="kijkwijzer-label">{t('movie.kijkwijzer')}</span>
+              <span class="kijkwijzer-explain" title={t('movie.kijkwijzerExplain')}>{t('movie.kijkwijzerExplain')}</span>
+            </div>
           </div>
 
           {(movie.language || movie.subtitles || movie.headphones) && (
@@ -335,25 +338,39 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
 
   .kijkwijzer-badge {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
+    align-items: center;
+    gap: var(--space-md);
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-md);
     padding: var(--space-md);
-    width: fit-content;
+  }
+
+  .kijkwijzer-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
   }
 
   .kijkwijzer-label {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    color: var(--color-gold);
+    font-weight: 500;
+  }
+
+  .kijkwijzer-explain {
+    font-size: 0.88rem;
     color: var(--color-text-muted);
+    line-height: 1.4;
   }
 
   .kijkwijzer-icon {
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
   }
 
   .language-info {
