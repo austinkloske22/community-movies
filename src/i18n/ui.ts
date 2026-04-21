@@ -27,6 +27,25 @@ export const ui = {
     'hero.badgeYourNeighborhood': 'Jouw buurt?',
     'hero.nextLabel': 'Volgende',
 
+    // Share actions
+    'share.addToCalendar': 'Zet in mijn agenda',
+    'share.whatsapp': 'Deel via WhatsApp',
+    'share.whatsappPrefix': 'Wil je mee? Nelsons Film draait',
+
+    // RSVP
+    'rsvp.kicker': 'Kom je? Laat het ons weten.',
+    'rsvp.body': 'Dit helpt ons de opbouw en afbouw te plannen — en om deze avonden gratis te houden voor de buurt. Geen ticket, geen verplichting. Als er iets tussenkomt: dat begrijpen we. Een kort berichtje is genoeg.',
+    'rsvp.finePrint': 'We bewaren je e-mail alleen voor deze vertoning. Geen nieuwsbrief. Later kun je hier je reservering aanpassen of annuleren — dat bouwen we binnenkort.',
+    'rsvp.expandCta': 'Laat ons weten dat je komt',
+    'rsvp.emailLabel': 'E-mailadres',
+    'rsvp.partyLabel': 'Met hoeveel mensen?',
+    'rsvp.notesLabel': 'Iets wat we moeten weten? (optioneel)',
+    'rsvp.notesPlaceholder': 'Allergieën, leeftijd van de kinderen, mobiliteit…',
+    'rsvp.submit': 'Reserveer een plekje',
+    'rsvp.submitting': 'Bezig…',
+    'rsvp.success': 'Top, tot dan.',
+    'rsvp.error': 'Versturen mislukt. Probeer het nog eens, of stuur ons een mailtje.',
+
     // Home page sections
     'home.forEveryoneTitle': 'Een filmavond voor iedereen. Echt iedereen.',
     'home.forEveryoneText': 'Met Nelsons Film verandert een park of centrale plek in een warme ontmoetingsplek waar buurtbewoners samenkomen voor een bijzondere filmervaring. Met Nelsons Film breken we muren tussen mensen af en bouwen we bruggen. Niet met geforceerde concepten maar met unieke laagdrempelige films gratis en in eigen taal.',
@@ -230,6 +249,25 @@ export const ui = {
     'hero.badgeAnnounced': 'Announced',
     'hero.badgeYourNeighborhood': 'Your neighborhood?',
     'hero.nextLabel': 'Next',
+
+    // Share actions
+    'share.addToCalendar': 'Add to calendar',
+    'share.whatsapp': 'Share on WhatsApp',
+    'share.whatsappPrefix': 'Want to come? Nelsons Film is showing',
+
+    // RSVP
+    'rsvp.kicker': 'Coming? Let us know.',
+    'rsvp.body': 'This helps us plan chairs, set-up, and keep these nights free for the neighbourhood. Not a ticket, not a commitment. If something comes up — we understand. A short note is plenty.',
+    'rsvp.finePrint': 'We keep your email only for this screening. No newsletter. You\'ll be able to edit or cancel your RSVP from the confirmation email soon — we\'re building that next.',
+    'rsvp.expandCta': 'Let us know you\'re coming',
+    'rsvp.emailLabel': 'Email address',
+    'rsvp.partyLabel': 'How many people?',
+    'rsvp.notesLabel': 'Anything we should know? (optional)',
+    'rsvp.notesPlaceholder': 'Allergies, kids\' ages, mobility…',
+    'rsvp.submit': 'Save my spot',
+    'rsvp.submitting': 'Sending…',
+    'rsvp.success': 'Great, see you then.',
+    'rsvp.error': 'Something went wrong. Try again, or send us an email.',
 
     // Home page sections
     'home.forEveryoneTitle': 'A film night for everyone. Truly everyone.',
@@ -435,6 +473,25 @@ export const ui = {
     'hero.badgeAnnounced': 'قريباً',
     'hero.badgeYourNeighborhood': 'حيّك؟',
     'hero.nextLabel': 'التالي',
+
+    // Share actions
+    'share.addToCalendar': 'أضف إلى تقويمي',
+    'share.whatsapp': 'شارك عبر واتساب',
+    'share.whatsappPrefix': 'تريد الحضور؟ نيلسونز فيلم يعرض',
+
+    // RSVP
+    'rsvp.kicker': 'هل ستأتي؟ أخبرنا.',
+    'rsvp.body': 'هذا يساعدنا على تخطيط المقاعد والتجهيز، وإبقاء هذه الأمسيات مجانية للحي. ليست تذكرة، وليس التزاماً. إذا طرأ شيء ما، نحن نتفهم.',
+    'rsvp.finePrint': 'نحتفظ ببريدك فقط لهذه الأمسية. لا توجد رسائل إخبارية.',
+    'rsvp.expandCta': 'أخبرنا أنك ستأتي',
+    'rsvp.emailLabel': 'البريد الإلكتروني',
+    'rsvp.partyLabel': 'كم شخصاً؟',
+    'rsvp.notesLabel': 'هل هناك شيء يجب أن نعرفه؟ (اختياري)',
+    'rsvp.notesPlaceholder': 'الحساسية، أعمار الأطفال، احتياجات الحركة…',
+    'rsvp.submit': 'احجز مكاني',
+    'rsvp.submitting': 'جارٍ الإرسال…',
+    'rsvp.success': 'رائع، نراك حينها.',
+    'rsvp.error': 'تعذر الإرسال. حاول مرة أخرى أو راسلنا بالبريد.',
 
     // Home page sections
     'home.forEveryoneTitle': 'أمسية سينمائية للجميع. حقاً للجميع.',

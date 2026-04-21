@@ -32,7 +32,8 @@
 const CONFIG = {
   ADMIN_EMAIL: 'austinkloske@gmail.com',  // who gets notified on every submission
   SEND_PARTNER_CONFIRMATION: true,         // auto-ack the person who submitted
-  SHEET_NAME: 'Submissions',               // first tab in the Sheet
+  SHEET_NAME: 'Submissions',               // samenwerking/collaboration statements
+  RSVP_SHEET_NAME: 'RSVPs',                // neighbour RSVPs for individual screenings
   // If this Apps Script is STANDALONE (not created from inside a Sheet), paste the
   // target Sheet's ID here. Find it in the Sheet URL:
   //   https://docs.google.com/spreadsheets/d/{THIS_IS_THE_ID}/edit
@@ -53,6 +54,13 @@ function doPost(e) {
       throw new Error('No POST body received');
     }
     const body = JSON.parse(e.postData.contents);
+
+    // RSVP submissions land in their own sheet tab and send NO emails —
+    // the email engine migration happens later.
+    if (body && body.type === 'rsvp') {
+      return handleRsvp(body);
+    }
+
     const { lang = 'nl', answers = {}, signature, submittedAt, userAgent, pageUrl } = body;
     console.log('[doPost] parsed', {
       lang, submittedAt,
@@ -132,6 +140,49 @@ function doPost(e) {
     return jsonResponse({ ok: true });
   } catch (err) {
     console.error('[doPost] FAILED', { message: err.message, stack: err.stack, ms: Date.now() - t0 });
+    return jsonResponse({ ok: false, error: String(err && err.message || err) });
+  }
+}
+
+// RSVP handler — appends one row to the RSVPs tab. Does NOT send any email
+// (the project doesn't have an email engine wired up yet; once it does,
+// add MailApp calls here).
+function handleRsvp(body) {
+  const t0 = Date.now();
+  try {
+    console.log('[rsvp] received', {
+      movieId: body.movieId, movieTitle: body.movieTitle,
+      locale: body.locale, partySize: body.partySize,
+      hasNotes: !!(body.notes && String(body.notes).trim()),
+    });
+    const ss = CONFIG.SPREADSHEET_ID
+      ? SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)
+      : SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) throw new Error('No spreadsheet available.');
+    let sheet = ss.getSheetByName(CONFIG.RSVP_SHEET_NAME);
+    if (!sheet) {
+      console.log('[rsvp] creating sheet tab', CONFIG.RSVP_SHEET_NAME);
+      sheet = ss.insertSheet(CONFIG.RSVP_SHEET_NAME);
+      sheet.appendRow([
+        'Timestamp', 'Movie', 'Screening date', 'Email', 'Party size',
+        'Notes', 'Locale', 'Referrer', 'Page URL',
+      ]);
+    }
+    sheet.appendRow([
+      new Date(body.submittedAt || Date.now()),
+      body.movieTitle || '',
+      body.screeningDate || '',
+      body.email || '',
+      Number(body.partySize || 0),
+      body.notes || '',
+      body.locale || '',
+      body.referrer || '',
+      body.pageUrl || '',
+    ]);
+    console.log('[rsvp] row appended', { rows: sheet.getLastRow(), ms: Date.now() - t0 });
+    return jsonResponse({ ok: true });
+  } catch (err) {
+    console.error('[rsvp] FAILED', { message: err.message, stack: err.stack });
     return jsonResponse({ ok: false, error: String(err && err.message || err) });
   }
 }

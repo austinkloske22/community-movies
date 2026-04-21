@@ -1,0 +1,286 @@
+---
+import Icon from './Icon.astro';
+import { useTranslations } from '../i18n/utils';
+import type { Movie } from '../lib/sheets';
+
+interface Props {
+  movie: Movie | null;
+  lang: 'nl' | 'en' | 'ara';
+}
+
+const { movie, lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Endpoint is the same Apps Script /exec URL used by the samenwerking flow.
+// The script dispatches on payload.type === 'rsvp' vs. 'samenwerking'.
+// Must match public/onboarding/config.js window.NF_SUBMIT_URL — if you
+// change one, change the other.
+const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycby7Sn4K5lWKriC0cuedxpgA0Ymk5Pn5BZ2SHSCmfOp9sPDxyE5G6LN6yfRgUG4G3HbJ/exec';
+const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeURIComponent(`RSVP: ${movie?.title ?? ''}`)}`;
+---
+
+{movie && (
+  <form class="rsvp-form"
+        data-submit-url={SUBMIT_URL}
+        data-movie-id={movie.date + '-' + movie.title}
+        data-movie-title={movie.title}
+        data-screening-date={movie.date}
+        data-mailto-fallback={mailtoFallback}
+        data-locale={lang}
+        novalidate>
+    <div class="rsvp-header">
+      <h3 class="rsvp-kicker">{t('rsvp.kicker')}</h3>
+      <p class="rsvp-body">{t('rsvp.body')}</p>
+    </div>
+
+    <div class="rsvp-grid">
+      <label class="rsvp-field rsvp-field-email">
+        <span class="rsvp-label">{t('rsvp.emailLabel')}</span>
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="name@example.com" />
+      </label>
+
+      <label class="rsvp-field rsvp-field-party">
+        <span class="rsvp-label">{t('rsvp.partyLabel')}</span>
+        <input type="number" name="partySize" required min="1" max="20" value="2"
+               inputmode="numeric" />
+      </label>
+    </div>
+
+    <label class="rsvp-field">
+      <span class="rsvp-label">{t('rsvp.notesLabel')}</span>
+      <textarea name="notes" rows="2" placeholder={t('rsvp.notesPlaceholder')}></textarea>
+    </label>
+
+    <p class="rsvp-fine-print">{t('rsvp.finePrint')}</p>
+
+    <div class="rsvp-actions">
+      <button type="submit" class="btn btn-primary rsvp-submit">
+        <span class="rsvp-submit-label">{t('rsvp.submit')}</span>
+        <span class="rsvp-submit-loading" hidden>{t('rsvp.submitting')}</span>
+      </button>
+    </div>
+
+    <div class="rsvp-success" role="status" aria-live="polite" hidden>
+      <div class="rsvp-success-badge" aria-hidden="true">
+        <Icon name="check" size={24} />
+      </div>
+      <p>{t('rsvp.success')}</p>
+    </div>
+
+    <div class="rsvp-error" role="alert" aria-live="assertive" hidden>
+      <p>{t('rsvp.error')}</p>
+    </div>
+  </form>
+)}
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.rsvp-form').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = form.dataset.submitUrl;
+      if (!url || url.includes('PASTE')) return;
+      const submitBtn = form.querySelector<HTMLButtonElement>('.rsvp-submit');
+      const label = form.querySelector<HTMLElement>('.rsvp-submit-label');
+      const loading = form.querySelector<HTMLElement>('.rsvp-submit-loading');
+      const successEl = form.querySelector<HTMLElement>('.rsvp-success');
+      const errorEl = form.querySelector<HTMLElement>('.rsvp-error');
+      const fd = new FormData(form);
+
+      if (!fd.get('email') || !fd.get('partySize')) return;
+
+      submitBtn?.setAttribute('disabled', '');
+      label?.setAttribute('hidden', '');
+      loading?.removeAttribute('hidden');
+      errorEl?.setAttribute('hidden', '');
+
+      const payload = {
+        type: 'rsvp',
+        movieId: form.dataset.movieId ?? '',
+        movieTitle: form.dataset.movieTitle ?? '',
+        screeningDate: form.dataset.screeningDate ?? '',
+        locale: form.dataset.locale ?? 'nl',
+        email: String(fd.get('email') ?? ''),
+        partySize: Number(fd.get('partySize') ?? 0),
+        notes: String(fd.get('notes') ?? ''),
+        submittedAt: new Date().toISOString(),
+        referrer: document.referrer || '',
+        pageUrl: window.location.href,
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json().catch(() => ({}));
+        if (data && data.ok === false) throw new Error(data.error || 'Server rejected');
+        // Success: swap form for success message.
+        form.querySelectorAll('.rsvp-grid, .rsvp-field, .rsvp-fine-print, .rsvp-actions').forEach((el) => (el as HTMLElement).setAttribute('hidden', ''));
+        successEl?.removeAttribute('hidden');
+        // Analytics — single no-PII event. GoatCounter auto-pings on anchor
+        // clicks; this is a synthetic custom event via the image tag API.
+        try {
+          const anyWindow = window as unknown as { goatcounter?: { count: (p: Record<string, unknown>) => void } };
+          anyWindow.goatcounter?.count({ path: 'rsvp_submitted', event: true });
+        } catch { /* ignore */ }
+      } catch {
+        loading?.setAttribute('hidden', '');
+        label?.removeAttribute('hidden');
+        submitBtn?.removeAttribute('disabled');
+        errorEl?.removeAttribute('hidden');
+      }
+    });
+  });
+</script>
+
+<style>
+  .rsvp-form {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+  }
+
+  .rsvp-header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .rsvp-kicker {
+    font-size: 1.3rem;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+  }
+
+  .rsvp-body {
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    font-size: 0.95rem;
+  }
+
+  .rsvp-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    align-items: end;
+  }
+
+  .rsvp-field {
+    display: block;
+  }
+
+  .rsvp-field-party input {
+    width: 90px;
+    text-align: center;
+  }
+
+  .rsvp-label {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin-bottom: 6px;
+  }
+
+  .rsvp-form input,
+  .rsvp-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font: inherit;
+    transition: border-color var(--transition-fast);
+  }
+
+  .rsvp-form input:focus,
+  .rsvp-form textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(215, 110, 77, 0.15);
+  }
+
+  .rsvp-form textarea {
+    resize: vertical;
+    min-height: 60px;
+    line-height: 1.5;
+  }
+
+  .rsvp-fine-print {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    margin: var(--space-md) 0;
+    font-style: italic;
+  }
+
+  .rsvp-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .rsvp-submit {
+    min-width: 180px;
+  }
+
+  .rsvp-submit[disabled] {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  /* Success + error states */
+  .rsvp-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg) 0;
+    text-align: center;
+  }
+
+  .rsvp-success-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rsvp-success p {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .rsvp-error {
+    color: var(--color-accent);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(215, 110, 77, 0.08);
+    border: 1px solid rgba(215, 110, 77, 0.3);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    margin-top: var(--space-md);
+  }
+
+  @media (max-width: 520px) {
+    .rsvp-grid {
+      grid-template-columns: 1fr;
+    }
+    .rsvp-field-party input {
+      width: 100%;
+    }
+    .rsvp-form {
+      padding: var(--space-lg);
+    }
+  }
+</style>
