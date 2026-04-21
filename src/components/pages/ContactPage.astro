@@ -80,16 +80,29 @@ const secondaryLinks = [
           <Icon name="map-pin" size={18} />
           Nelson Mandelapark, Haarlem Noord
         </p>
-        <div class="map-container">
-          <iframe
-            src="https://www.google.com/maps?q=Nelson+Mandelapark,+Haarlem+Noord,+Netherlands&output=embed"
-            width="100%"
-            height="300"
-            style="border:0; border-radius: var(--radius-lg);"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+        <!-- Click-to-activate map: static placeholder by default (no 3rd-party
+             scripts loaded), the iframe only mounts when the user taps in. -->
+        <div class="map-container" data-map-state="off">
+          <button type="button" class="map-placeholder" aria-label={t('contact.openMaps')}>
+            <div class="map-placeholder-inner">
+              <Icon name="map-pin" size={40} />
+              <span class="map-placeholder-title">Nelson Mandelapark</span>
+              <span class="map-placeholder-sub">Haarlem Noord</span>
+              <span class="map-placeholder-cta">{t('contact.openMaps')} →</span>
+            </div>
+          </button>
+          <template class="map-embed-template">
+            <iframe
+              src="https://www.google.com/maps?q=Nelson+Mandelapark,+Haarlem+Noord,+Netherlands&output=embed"
+              width="100%"
+              height="300"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Nelson Mandelapark map"
+            ></iframe>
+          </template>
         </div>
         <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="map-link">
           {t('contact.openMaps')} →
@@ -100,6 +113,20 @@ const secondaryLinks = [
 </BaseLayout>
 
 <script>
+  // Swap the static map placeholder for the real iframe on first click.
+  // Keeps Google Maps off the initial page load — faster, more private.
+  document.querySelectorAll('.map-container').forEach((container) => {
+    const btn = container.querySelector('.map-placeholder');
+    const tpl = container.querySelector('.map-embed-template');
+    if (!btn || !tpl) return;
+    btn.addEventListener('click', () => {
+      if (container.dataset.mapState === 'on') return;
+      const frame = tpl.content.firstElementChild.cloneNode(true);
+      container.replaceChild(frame, btn);
+      container.dataset.mapState = 'on';
+    });
+  });
+
   // Copy-to-clipboard for the email address, with a transient "Copied" state.
   document.querySelectorAll('.copy-btn').forEach((btn) => {
     const value = btn.dataset.copy;
@@ -306,6 +333,69 @@ const secondaryLinks = [
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-height: 300px;
+    display: flex;
+  }
+
+  .map-container iframe {
+    width: 100%;
+    height: 300px;
+    display: block;
+  }
+
+  .map-placeholder {
+    width: 100%;
+    min-height: 300px;
+    padding: var(--space-lg);
+    background:
+      radial-gradient(circle at 50% 40%, rgba(242, 199, 92, 0.1), transparent 60%),
+      linear-gradient(180deg, var(--color-card), #1a2c46);
+    border: 0;
+    color: var(--color-text);
+    cursor: pointer;
+    font: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast);
+  }
+
+  .map-placeholder:hover {
+    background:
+      radial-gradient(circle at 50% 40%, rgba(242, 199, 92, 0.16), transparent 60%),
+      linear-gradient(180deg, var(--color-card-hover), #1e3150);
+  }
+
+  .map-placeholder-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    text-align: center;
+  }
+
+  .map-placeholder-inner :global(svg) {
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .map-placeholder-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .map-placeholder-sub {
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+  }
+
+  .map-placeholder-cta {
+    margin-top: var(--space-sm);
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    font-weight: 500;
   }
 
   .map-link {

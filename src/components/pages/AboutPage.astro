@@ -130,15 +130,18 @@ const values = [
           <h2>{t('about.inTheNews')}</h2>
           <div class="press-links">
             <a href="https://www.023magazine.nl/cultuur-uitgaan/3149-succesvolle-bewonersinitiatieven" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
+              <img src="https://www.google.com/s2/favicons?domain=023magazine.nl&sz=64"
+                   alt="" width="24" height="24" loading="lazy" class="press-favicon" />
               <span>{t('about.newsItem023')}</span>
             </a>
             <a href="https://www.haarlemlink.nl/nieuws/pitch-nelson-film" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
+              <img src="https://www.google.com/s2/favicons?domain=haarlemlink.nl&sz=64"
+                   alt="" width="24" height="24" loading="lazy" class="press-favicon" />
               <span>{t('about.newsItemHaarlemlink')}</span>
             </a>
             <a href="https://www.haarlemmerdagblad.nl/uitgaan/nelsons-film-brengt-buurt-samen-met-gratis-pop-up-bioscoop-in-haarlem-noord" target="_blank" rel="noopener" class="press-link">
-              <span class="press-icon"><Icon name="newspaper" size={18} /></span>
+              <img src="https://www.google.com/s2/favicons?domain=haarlemmerdagblad.nl&sz=64"
+                   alt="" width="24" height="24" loading="lazy" class="press-favicon" />
               <span>{t('about.newsItemDagblad')}</span>
             </a>
           </div>
@@ -398,6 +401,14 @@ const values = [
 
   .press-icon {
     font-size: 1.5rem;
+  }
+
+  .press-favicon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.06);
   }
 
   .split-section {
