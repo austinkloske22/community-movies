@@ -197,7 +197,7 @@ export const ui = {
     'municipalities.curiousText': 'Plan een vrijblijvend gesprek. Wij denken graag mee over de mogelijkheden.',
     'municipalities.meetingCta': 'Plan een kennismakingsgesprek',
     'municipalities.collaborationTitle': 'Klaar om samen te werken?',
-    'municipalities.collaborationText': 'Teken de samenwerkingsverklaring. In ongeveer 12 minuten vertel je wie je bent, wat je kunt bijdragen en waarom deze wijk deze avond nodig heeft.',
+    'municipalities.collaborationText': 'Teken de samenwerkingsverklaring. In ongeveer 10 minuten vertel je wie je bent, hoe je wilt samenwerken en waarom deze wijk deze avond nodig heeft.',
     'municipalities.collaborationCta': 'Start samenwerkingsverklaring',
     // Partner / municipalities — new structure
     'partner.kicker': 'Voor gemeenten en organisaties',
@@ -216,7 +216,7 @@ export const ui = {
     'partner.howTitle': 'Zo gaat het verder',
     'partner.howStep1': 'Onderteken de verklaring',
     'partner.howStep1Body': '5 minuten online. Geen kosten, geen verplichting — het markeert alleen wederzijdse interesse.',
-    'partner.howStep2': 'Wij bellen binnen 48 uur',
+    'partner.howStep2': 'Wij nemen contact op',
     'partner.howStep2Body': 'Korte kennismaking. Wat je wilt, wat wij nodig hebben, en of de wijk klaar is.',
     'partner.howStep3': 'Plan een pilot-avond',
     'partner.howStep3Body': 'Vanaf 6–8 weken voorbereidingstijd. We leveren een draaiboek; jullie leveren de wijk.',
@@ -230,7 +230,7 @@ export const ui = {
     'partner.faqQ4': 'Welke locaties werken?',
     'partner.faqA4': 'Een groene plek in de wijk met stroom binnen 50 meter en ruimte voor 50+ bezoekers. Parken, pleinen en binnenterreinen werken allemaal. Wij komen langs om de plek te beoordelen.',
     'partner.endCtaTitle': 'Klaar om te beginnen?',
-    'partner.endCtaBody': 'Teken de samenwerkingsverklaring. In ongeveer 12 minuten vertel je wie je bent en wat je kunt bijdragen.',
+    'partner.endCtaBody': 'Teken de samenwerkingsverklaring. In ongeveer 10 minuten vertel je wie je bent en hoe je wilt samenwerken.',
     'partner.callPrompt': 'Liever eerst bellen?',
 
     // Location
@@ -475,7 +475,7 @@ export const ui = {
     'municipalities.curiousText': 'Schedule a no-obligation conversation — we are happy to explore the possibilities with you.',
     'municipalities.meetingCta': 'Schedule a meeting',
     'municipalities.collaborationTitle': 'Ready to collaborate?',
-    'municipalities.collaborationText': 'Sign the collaboration statement. In about 12 minutes, tell us who you are, what you can contribute, and why this neighbourhood deserves this evening.',
+    'municipalities.collaborationText': 'Sign the collaboration statement. In about 10 minutes, tell us who you are, how you\'d like to collaborate, and why this neighbourhood deserves this evening.',
     'municipalities.collaborationCta': 'Start collaboration statement',
     // Partner / municipalities — new structure
     'partner.kicker': 'For municipalities and organisations',
@@ -494,7 +494,7 @@ export const ui = {
     'partner.howTitle': 'How it works from here',
     'partner.howStep1': 'Sign the statement',
     'partner.howStep1Body': '5 minutes, online. No fee, no commitment — it simply marks mutual interest.',
-    'partner.howStep2': "We'll call within 48 hours",
+    'partner.howStep2': "We'll be in touch",
     'partner.howStep2Body': 'A short intro. What you want, what we need, and whether the neighbourhood is ready.',
     'partner.howStep3': 'Plan a pilot evening',
     'partner.howStep3Body': '6–8 weeks lead time. We bring the playbook; you bring the neighbourhood.',
@@ -508,7 +508,7 @@ export const ui = {
     'partner.faqQ4': 'What locations work?',
     'partner.faqA4': "A green spot in the neighbourhood with power within 50 metres and room for 50+ visitors. Parks, squares and courtyards all work. We visit in person to confirm the location.",
     'partner.endCtaTitle': 'Ready to start?',
-    'partner.endCtaBody': 'Sign the collaboration statement. In about 12 minutes, tell us who you are and what you can contribute.',
+    'partner.endCtaBody': 'Sign the collaboration statement. In about 10 minutes, tell us who you are and how you\'d like to collaborate.',
     'partner.callPrompt': 'Prefer to call first?',
 
     // Location
@@ -752,7 +752,7 @@ export const ui = {
     'municipalities.curiousText': 'حدد موعداً لمحادثة بدون التزام — يسعدنا استكشاف الإمكانيات معك.',
     'municipalities.meetingCta': 'حدد موعداً لاجتماع',
     'municipalities.collaborationTitle': 'جاهز للتعاون؟',
-    'municipalities.collaborationText': 'وقّع إعلان التعاون. في حوالي 12 دقيقة، أخبرنا من أنت، وما يمكنك المساهمة به، ولماذا يستحق هذا الحي هذه الأمسية.',
+    'municipalities.collaborationText': 'وقّع إعلان التعاون. في حوالي 10 دقائق، أخبرنا من أنت، وكيف تودّ التعاون، ولماذا يستحق هذا الحي هذه الأمسية.',
     'municipalities.collaborationCta': 'ابدأ إعلان التعاون',
     // Partner / municipalities — new structure
     'partner.kicker': 'للبلديات والمنظمات',
@@ -771,7 +771,7 @@ export const ui = {
     'partner.howTitle': 'كيف نتقدم من هنا',
     'partner.howStep1': 'وقّع البيان',
     'partner.howStep1Body': '5 دقائق عبر الإنترنت. لا رسوم ولا التزام — إنه فقط يدل على الاهتمام المتبادل.',
-    'partner.howStep2': 'سنتصل خلال 48 ساعة',
+    'partner.howStep2': 'سنتواصل معك',
     'partner.howStep2Body': 'مقدمة قصيرة. ما تريده، ما نحتاجه، وما إذا كان الحي جاهزاً.',
     'partner.howStep3': 'خطط لأمسية تجريبية',
     'partner.howStep3Body': 'من 6 إلى 8 أسابيع من التحضير.',
@@ -785,7 +785,7 @@ export const ui = {
     'partner.faqQ4': 'ما المواقع المناسبة؟',
     'partner.faqA4': 'مكان أخضر في الحي مع كهرباء في نطاق 50 متراً ومساحة لأكثر من 50 زائراً.',
     'partner.endCtaTitle': 'جاهز للبدء؟',
-    'partner.endCtaBody': 'وقّع إعلان التعاون. في حوالي 12 دقيقة، أخبرنا من أنت وما يمكنك المساهمة به.',
+    'partner.endCtaBody': 'وقّع إعلان التعاون. في حوالي 10 دقائق، أخبرنا من أنت وكيف تودّ التعاون.',
     'partner.callPrompt': 'تفضل الاتصال أولاً؟',
 
     // Location
