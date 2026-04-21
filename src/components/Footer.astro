@@ -1,5 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import SponsorStrip from './SponsorStrip.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -36,15 +37,7 @@ const t = useTranslations(lang);
 
     <div class="footer-sponsors">
       <h4>{t('footer.sponsors')}</h4>
-      <div class="sponsor-list">
-        <a href="https://buurtamsterdam.nl" target="_blank" rel="noopener" class="sponsor">BUURT / Fjörd</a>
-        <a href="https://cronje.nl" target="_blank" rel="noopener" class="sponsor">Cronjé</a>
-        <a href="https://desnuffelmug.nl" target="_blank" rel="noopener" class="sponsor">De Snuffelmug</a>
-        <a href="https://www.coa.nl" target="_blank" rel="noopener" class="sponsor">COA</a>
-        <a href="https://www.haarlem.nl" target="_blank" rel="noopener" class="sponsor">Gemeente Haarlem</a>
-        <a target="_blank" rel="noopener" class="sponsor">HBP Hoorne</a>
-        <a href="https://duizend1.nl" target="_blank" rel="noopener" class="sponsor">Duizend1</a>
-      </div>
+      <SponsorStrip variant="strip" />
     </div>
 
     <div class="footer-bottom">
@@ -131,31 +124,6 @@ const t = useTranslations(lang);
     color: var(--color-text-muted);
     margin-bottom: var(--space-md);
     text-align: center;
-  }
-
-  .sponsor-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-sm);
-  }
-
-  .sponsor {
-    background: rgba(255, 255, 255, 0.05);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-    border: 1px solid transparent;
-  }
-
-  .sponsor:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    transform: translateY(-2px);
   }
 
   .footer-bottom {

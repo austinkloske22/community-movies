@@ -221,6 +221,8 @@ export const ui = {
     // Footer
     'footer.madeWith': 'Gemaakt met liefde voor de buurt',
     'footer.sponsors': 'Partners',
+    'sponsors.title': 'Gesteund door',
+    'sponsors.subtitle': 'Deze partners maken Nelsons Film mogelijk.',
 
     // Common
     'common.watchTrailer': 'Bekijk trailer',
@@ -445,6 +447,8 @@ export const ui = {
     // Footer
     'footer.madeWith': 'Made with love for the neighborhood',
     'footer.sponsors': 'Partners',
+    'sponsors.title': 'Supported by',
+    'sponsors.subtitle': 'These partners make Nelsons Film possible.',
 
     // Common
     'common.watchTrailer': 'Watch trailer',
@@ -668,6 +672,8 @@ export const ui = {
     // Footer
     'footer.madeWith': 'صُنع بحب للحي',
     'footer.sponsors': 'الشركاء',
+    'sponsors.title': 'بدعم من',
+    'sponsors.subtitle': 'هؤلاء الشركاء يجعلون نيلسونز فيلم ممكناً.',
 
     // Common
     'common.watchTrailer': 'شاهد الإعلان',

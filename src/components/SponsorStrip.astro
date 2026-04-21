@@ -1,0 +1,141 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+interface Props {
+  variant?: 'full' | 'strip';
+  class?: string;
+}
+
+const { variant = 'strip', class: extraClass = '' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Sponsor slugs must match filenames in /public/images/sponsors/{slug}.svg.
+// Placeholder SVGs ship with the repo — swap for real logos (same filename)
+// when they're available. Optionally add ?url= to link each logo out.
+interface Sponsor {
+  slug: string;
+  name: string;
+  url?: string;
+}
+
+const sponsors: Sponsor[] = [
+  { slug: 'coa',              name: 'COA' },
+  { slug: 'gemeente-haarlem', name: 'Gemeente Haarlem', url: 'https://www.haarlem.nl' },
+  { slug: 'buurt',            name: 'BUURT' },
+  { slug: 'cronje',           name: 'Cronjé' },
+  { slug: 'de-snuffelmug',    name: 'De Snuffelmug' },
+  { slug: 'hbp-hoorne',       name: 'HBP Hoorne' },
+  { slug: 'duizend1',         name: 'Duizend1' },
+];
+---
+
+<section class:list={['sponsor-strip', `variant-${variant}`, extraClass]}>
+  {variant === 'full' && (
+    <header class="sponsor-head">
+      <h2>{t('sponsors.title')}</h2>
+      <p>{t('sponsors.subtitle')}</p>
+    </header>
+  )}
+
+  <ul class="sponsor-list">
+    {sponsors.map((s) => (
+      <li class="sponsor-item">
+        {s.url ? (
+          <a href={s.url} target="_blank" rel="noopener" class="sponsor-link" aria-label={s.name}>
+            <img src={`/images/sponsors/${s.slug}.svg`} alt={s.name} loading="lazy" width="200" height="80" />
+          </a>
+        ) : (
+          <span class="sponsor-link sponsor-static">
+            <img src={`/images/sponsors/${s.slug}.svg`} alt={s.name} loading="lazy" width="200" height="80" />
+          </span>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .sponsor-strip {
+    position: relative;
+  }
+
+  .variant-full {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+  }
+
+  .sponsor-head {
+    margin-bottom: var(--space-lg);
+  }
+
+  .sponsor-head h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--space-sm);
+  }
+
+  .sponsor-head p {
+    color: var(--color-text-muted);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .sponsor-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .variant-strip .sponsor-list {
+    gap: var(--space-lg);
+  }
+
+  .sponsor-item {
+    flex: 0 0 auto;
+  }
+
+  .sponsor-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+
+  .sponsor-link img {
+    display: block;
+    max-width: 160px;
+    height: auto;
+    filter: grayscale(1) brightness(1.1);
+    opacity: 0.6;
+    transition: filter var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  a.sponsor-link:hover img,
+  a.sponsor-link:focus-visible img {
+    filter: none;
+    opacity: 1;
+  }
+
+  a.sponsor-link:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .sponsor-link img {
+      max-width: 130px;
+    }
+    .variant-strip .sponsor-list {
+      gap: var(--space-md);
+    }
+  }
+</style>
