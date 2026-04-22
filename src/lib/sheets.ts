@@ -9,6 +9,7 @@ export interface Movie {
   title: string;
   descriptionNl: string;
   descriptionEn: string;
+  descriptionAra: string;
   rating: string;
   contentWarnings: string;
   date: string;
@@ -19,6 +20,10 @@ export interface Movie {
   previewUrl: string;
   location: string;
   silentDisco: boolean;
+  preProgramStartMin: number;
+  preProgramNl: string;
+  preProgramEn: string;
+  preProgramAra: string;
 }
 
 function parseCSV(csv: string): Movie[] {
@@ -46,21 +51,26 @@ function parseCSV(csv: string): Movie[] {
     }
     values.push(current.trim());
 
-    // Column order: Title, descriptionNl, descriptionEn, Rating, ContentWarnings, Date, Time, language, subtitles, headphones, Preview URL, location
+    // Column order: Title, descriptionNl, descriptionEn, descriptionAra, Rating, ContentWarnings, Date, Time, language, subtitles, headphones, Preview URL, location, silent_disco, preProgramStartMin, preProgramNl, preProgramEn, preProgramAra
     return {
       title: values[0] || '',
       descriptionNl: values[1] || '',
       descriptionEn: values[2] || '',
-      rating: values[3] || '',
-      contentWarnings: values[4] || '',
-      date: values[5] || '',
-      time: values[6] || '',
-      language: values[7] || '',
-      subtitles: values[8] || '',
-      headphones: values[9] || '',
-      previewUrl: values[10] || '',
-      location: values[11] || '',
-      silentDisco: (values[12] || '').toLowerCase() === 'true',
+      descriptionAra: values[3] || '',
+      rating: values[4] || '',
+      contentWarnings: values[5] || '',
+      date: values[6] || '',
+      time: values[7] || '',
+      language: values[8] || '',
+      subtitles: values[9] || '',
+      headphones: values[10] || '',
+      previewUrl: values[11] || '',
+      location: values[12] || '',
+      silentDisco: (values[13] || '').toLowerCase() === 'true',
+      preProgramStartMin: parseInt(values[14] || '0', 10) || 0,
+      preProgramNl: values[15] || '',
+      preProgramEn: values[16] || '',
+      preProgramAra: values[17] || '',
     };
   }).filter((movie) => movie.title && movie.date);
 }

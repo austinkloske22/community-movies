@@ -42,6 +42,7 @@ const nextMovie = getNextMovie(movies);
               title={movie.title}
               descriptionNl={movie.descriptionNl}
               descriptionEn={movie.descriptionEn}
+              descriptionAra={movie.descriptionAra}
               rating={movie.rating}
               contentWarnings={movie.contentWarnings}
               date={movie.date}
@@ -51,7 +52,10 @@ const nextMovie = getNextMovie(movies);
               headphones={movie.headphones}
               previewUrl={movie.previewUrl}
               location={movie.location}
-              silentDisco={movie.silentDisco}
+              preProgramStartMin={movie.preProgramStartMin}
+              preProgramNl={movie.preProgramNl}
+              preProgramEn={movie.preProgramEn}
+              preProgramAra={movie.preProgramAra}
               isNext={nextMovie?.date === movie.date}
             />
           ))}

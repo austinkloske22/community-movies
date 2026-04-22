@@ -23,7 +23,7 @@ const icsText = movie
       date: movie.date,
       time: movie.time,
       location: movie.location || 'Nelson Mandelapark, Haarlem',
-      description: lang === 'nl' ? movie.descriptionNl : movie.descriptionEn,
+      description: lang === 'nl' ? movie.descriptionNl : lang === 'ara' ? (movie.descriptionAra || movie.descriptionEn) : movie.descriptionEn,
       url: pageUrl,
     })
   : '';
@@ -64,8 +64,31 @@ function getYouTubeId(url: string): string | null {
 
 const youtubeId = movie?.previewUrl ? getYouTubeId(movie.previewUrl) : null;
 
+// Pre-program / community hour — driven by movie.preProgramStartMin from schedule.csv
+function earlier(time: string, minutesBefore: number): string {
+  const [h, m] = time.split(':').map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return '';
+  const total = (((h * 60 + m - minutesBefore) % 1440) + 1440) % 1440;
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+const preProgramText = movie
+  ? (lang === 'nl'
+      ? movie.preProgramNl
+      : lang === 'ara'
+        ? (movie.preProgramAra || movie.preProgramEn)
+        : movie.preProgramEn)
+  : '';
+const hasPreProgram = !!movie && movie.preProgramStartMin > 0 && preProgramText.length > 0;
+const gatherTime = hasPreProgram && movie ? earlier(movie.time, movie.preProgramStartMin) : '';
+
 // Get description based on current language
-const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descriptionEn) : '';
+const description = movie
+  ? (lang === 'nl'
+      ? movie.descriptionNl
+      : lang === 'ara'
+        ? (movie.descriptionAra || movie.descriptionEn)
+        : movie.descriptionEn)
+  : '';
 ---
 
 {movie ? (
@@ -109,7 +132,10 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
             <span class="detail-icon"><Icon name="clock" size={22} /></span>
             <div class="detail-content">
               <span class="detail-label">{t('schedule.time')}</span>
-              <span class="detail-value">{movie.time}</span>
+              {hasPreProgram && (
+                <span class="detail-timeline"><strong>{gatherTime}</strong> {preProgramText}</span>
+              )}
+              <span class="detail-timeline"><strong>{movie.time}</strong> — {t('gather.showtime')}</span>
             </div>
           </div>
 
@@ -400,6 +426,22 @@ const description = movie ? (lang === 'nl' ? movie.descriptionNl : movie.descrip
 
   .lang-value {
     font-weight: 500;
+  }
+
+  .detail-timeline {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .detail-timeline strong {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+    margin-inline-end: 4px;
   }
 
   .screening-description {
