@@ -14,7 +14,9 @@
       "Bash(tree:*)",
       "Bash(wc:*)",
       "Bash(git -C /Users/austinkloske/Projects/community-movies log --oneline -10)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Read(//private/tmp/design-bundle/nelsons-onboarding/**)"
     ]
   }
 }

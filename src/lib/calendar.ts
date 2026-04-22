@@ -27,7 +27,11 @@ export function generateICS(movies: Movie[], lang: 'nl' | 'en' | 'ara', calendar
     const endTime = `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
     const dtEnd = formatICSDate(endDate, endTime);
 
-    const description = lang === 'nl' ? movie.descriptionNl : movie.descriptionEn;
+    const description = lang === 'nl'
+      ? movie.descriptionNl
+      : lang === 'ara'
+        ? (movie.descriptionAra || movie.descriptionEn)
+        : movie.descriptionEn;
 
     return [
       'BEGIN:VEVENT',

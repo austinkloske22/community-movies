@@ -20,12 +20,26 @@ const dayNum = dateObj.toLocaleDateString(locale, { day: 'numeric' });
 const monthShort = dateObj.toLocaleDateString(locale, { month: 'short' }).replace(/\.$/, '');
 const weekdayShort = dateObj.toLocaleDateString(locale, { weekday: 'short' }).replace(/\.$/, '');
 
+function earlier(time: string, minutesBefore: number): string {
+  const [h, m] = time.split(':').map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return '';
+  const total = (((h * 60 + m - minutesBefore) % 1440) + 1440) % 1440;
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+const preProgramText = lang === 'nl'
+  ? movie.preProgramNl
+  : lang === 'ara'
+    ? (movie.preProgramAra || movie.preProgramEn)
+    : movie.preProgramEn;
+const hasPreProgram = movie.preProgramStartMin > 0 && preProgramText.length > 0;
+const gatherTime = hasPreProgram ? earlier(movie.time, movie.preProgramStartMin) : '';
+
 const icsText = buildIcs({
   title: `Nelsons Film — ${movie.title}`,
   date: movie.date,
   time: movie.time,
   location: movie.location || 'Nelson Mandelapark, Haarlem',
-  description: lang === 'nl' ? movie.descriptionNl : movie.descriptionEn,
+  description: lang === 'nl' ? movie.descriptionNl : lang === 'ara' ? (movie.descriptionAra || movie.descriptionEn) : movie.descriptionEn,
   url: pageUrl,
 });
 const icsFilename = `nelsonsfilm-${slugifyForFilename(movie.title)}-${movie.date.replace(/-/g, '')}.ics`;
@@ -46,9 +60,13 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
     <div class="ns-badge">{t('schedule.nextScreening')}</div>
     <h2 class="ns-title">{movie.title}</h2>
     <div class="ns-meta">
-      <span class="ns-meta-item"><Icon name="clock" size={14} />{movie.time}</span>
+      {hasPreProgram && (
+        <span class="ns-meta-item"><Icon name="clock" size={14} /><span><strong>{gatherTime}</strong> {preProgramText}</span></span>
+      )}
+      <span class="ns-meta-item"><Icon name="clock" size={14} /><span><strong>{movie.time}</strong> — {t('gather.showtime')}</span></span>
       <span class="ns-meta-item"><Icon name="map-pin" size={14} />{movie.location || 'Nelson Mandelapark'}</span>
     </div>
+
     <div class="ns-actions">
       <button type="button" class="ns-action action-calendar"
               data-ics={icsText}
@@ -82,7 +100,7 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
     border: 1px solid rgba(239, 230, 216, 0.12);
     border-radius: var(--radius-lg);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-    align-items: center;
+    align-items: start;
   }
 
   .ns-date {
@@ -151,17 +169,30 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
 
   .ns-meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
+    flex-direction: column;
+    gap: 6px;
     color: var(--color-text-muted);
     font-size: 0.9rem;
     margin-bottom: var(--space-md);
   }
 
   .ns-meta-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .ns-meta-item :global(svg) {
+    flex-shrink: 0;
+    position: relative;
+    top: 2px;
+  }
+
+  .ns-meta-item strong {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
   }
 
   .ns-actions {

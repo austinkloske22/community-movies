@@ -39,8 +39,9 @@ export const ui = {
     'rsvp.expandCta': 'Laat ons weten dat je komt',
     'rsvp.emailLabel': 'E-mailadres',
     'rsvp.partyLabel': 'Met hoeveel mensen?',
-    'rsvp.notesLabel': 'Iets wat we moeten weten? (optioneel)',
-    'rsvp.notesPlaceholder': 'Allergieën, leeftijd van de kinderen, mobiliteit…',
+    'rsvp.cohostQuestion': 'Wil je ons vóór-de-film community-event mede-organiseren?',
+    'rsvp.notesLabel': 'Vertel over je idee',
+    'rsvp.notesPlaceholder': 'Denk aan een grassroots concert, goochelshow, poëzie, kinderworkshop — wat breng je mee, voor hoeveel mensen, welke avond?',
     'rsvp.submit': 'Reserveer een plekje',
     'rsvp.submitting': 'Bezig…',
     'rsvp.success': 'Top, tot dan.',
@@ -114,6 +115,9 @@ export const ui = {
     'schedule.whatToBringTitle': 'Wat meenemen?',
     'schedule.whatToBringText': 'Neem je eigen stoel of kleedje mee. Kom op tijd, want er zijn beperkte plekken!',
 
+    // Pre-program ("kom eerder") — activity content comes from schedule.csv per screening
+    'gather.showtime': 'Showtime',
+
     // Movie
     'movie.language': 'Taal',
     'movie.spokenLanguage': 'Gesproken taal',
@@ -123,8 +127,6 @@ export const ui = {
     'movie.kijkwijzer': 'Kijkwijzer',
     'movie.kijkwijzerExplain': 'De Nederlandse leeftijdsindicatie voor film en TV. AL = alle leeftijden.',
     'movie.trailerComingSoon': 'Trailer komt binnenkort',
-    'movie.silentDisco': 'Silent Disco',
-    'movie.filmStart': 'Film',
     'movie.viewFullSchedule': 'Bekijk volledig programma',
 
     // About
@@ -316,8 +318,9 @@ export const ui = {
     'rsvp.expandCta': 'Let us know you\'re coming',
     'rsvp.emailLabel': 'Email address',
     'rsvp.partyLabel': 'How many people?',
-    'rsvp.notesLabel': 'Anything we should know? (optional)',
-    'rsvp.notesPlaceholder': 'Allergies, kids\' ages, mobility…',
+    'rsvp.cohostQuestion': 'Want to co-host our pre-film community event?',
+    'rsvp.notesLabel': 'Tell us about your idea',
+    'rsvp.notesPlaceholder': 'Think grassroots concert, magic show, spoken word, kids\' workshop — what would you bring, for how many, which evening?',
     'rsvp.submit': 'Save my spot',
     'rsvp.submitting': 'Sending…',
     'rsvp.success': 'Great, see you then.',
@@ -392,6 +395,9 @@ export const ui = {
     'schedule.whatToBringTitle': 'What to bring?',
     'schedule.whatToBringText': 'Bring your own chair or blanket. Arrive early as spaces are limited!',
 
+    // Pre-program ("come early") — activity content comes from schedule.csv per screening
+    'gather.showtime': 'Showtime',
+
     // Movie
     'movie.language': 'Language',
     'movie.spokenLanguage': 'Spoken language',
@@ -401,8 +407,6 @@ export const ui = {
     'movie.kijkwijzer': 'Age Rating',
     'movie.kijkwijzerExplain': 'Dutch age rating for film and TV. AL = all ages.',
     'movie.trailerComingSoon': 'Trailer coming soon',
-    'movie.silentDisco': 'Silent Disco',
-    'movie.filmStart': 'Film',
     'movie.viewFullSchedule': 'View full schedule',
 
     // About
@@ -594,8 +598,9 @@ export const ui = {
     'rsvp.expandCta': 'أخبرنا أنك ستأتي',
     'rsvp.emailLabel': 'البريد الإلكتروني',
     'rsvp.partyLabel': 'كم شخصاً؟',
-    'rsvp.notesLabel': 'هل هناك شيء يجب أن نعرفه؟ (اختياري)',
-    'rsvp.notesPlaceholder': 'الحساسية، أعمار الأطفال، احتياجات الحركة…',
+    'rsvp.cohostQuestion': 'هل تودّ المشاركة في تنظيم فعالية ما قبل الفيلم؟',
+    'rsvp.notesLabel': 'أخبرنا عن فكرتك',
+    'rsvp.notesPlaceholder': 'مثل حفل موسيقي شعبي، عرض سحر، أمسية شعرية، ورشة للأطفال — ماذا ستقدّم، لكم شخص، أي أمسية؟',
     'rsvp.submit': 'احجز مكاني',
     'rsvp.submitting': 'جارٍ الإرسال…',
     'rsvp.success': 'رائع، نراك حينها.',
@@ -669,6 +674,9 @@ export const ui = {
     'schedule.whatToBringTitle': 'ماذا تحضر معك؟',
     'schedule.whatToBringText': 'أحضر كرسيك أو بطانيتك. تعال مبكراً فالأماكن محدودة!',
 
+    // Pre-program — activity content comes from schedule.csv per screening
+    'gather.showtime': 'وقت العرض',
+
     // Movie
     'movie.language': 'اللغة',
     'movie.spokenLanguage': 'اللغة المنطوقة',
@@ -678,8 +686,6 @@ export const ui = {
     'movie.kijkwijzer': 'التصنيف العمري',
     'movie.kijkwijzerExplain': 'التصنيف العمري الهولندي للأفلام والتلفزيون. AL = لجميع الأعمار.',
     'movie.trailerComingSoon': 'الإعلان الترويجي قريباً',
-    'movie.silentDisco': 'ديسكو صامت',
-    'movie.filmStart': 'الفيلم',
     'movie.viewFullSchedule': 'عرض البرنامج الكامل',
 
     // About

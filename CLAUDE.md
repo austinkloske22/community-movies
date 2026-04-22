@@ -72,14 +72,21 @@ CSV columns (in order):
 1. **Title** - Movie title
 2. **descriptionNl** - Dutch description
 3. **descriptionEn** - English description
-4. **Rating** - Kijkwijzer age rating (AL, 6, 9, 12, 14, 16, 18)
-5. **ContentWarnings** - Kijkwijzer pictograms, pipe-separated (e.g., `geweld|angst`)
-6. **Date** - Format: YYYY-MM-DD
-7. **Time** - Format: HH:MM
-8. **language** - Spoken language
-9. **subtitles** - Subtitle language
-10. **headphones** - Audio description availability (or "n/a")
-11. **Preview URL** - YouTube link for trailer
+4. **descriptionAra** - Arabic description (falls back to English if empty)
+5. **Rating** - Kijkwijzer age rating (AL, 6, 9, 12, 14, 16, 18)
+6. **ContentWarnings** - Kijkwijzer pictograms, pipe-separated (e.g., `geweld|angst`)
+7. **Date** - Format: YYYY-MM-DD
+8. **Time** - Format: HH:MM (film start)
+9. **language** - Spoken language
+10. **subtitles** - Subtitle language
+11. **headphones** - Audio description availability (or "n/a")
+12. **Preview URL** - YouTube link for trailer
+13. **location** - Venue name (e.g., `Nelson Mandelapark`)
+14. **silent_disco** - `true` / `false`
+15. **preProgramStartMin** - Minutes before film to invite people to arrive (e.g., `60`). Leave blank or `0` to hide the "come early" line.
+16. **preProgramNl** - Dutch copy for what's happening before the film (e.g., `Silent disco · BYOP · buren ontmoeten. Muzikanten welkom.`)
+17. **preProgramEn** - English copy for what's happening before the film
+18. **preProgramAra** - Arabic copy for what's happening before the film (falls back to English if empty)
 
 **Kijkwijzer Age Ratings:**
 - `AL` - Alle leeftijden (All ages)

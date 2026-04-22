@@ -47,9 +47,17 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
       </label>
     </div>
 
-    <label class="rsvp-field">
+    <label class="rsvp-cohost-check">
+      <input type="checkbox" name="cohostInterested" class="rsvp-cohost-input" />
+      <span class="rsvp-cohost-box" aria-hidden="true">
+        <Icon name="check" size={14} />
+      </span>
+      <span class="rsvp-cohost-text">{t('rsvp.cohostQuestion')}</span>
+    </label>
+
+    <label class="rsvp-field rsvp-cohost-field">
       <span class="rsvp-label">{t('rsvp.notesLabel')}</span>
-      <textarea name="notes" rows="2" placeholder={t('rsvp.notesPlaceholder')}></textarea>
+      <textarea name="notes" rows="2" placeholder={t('rsvp.notesPlaceholder')} disabled></textarea>
     </label>
 
     <p class="rsvp-fine-print">{t('rsvp.finePrint')}</p>
@@ -75,6 +83,23 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
 )}
 
 <script>
+  // Toggle the co-host idea textarea based on the checkbox above it.
+  document.querySelectorAll('form.rsvp-form').forEach((form) => {
+    const checkbox = form.querySelector('input[name="cohostInterested"]');
+    const textarea = form.querySelector('textarea[name="notes"]');
+    if (checkbox && textarea) {
+      checkbox.addEventListener('change', () => {
+        const on = checkbox.checked;
+        textarea.disabled = !on;
+        if (on) {
+          textarea.focus();
+        } else {
+          textarea.value = '';
+        }
+      });
+    }
+  });
+
   document.querySelectorAll('form.rsvp-form').forEach((form) => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -102,6 +127,7 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
         locale: form.dataset.locale || 'nl',
         email: String(fd.get('email') || ''),
         partySize: Number(fd.get('partySize') || 0),
+        cohostInterested: fd.get('cohostInterested') === 'on',
         notes: String(fd.get('notes') || ''),
         submittedAt: new Date().toISOString(),
         referrer: document.referrer || '',
@@ -212,6 +238,71 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
     resize: vertical;
     min-height: 60px;
     line-height: 1.5;
+  }
+
+  .rsvp-form textarea:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.12);
+    color: var(--color-text-muted);
+  }
+
+  /* Co-host checkbox — the gate above the textarea */
+  .rsvp-cohost-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    margin: var(--space-md) 0 var(--space-sm);
+    background: rgba(242, 199, 92, 0.04);
+    border: 1px solid rgba(242, 199, 92, 0.2);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+    line-height: 1.5;
+  }
+
+  .rsvp-cohost-check:hover {
+    border-color: rgba(242, 199, 92, 0.5);
+    background: rgba(242, 199, 92, 0.07);
+  }
+
+  .rsvp-cohost-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  .rsvp-cohost-box {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1.5px solid rgba(239, 230, 216, 0.3);
+    background: rgba(0, 0, 0, 0.2);
+    color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: all var(--transition-fast);
+  }
+
+  .rsvp-cohost-input:checked + .rsvp-cohost-box {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
+  .rsvp-cohost-input:focus-visible + .rsvp-cohost-box {
+    box-shadow: 0 0 0 3px rgba(215, 110, 77, 0.3);
+  }
+
+  .rsvp-cohost-text {
+    color: var(--color-text);
+    font-size: 0.92rem;
   }
 
   .rsvp-fine-print {
