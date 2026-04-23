@@ -2,15 +2,146 @@
 const { useState: useSigState, useRef: useSigRef, useEffect: useSigEffect } = React;
 
 function SignaturePad({ value, onChange, lang }) {
-  const typedName = value?.data || '';
+  const L = window.I18N[lang];
+  const initialMode = value?.mode === 'type' ? 'type' : 'draw';
+  const [mode, setMode] = useSigState(initialMode);
+  const canvasRef = useSigRef(null);
+  const drawing = useSigRef(false);
+  const hasInk = useSigRef(false);
+  const lastPt = useSigRef(null);
+
+  const typedName = (value?.mode === 'type' ? value.data : '') || '';
   const onTypeChange = (e) => onChange({ mode: 'type', data: e.target.value });
+
+  // Initialise / resize canvas for crisp drawing on high-DPI screens, and
+  // restore any previously saved drawing when switching back to draw mode.
+  useSigEffect(() => {
+    if (mode !== 'draw') return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const setup = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = '#1B2F4A';
+      // Restore if we already have saved ink
+      if (value?.mode === 'draw' && value.data) {
+        const img = new Image();
+        img.onload = () => {
+          ctx.clearRect(0, 0, rect.width, rect.height);
+          ctx.drawImage(img, 0, 0, rect.width, rect.height);
+          hasInk.current = true;
+        };
+        img.src = value.data;
+      } else {
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        hasInk.current = false;
+      }
+    };
+    setup();
+    window.addEventListener('resize', setup);
+    return () => window.removeEventListener('resize', setup);
+  }, [mode]);
+
+  const getPoint = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches && e.touches[0];
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  };
+
+  const startDraw = (e) => {
+    e.preventDefault();
+    drawing.current = true;
+    lastPt.current = getPoint(e);
+  };
+  const moveDraw = (e) => {
+    if (!drawing.current) return;
+    e.preventDefault();
+    const ctx = canvasRef.current.getContext('2d');
+    const p = getPoint(e);
+    const last = lastPt.current;
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastPt.current = p;
+    hasInk.current = true;
+  };
+  const endDraw = () => {
+    if (!drawing.current) return;
+    drawing.current = false;
+    if (hasInk.current) {
+      const data = canvasRef.current.toDataURL('image/png');
+      onChange({ mode: 'draw', data });
+    }
+  };
+
+  const clear = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    hasInk.current = false;
+    onChange({ mode: 'draw', data: '' });
+  };
+
+  const switchMode = (next) => {
+    if (next === mode) return;
+    setMode(next);
+    // Starting a fresh mode clears the previous signature shape.
+    onChange(null);
+  };
+
   return (
     <div>
-      <div className="om-sign-typed-preview">{typedName || (lang === 'nl' ? 'Je handtekening verschijnt hier' : 'Your signature appears here')}</div>
-      <input className="om-sign-typed-input" value={typedName} onChange={onTypeChange}
-        placeholder={lang === 'nl' ? 'Voornaam Achternaam' : 'First Last'} />
+      <div className="om-sign-tabs" role="tablist">
+        <button type="button" className={`om-sign-tab ${mode === 'type' ? 'active' : ''}`}
+          onClick={() => switchMode('type')} aria-pressed={mode === 'type'}>
+          {L.signTyped}
+        </button>
+        <button type="button" className={`om-sign-tab ${mode === 'draw' ? 'active' : ''}`}
+          onClick={() => switchMode('draw')} aria-pressed={mode === 'draw'}>
+          {L.signDraw}
+        </button>
+      </div>
+
+      {mode === 'type' && (
+        <>
+          <div className="om-sign-typed-preview">
+            {typedName || (lang === 'nl' ? 'Je handtekening verschijnt hier' : 'Your signature appears here')}
+          </div>
+          <input className="om-sign-typed-input" value={typedName} onChange={onTypeChange}
+            placeholder={lang === 'nl' ? 'Voornaam Achternaam' : 'First Last'} />
+        </>
+      )}
+
+      {mode === 'draw' && (
+        <div className="om-sign-canvas-wrap">
+          <canvas ref={canvasRef} className="om-sign-canvas"
+            onMouseDown={startDraw} onMouseMove={moveDraw} onMouseUp={endDraw} onMouseLeave={endDraw}
+            onTouchStart={startDraw} onTouchMove={moveDraw} onTouchEnd={endDraw} />
+          <div className="om-sign-guideline" />
+          <div className="om-sign-hint">
+            {lang === 'nl' ? 'Teken hier' : 'Sign here'}
+          </div>
+        </div>
+      )}
+
       <div className="om-sign-footer">
         <span>{lang === 'nl' ? 'Ondertekend' : 'Signed'} · {new Date().toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-GB')}</span>
+        {mode === 'draw' && (
+          <button type="button" className="om-sign-clear" onClick={clear}>{L.signClear}</button>
+        )}
       </div>
     </div>
   );
@@ -30,19 +161,21 @@ function formatAnswer(q, answers, lang) {
   }
 
   if (q.kind === 'single' || q.kind === 'single-text') {
-    const opt = L.options.find(o => o.value === v);
+    const val = typeof v === 'object' && v ? v.value : v;
+    const opt = L.options.find(o => o.value === val);
     if (!opt) return null;
-    const extra = answers[q.id + '__text'];
+    const extra = (typeof v === 'object' && v && v.text) || answers[q.id + '__text'];
     return { type: 'text', text: opt.label + (extra ? ` — "${extra}"` : '') };
   }
 
   if (q.kind === 'multi' || q.kind === 'multi-cards') {
-    const arr = Array.isArray(v) ? v : [];
+    const arr = Array.isArray(v) ? v : (v && Array.isArray(v.values) ? v.values : []);
     if (!arr.length) return null;
+    const others = (v && typeof v === 'object' && v.others) || {};
     const items = arr.map(val => {
       const opt = L.options.find(o => o.value === val);
       if (!opt) return null;
-      const extra = answers[q.id + '__' + val + '_text'];
+      const extra = others[val] || answers[q.id + '__' + val + '_text'];
       return opt.label + (extra ? ` — "${extra}"` : '');
     }).filter(Boolean);
     return { type: 'list', items };

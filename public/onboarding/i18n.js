@@ -48,6 +48,7 @@ window.I18N = {
     signTyped: 'Typ je naam',
     signDraw: 'Teken',
     signAgree: 'Ik bevestig dat mijn antwoorden naar waarheid zijn ingevuld en dat Nelson\u2019s Film contact met mij mag opnemen over de samenwerkingsverklaring.',
+    signReassure: 'Nelson\u2019s Film controleert je formulier. Als iets vragen oproept, nemen we binnen 5 werkdagen contact met je op.',
     previewPdf: 'Bekijk concept-verklaring (PDF)',
     closePreview: 'Sluiten',
     // Confirmation
@@ -110,6 +111,7 @@ window.I18N = {
     signTyped: 'Type your name',
     signDraw: 'Draw',
     signAgree: 'I confirm my answers are truthful and that Nelson\u2019s Film may contact me about the collaboration statement.',
+    signReassure: 'Nelson\u2019s Film will double-check your form. If anything raises questions, we will contact you within 5 business days.',
     previewPdf: 'Preview draft statement (PDF)',
     closePreview: 'Close',
     confTitle: 'Thank you. Your contribution is received.',

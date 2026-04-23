@@ -422,6 +422,7 @@ function ReviewScreen({ answers, lang, back, onEdit, signature, setSignature, ag
         <h2 className="om-sign-title">{L.signTitle}</h2>
         <p className="om-sign-body">{L.signBody}</p>
         <SignaturePad value={signature} onChange={setSignature} lang={lang} />
+        <p className="om-sign-reassure">{L.signReassure}</p>
       </div>
 
       <label className="om-agree">
