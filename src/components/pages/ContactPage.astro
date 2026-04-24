@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DonateButton from '../DonateButton.astro';
 import Icon from '../Icon.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { DONATIONS_ENABLED } from '../../lib/features';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -12,7 +13,9 @@ const emailAddress = 'Nelsons.film.Haarlem@gmail.com';
 const secondaryLinks = [
   { icon: 'phone', label: t('contact.callUs'), sub: '+31 6 57576047', href: 'tel:+31657576047', external: false },
   { icon: 'instagram', label: t('contact.instagram'), sub: '@nelsonsfilm', href: 'https://instagram.com/nelsonsfilm', external: true },
-  { icon: 'heart', label: t('contact.donate'), sub: null, href: null, external: false, donate: true },
+  ...(DONATIONS_ENABLED
+    ? [{ icon: 'heart', label: t('contact.donate'), sub: null, href: null, external: false, donate: true }]
+    : []),
   { icon: 'handshake', label: t('contact.sponsor'), sub: null, href: `mailto:${emailAddress}?subject=Sponsor`, external: false },
   { icon: 'landmark', label: t('contact.municipalitiesLink'), sub: null, href: getLocalizedPath('/voor-gemeenten', lang), external: false },
 ] as const;

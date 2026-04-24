@@ -6,6 +6,7 @@ import SponsorStrip from '../SponsorStrip.astro';
 import Numbers from '../Numbers.astro';
 import Testimonial from '../Testimonial.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { DONATIONS_ENABLED } from '../../lib/features';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -107,11 +108,13 @@ const values = [
           </div>
         </div>
 
-        <!-- Donate Section -->
-        <div class="donate-section">
-          <p>{t('about.donateText')}</p>
-          <DonateButton lang={lang} variant="primary" />
-        </div>
+        {DONATIONS_ENABLED && (
+          <!-- Donate Section -->
+          <div class="donate-section">
+            <p>{t('about.donateText')}</p>
+            <DonateButton lang={lang} variant="primary" />
+          </div>
+        )}
 
         <!-- Numbers strip -->
         <Numbers />

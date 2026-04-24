@@ -1,11 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { numbers } from '../data/numbers';
-
-// Kill switch — the current tally (15 screenings, 3 locations) is too modest
-// to show publicly while we're still saying "we just started" on calls and
-// in grant conversations. Flip to `false` to re-enable site-wide.
-const DISABLED = true;
+import { STATS_ENABLED } from '../lib/features';
 
 interface Props {
   /** Title shown above the stats. Omit for a bare strip. */
@@ -27,7 +23,7 @@ const stats = [
 ];
 ---
 
-{!DISABLED && (
+{STATS_ENABLED && (
 <section class:list={['numbers', extraClass]}>
   {title && <h2 class="numbers-title">{title}</h2>}
   <dl class="numbers-list">
