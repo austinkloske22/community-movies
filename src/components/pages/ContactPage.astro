@@ -16,8 +16,8 @@ const secondaryLinks = [
   ...(DONATIONS_ENABLED
     ? [{ icon: 'heart', label: t('contact.donate'), sub: null, href: null, external: false, donate: true }]
     : []),
-  { icon: 'handshake', label: t('contact.sponsor'), sub: null, href: `mailto:${emailAddress}?subject=Sponsor`, external: false },
-  { icon: 'landmark', label: t('contact.municipalitiesLink'), sub: null, href: getLocalizedPath('/voor-gemeenten', lang), external: false },
+  { icon: 'handshake', label: t('contact.sponsor'), sub: null, href: getLocalizedPath('/in-jouw-buurt', lang), external: false },
+  { icon: 'landmark', label: t('contact.municipalitiesLink'), sub: null, href: getLocalizedPath('/in-jouw-buurt', lang), external: false },
 ] as const;
 ---
 

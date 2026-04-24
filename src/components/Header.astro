@@ -43,7 +43,7 @@ const navItems = [
   { href: '/', label: t('nav.home'), hasDropdown: false },
   { href: '/programma', label: t('nav.schedule'), hasDropdown: true },
   { href: '/over-ons', label: t('nav.about'), hasDropdown: false },
-  { href: '/voor-gemeenten', label: t('nav.municipalities'), hasDropdown: false },
+  { href: '/in-jouw-buurt', label: t('nav.municipalities'), hasDropdown: false },
   { href: '/contact', label: t('nav.contact'), hasDropdown: false },
 ];
 ---
@@ -88,7 +88,7 @@ const navItems = [
                       <span class="location-name">{location.name}</span>
                     </a>
                   ))}
-                  <a href={getLocalizedPath('/voor-gemeenten', lang)} class="dropdown-cta" role="menuitem">
+                  <a href={getLocalizedPath('/in-jouw-buurt', lang)} class="dropdown-cta" role="menuitem">
                     {t('nav.municipalityBanner')}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
