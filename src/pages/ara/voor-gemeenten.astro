@@ -1,4 +1,17 @@
 ---
-import MunicipalitiesPage from '../../components/pages/MunicipalitiesPage.astro';
+const target = '/ara/in-jouw-buurt';
 ---
-<MunicipalitiesPage />
+<!doctype html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nelsons Film</title>
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={`https://nelsonsfilm.nl${target}`} />
+    <meta name="robots" content="noindex" />
+    <script is:inline set:html={`window.location.replace(${JSON.stringify(target)});`} />
+  </head>
+  <body>
+    <p>تم نقل هذه الصفحة. <a href={target}>المتابعة إلى {target}</a>.</p>
+  </body>
+</html>

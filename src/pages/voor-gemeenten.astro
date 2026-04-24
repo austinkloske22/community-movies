@@ -1,4 +1,22 @@
 ---
-import MunicipalitiesPage from '../components/pages/MunicipalitiesPage.astro';
+// Redirect stub — /voor-gemeenten was live for a while before the rename
+// to /in-jouw-buurt. Kept here so inbound links (Google, partner emails,
+// social posts) don't 404. GitHub Pages can't do server-side redirects,
+// so we ship a meta-refresh + JS fallback. For the Netlify backup a
+// proper 301 is configured in netlify.toml.
+const target = '/in-jouw-buurt';
 ---
-<MunicipalitiesPage />
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nelsons Film</title>
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={`https://nelsonsfilm.nl${target}`} />
+    <meta name="robots" content="noindex" />
+    <script is:inline set:html={`window.location.replace(${JSON.stringify(target)});`} />
+  </head>
+  <body>
+    <p>Deze pagina is verhuisd. <a href={target}>Ga verder naar {target}</a>.</p>
+  </body>
+</html>

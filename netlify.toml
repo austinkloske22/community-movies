@@ -5,6 +5,27 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Legacy route — /voor-gemeenten was renamed to /in-jouw-buurt in
+# 2026-04. Keep 301s for inbound links from Google / partner emails.
+# Locale-specific rules come before the catch-all so they match first.
+[[redirects]]
+  from = "/voor-gemeenten"
+  to = "/in-jouw-buurt"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/en/voor-gemeenten"
+  to = "/en/in-jouw-buurt"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ara/voor-gemeenten"
+  to = "/ara/in-jouw-buurt"
+  status = 301
+  force = true
+
 # Redirect all routes to the SPA for client-side routing
 [[redirects]]
   from = "/*"

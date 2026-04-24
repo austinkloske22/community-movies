@@ -1,6 +1,7 @@
 ---
 import { getSettings } from '../lib/settings';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import { DONATIONS_ENABLED } from '../lib/features';
 
 interface Props {
   lang: 'nl' | 'en' | 'ara';
@@ -18,13 +19,15 @@ const href = settings.tikkie_url || 'mailto:Nelsons.film.Haarlem@gmail.com?subje
 const isExternal = settings.tikkie_url ? true : false;
 ---
 
-<a
-  href={href}
-  class:list={['btn', `btn-${variant}`, className]}
-  target={isExternal ? '_blank' : undefined}
-  rel={isExternal ? 'noopener' : undefined}
-  data-goatcounter-click="donate-click"
-  data-goatcounter-title={`Donate (${lang})`}
->
-  {buttonText}
-</a>
+{DONATIONS_ENABLED && (
+  <a
+    href={href}
+    class:list={['btn', `btn-${variant}`, className]}
+    target={isExternal ? '_blank' : undefined}
+    rel={isExternal ? 'noopener' : undefined}
+    data-goatcounter-click="donate-click"
+    data-goatcounter-title={`Donate (${lang})`}
+  >
+    {buttonText}
+  </a>
+)}
