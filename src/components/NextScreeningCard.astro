@@ -2,6 +2,7 @@
 import Icon from './Icon.astro';
 import { useTranslations } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
+import { programLabel, venueLine } from '../lib/programs';
 import { buildIcs, slugifyForFilename } from '../lib/ics.ts';
 
 interface Props {
@@ -34,11 +35,12 @@ const preProgramText = lang === 'nl'
 const hasPreProgram = movie.preProgramStartMin > 0 && preProgramText.length > 0;
 const gatherTime = hasPreProgram ? earlier(movie.time, movie.preProgramStartMin) : '';
 
+const cityLabel = programLabel(movie.program);
 const icsText = buildIcs({
   title: `Nelsons Film — ${movie.title}`,
   date: movie.date,
   time: movie.time,
-  location: movie.location || 'Nelson Mandelapark, Haarlem',
+  location: venueLine(movie.program, movie.location),
   description: lang === 'nl' ? movie.descriptionNl : lang === 'ara' ? (movie.descriptionAra || movie.descriptionEn) : movie.descriptionEn,
   url: pageUrl,
 });
@@ -64,7 +66,13 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
         <span class="ns-meta-item"><Icon name="clock" size={14} /><span><strong>{gatherTime}</strong> {preProgramText}</span></span>
       )}
       <span class="ns-meta-item"><Icon name="clock" size={14} /><span><strong>{movie.time}</strong> — {t('gather.showtime')}</span></span>
-      <span class="ns-meta-item"><Icon name="map-pin" size={14} />{movie.location || 'Nelson Mandelapark'}</span>
+      <span class="ns-meta-item ns-meta-location">
+        <Icon name="map-pin" size={14} />
+        <span>
+          <strong>{cityLabel}</strong>
+          {movie.location && <span class="ns-venue"> · {movie.location}</span>}
+        </span>
+      </span>
     </div>
 
     <div class="ns-actions">
@@ -193,6 +201,10 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
     font-weight: 600;
     color: var(--color-text);
     font-variant-numeric: tabular-nums;
+  }
+
+  .ns-venue {
+    color: var(--color-text-muted);
   }
 
   .ns-actions {

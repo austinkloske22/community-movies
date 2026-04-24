@@ -36,16 +36,27 @@ function QText({ q, answer, setAnswer, lang }) {
 
 function QSingle({ q, answer, setAnswer, lang }) {
   const L = q[lang];
+  const curText = typeof answer === 'object' && answer ? (answer.text || '') : '';
   return (
     <div className={`om-options ${L.columns === 2 ? 'two-col' : ''}`}>
       {L.options.map(o => {
         const selected = answer === o.value || (typeof answer === 'object' && answer?.value === o.value);
         return (
-          <OptionBtn key={o.value} single selected={selected}
-            onClick={() => setAnswer(o.freeText ? { value: o.value, text: (typeof answer === 'object' ? answer?.text : '') || '' } : o.value)}>
-            <div className="om-option-label">{o.label}</div>
-            {o.sub && <div className="om-option-sub">{o.sub}</div>}
-          </OptionBtn>
+          <div key={o.value}>
+            <OptionBtn single selected={selected}
+              onClick={() => setAnswer(o.freeText ? { value: o.value, text: curText } : o.value)}>
+              <div className="om-option-label">{o.label}</div>
+              {o.sub && <div className="om-option-sub">{o.sub}</div>}
+            </OptionBtn>
+            {selected && o.freeText && (
+              <input
+                className="om-option-freetext"
+                placeholder={o.freeText}
+                value={curText}
+                onChange={(e) => setAnswer({ value: o.value, text: e.target.value })}
+              />
+            )}
+          </div>
         );
       })}
     </div>

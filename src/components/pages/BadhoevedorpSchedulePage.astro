@@ -3,20 +3,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
 import Icon from '../Icon.astro';
 import NotifySignup from '../NotifySignup.astro';
-import { getTielMovies, getAnnouncedUpcoming, getNextMovie } from '../../lib/sheets';
+import { getBadhoevedorpMovies, getAnnouncedUpcoming, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const movies = getTielMovies();
+const movies = getBadhoevedorpMovies();
 // "Announced" filters out TBA placeholder rows — a TBA-only CSV triggers
 // the in-preparation state (NotifySignup) instead of a fake movie card.
 const announced = getAnnouncedUpcoming(movies);
 const nextMovie = getNextMovie(movies);
 ---
 
-<BaseLayout title={`${t('schedule.title')} — ${t('schedule.locationTiel')}`} description="Bekijk het programma van Nelsons Film in Tiel">
+<BaseLayout title={`${t('schedule.title')} — ${t('schedule.locationBadhoevedorp')}`} description="Bekijk het programma van Nelsons Film in Badhoevedorp">
   <section class="schedule-page section">
     <div class="container">
       <div class="back-link">
@@ -24,11 +24,11 @@ const nextMovie = getNextMovie(movies);
       </div>
 
       <header class="page-header">
-        <h1>{t('schedule.title')} — {t('schedule.locationTiel')}</h1>
+        <h1>{t('schedule.title')} — {t('schedule.locationBadhoevedorp')}</h1>
         <p class="page-subtitle">{t('schedule.datesToBeAnnounced')}</p>
         {announced.length > 0 && (
-          <a href="/programma/tiel.ics" class="calendar-btn"
-             data-goatcounter-click="calendar-tiel"
+          <a href="/programma/badhoevedorp.ics" class="calendar-btn"
+             data-goatcounter-click="calendar-badhoevedorp"
              data-goatcounter-title="Calendar download">
             <Icon name="calendar" size={18} /> {t('schedule.addToCalendar')}
           </a>
@@ -65,7 +65,7 @@ const nextMovie = getNextMovie(movies);
         </div>
       ) : (
         <div class="no-movies">
-          <NotifySignup location="tiel" lang={lang} />
+          <NotifySignup location="badhoevedorp" lang={lang} />
         </div>
       )}
 
@@ -82,7 +82,7 @@ const nextMovie = getNextMovie(movies);
 
         <div class="info-card location-card">
           <h3><Icon name="map-pin" size={22} /> {t('location.title')}</h3>
-          <p>{t('schedule.locationTiel')}</p>
+          <p>{t('schedule.locationBadhoevedorp')}</p>
         </div>
       </div>
     </div>

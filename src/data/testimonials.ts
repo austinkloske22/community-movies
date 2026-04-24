@@ -35,12 +35,12 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
-    id: 'municipal-placeholder-1',
+    id: 'municipal-myrna-wiggers',
     kind: 'municipal',
-    author: 'Placeholder — gemeente',
+    author: 'Myrna Wiggers',
     role: {
-      nl: 'Beleidsmedewerker, gemeente Haarlem',
-      en: 'Policy officer, City of Haarlem',
+      nl: 'Projectleider overheidsparticipatie, Gemeente Haarlem',
+      en: 'Project lead citizen participation, City of Haarlem',
     },
     quote: {
       nl: 'Een avond met écht bereik in de wijk — en zonder dat wij de organisatie moesten optuigen.',

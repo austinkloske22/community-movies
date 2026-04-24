@@ -61,7 +61,7 @@ window.QUESTIONS = [
         { key: 'orgRole', label: 'Jouw functie en rol', type: 'text' },
         { key: 'orgEmail', label: 'E-mail organisatie', type: 'email' },
         { key: 'orgPhone', label: 'Telefoon organisatie', type: 'tel', optional: true },
-        { key: 'orgAddress', label: 'Adres organisatie', type: 'text', wide: true, optional: true },
+        { key: 'orgAddress', label: 'Adres organisatie', type: 'text', wide: true },
       ]},
     en: { title: 'Details of your organisation',
       help: 'The official details of the organisation on whose behalf you are signing.',
@@ -70,7 +70,7 @@ window.QUESTIONS = [
         { key: 'orgRole', label: 'Your role', type: 'text' },
         { key: 'orgEmail', label: 'Organisation email', type: 'email' },
         { key: 'orgPhone', label: 'Organisation phone', type: 'tel', optional: true },
-        { key: 'orgAddress', label: 'Organisation address', type: 'text', wide: true, optional: true },
+        { key: 'orgAddress', label: 'Organisation address', type: 'text', wide: true },
       ]},
   },
   {
@@ -336,6 +336,7 @@ window.QUESTIONS = [
   // ---- SECTION 5 ----
   {
     id: 'permission', section: 5, kind: 'single', required: true,
+    deps: (a) => a.behalfOf === 'org',
     nl: { title: 'Mogen we jouw naam en logo gebruiken?',
       help: 'Zichtbare steun maakt subsidieaanvragen aantoonbaar sterker.',
       options: [
@@ -498,7 +499,8 @@ window.validateQuestion = function(q, answers, lang) {
     return { ok: true };
   }
   if (q.kind === 'multi' || q.kind === 'multi-cards') {
-    if (!v || !v.length) return { ok: false, msg: lang === 'nl' ? 'Kies minimaal één optie' : 'Pick at least one' };
+    const arr = Array.isArray(v) ? v : (v && Array.isArray(v.values) ? v.values : null);
+    if (!arr || !arr.length) return { ok: false, msg: lang === 'nl' ? 'Kies minimaal één optie' : 'Pick at least one' };
     return { ok: true };
   }
   if (q.kind === 'long') {

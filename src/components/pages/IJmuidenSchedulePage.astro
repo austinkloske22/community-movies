@@ -23,6 +23,7 @@ const nextMovie = getNextMovie(movies);
 
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationIJmuiden')}</h1>
+        <p class="page-subtitle">{t('schedule.datesToBeAnnounced')}</p>
         {announced.length > 0 && (
           <a href="/programma/ijmuiden.ics" class="calendar-btn"
              data-goatcounter-click="calendar-ijmuiden"
@@ -30,7 +31,6 @@ const nextMovie = getNextMovie(movies);
             <Icon name="calendar" size={18} /> {t('schedule.addToCalendar')}
           </a>
         )}
-        <p class="page-subtitle">{t('schedule.datesToBeAnnounced')}</p>
         <p class="page-info">{t('schedule.selectionInfo')}</p>
         <p class="page-free">{t('schedule.freeInfo')}</p>
       </header>
@@ -51,6 +51,7 @@ const nextMovie = getNextMovie(movies);
               subtitles={movie.subtitles}
               headphones={movie.headphones}
               previewUrl={movie.previewUrl}
+              program={movie.program}
               location={movie.location}
               preProgramStartMin={movie.preProgramStartMin}
               preProgramNl={movie.preProgramNl}
@@ -111,8 +112,9 @@ const nextMovie = getNextMovie(movies);
   }
 
   .page-subtitle {
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-size: 1.125rem;
+    font-weight: 600;
     margin-top: var(--space-sm);
   }
 

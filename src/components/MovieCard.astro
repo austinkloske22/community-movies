@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { programLabel, venueLine } from '../lib/programs';
 
 interface Props {
   title: string;
@@ -17,6 +18,7 @@ interface Props {
   previewUrl?: string;
   imageUrl?: string;
   isNext?: boolean;
+  program?: string;
   location?: string;
   preProgramStartMin?: number;
   preProgramNl?: string;
@@ -24,7 +26,14 @@ interface Props {
   preProgramAra?: string;
 }
 
-const { title, descriptionNl, descriptionEn, descriptionAra = '', rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext, location, preProgramStartMin = 0, preProgramNl = '', preProgramEn = '', preProgramAra = '' } = Astro.props;
+const { title, descriptionNl, descriptionEn, descriptionAra = '', rating, contentWarnings, date, time, language, subtitles, headphones, previewUrl, imageUrl, isNext, program, location, preProgramStartMin = 0, preProgramNl = '', preProgramEn = '', preProgramAra = '' } = Astro.props;
+const venue = venueLine(program, location);
+
+// A row with title "TBA" is a placeholder tile for a program that is
+// announced but not yet scheduled. We flag it up top so the city name
+// lands before the reader has to scan the fine print.
+const isTba = (title || '').trim().toUpperCase() === 'TBA';
+const city = programLabel(program);
 
 // Get age icon path
 function getAgeIcon(age: string): string {
@@ -116,30 +125,38 @@ const preProgramText = lang === 'nl'
 const hasPreProgram = preProgramStartMin > 0 && preProgramText.length > 0;
 const preProgramTime = hasPreProgram ? earlier(time, preProgramStartMin) : '';
 
-// Format date for display
+// Format date for display. Rows flagged as upcoming but not yet scheduled
+// have an unparseable `date` (e.g. empty or "TBA") — show a localized
+// placeholder instead of "Invalid Date".
 function formatDate(dateStr: string): string {
-  try {
-    const date = new Date(dateStr);
-    const localeMap: Record<string, string> = { nl: 'nl-NL', en: 'en-US', ara: 'ar-SA' };
-    return date.toLocaleDateString(localeMap[lang] || 'en-US', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long'
-    });
-  } catch {
-    return dateStr;
-  }
+  const date = new Date(dateStr);
+  if (!dateStr || Number.isNaN(date.getTime())) return t('schedule.dateTba');
+  const localeMap: Record<string, string> = { nl: 'nl-NL', en: 'en-US', ara: 'ar-SA' };
+  return date.toLocaleDateString(localeMap[lang] || 'en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long'
+  });
 }
+
+const hasShowtime = !!time && !['TBA', 'n/a', 'N/A'].includes(time.trim());
 ---
 
-<article class:list={['movie-card', { 'is-next': isNext }]}>
-  {isNext && (
-    <div class="next-badge">
-      {t('schedule.nextScreening')}
+<article class:list={['movie-card', { 'is-next': isNext, 'is-tba': isTba }]}>
+  {city && (
+    <div class:list={['location-banner', isTba ? 'is-new' : 'is-scheduled']}>
+      <Icon name="map-pin" size={16} />
+      {isTba && <span class="location-kicker">{t('schedule.newLocation')}</span>}
+      <span class="location-city">{city}</span>
     </div>
   )}
 
   <div class="movie-image">
+    {isNext && (
+      <div class="next-badge">
+        {t('schedule.nextScreening')}
+      </div>
+    )}
     <img src={thumbnail} alt={title} loading="lazy" />
     {previewUrl && (
       <a href={previewUrl} target="_blank" rel="noopener" class="play-button" aria-label={t('common.watchTrailer')}
@@ -165,17 +182,19 @@ function formatDate(dateStr: string): string {
           <span class="meta-time">{preProgramTime}</span>
         </div>
       )}
-      <div class="meta-row meta-film">
-        <span class="meta-icon-wrap"><Icon name="film" size={14} /></span>
-        <span>{t('gather.showtime')}</span>
-        <span class="meta-time">{time}</span>
-      </div>
+      {hasShowtime && (
+        <div class="meta-row meta-film">
+          <span class="meta-icon-wrap"><Icon name="film" size={14} /></span>
+          <span>{t('gather.showtime')}</span>
+          <span class="meta-time">{time}</span>
+        </div>
+      )}
     </div>
 
     <h3 class="movie-title">{title}</h3>
     <p class="movie-description">{description}</p>
 
-    {(language || subtitles || headphones || location) && (
+    {(language || subtitles || headphones || venue) && (
       <div class="movie-languages">
         {language && !['TBA', 'n/a', 'N/A', ''].includes(language) && (
           <span class="lang-tag" title={t('movie.spokenLanguage')}>
@@ -192,9 +211,9 @@ function formatDate(dateStr: string): string {
             <Icon name="headphones" size={14} /> {headphones}
           </span>
         )}
-        {location && (
+        {venue && (
           <span class="lang-tag location-tag" title={t('movie.location')}>
-            <Icon name="map-pin" size={14} /> {location}
+            <Icon name="map-pin" size={14} /> {venue}
           </span>
         )}
       </div>
@@ -218,6 +237,47 @@ function formatDate(dateStr: string): string {
 
   .movie-card.is-next {
     border: 2px solid var(--color-accent);
+  }
+
+  .movie-card.is-tba {
+    border: 2px solid var(--color-accent);
+  }
+
+  .location-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    color: white;
+    font-family: var(--font-display);
+    text-align: center;
+  }
+
+  .location-banner.is-new {
+    background: linear-gradient(90deg, var(--color-accent), var(--color-gold));
+  }
+
+  .location-banner.is-scheduled {
+    background: linear-gradient(90deg, #2d5f9e, #4a90c7);
+  }
+
+  .location-banner :global(svg) {
+    flex-shrink: 0;
+  }
+
+  .location-kicker {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  .location-city {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
   }
 
   .next-badge {
