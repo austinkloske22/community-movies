@@ -1,0 +1,232 @@
+---
+import Icon from './Icon.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Same Apps Script endpoint used by RSVP, samenwerking and NotifySignup.
+// Footer signups reuse the `notify` handler and land in the Notify sheet
+// tab alongside city-specific signups — they're distinguished by
+// `location: 'newsletter'` in the row.
+const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycby7Sn4K5lWKriC0cuedxpgA0Ymk5Pn5BZ2SHSCmfOp9sPDxyE5G6LN6yfRgUG4G3HbJ/exec';
+---
+
+<form class="newsletter" data-submit-url={SUBMIT_URL} data-locale={lang} novalidate>
+  <div class="newsletter-body">
+    <h4 class="newsletter-title">{t('newsletter.title')}</h4>
+    <p class="newsletter-lede">{t('newsletter.body')}</p>
+
+    <div class="newsletter-row">
+      <label class="sr-only" for="newsletter-email">Email</label>
+      <input
+        id="newsletter-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder={t('newsletter.placeholder')}
+      />
+      <button type="submit">
+        <span class="submit-label">{t('newsletter.submit')}</span>
+        <span class="submit-loading" hidden>…</span>
+      </button>
+    </div>
+
+    <p class="newsletter-gdpr">{t('newsletter.gdpr')}</p>
+  </div>
+
+  <div class="newsletter-success" role="status" aria-live="polite" hidden>
+    <span class="success-badge" aria-hidden="true"><Icon name="check" size={18} /></span>
+    <p>{t('newsletter.success')}</p>
+  </div>
+
+  <div class="newsletter-error" role="alert" aria-live="assertive" hidden>
+    <p>{t('rsvp.error')}</p>
+  </div>
+</form>
+
+<script>
+  document.querySelectorAll('form.newsletter').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = form.dataset.submitUrl;
+      if (!url || url.includes('PASTE')) return;
+      const fd = new FormData(form);
+      const email = String(fd.get('email') || '').trim();
+      if (!email.includes('@')) return;
+
+      const bodyEl = form.querySelector('.newsletter-body');
+      const successEl = form.querySelector('.newsletter-success');
+      const errorEl = form.querySelector('.newsletter-error');
+      const label = form.querySelector('.submit-label');
+      const loading = form.querySelector('.submit-loading');
+      const btn = form.querySelector('button[type="submit"]');
+
+      if (btn) btn.setAttribute('disabled', '');
+      if (label) label.setAttribute('hidden', '');
+      if (loading) loading.removeAttribute('hidden');
+      if (errorEl) errorEl.setAttribute('hidden', '');
+
+      const payload = {
+        type: 'notify',
+        location: 'newsletter',
+        email,
+        locale: form.dataset.locale || 'nl',
+        submittedAt: new Date().toISOString(),
+        referrer: document.referrer || '',
+        pageUrl: window.location.href,
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json().catch(() => ({}));
+        if (data && data.ok === false) throw new Error(data.error || 'rejected');
+        if (bodyEl) bodyEl.setAttribute('hidden', '');
+        if (successEl) successEl.removeAttribute('hidden');
+        try {
+          if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+            window.goatcounter.count({ path: 'newsletter_footer', event: true });
+          }
+        } catch (e) { /* ignore */ }
+      } catch (err) {
+        if (loading) loading.setAttribute('hidden', '');
+        if (label) label.removeAttribute('hidden');
+        if (btn) btn.removeAttribute('disabled');
+        if (errorEl) errorEl.removeAttribute('hidden');
+      }
+    });
+  });
+</script>
+
+<style>
+  .newsletter {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .newsletter-title {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+    margin-bottom: 6px;
+  }
+
+  .newsletter-lede {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+  }
+
+  .newsletter-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-sm);
+  }
+
+  .newsletter input[type="email"] {
+    width: 100%;
+    padding: 11px 14px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 0.95rem;
+  }
+
+  .newsletter input[type="email"]:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(215, 110, 77, 0.15);
+  }
+
+  .newsletter button[type="submit"] {
+    padding: 11px 18px;
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    color: white;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .newsletter button[type="submit"]:hover {
+    filter: brightness(1.08);
+  }
+
+  .newsletter button[disabled] {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .newsletter-gdpr {
+    margin-top: var(--space-sm);
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .newsletter-success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) 0;
+    color: var(--color-text);
+  }
+
+  .newsletter-success .success-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .newsletter-success p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .newsletter-error {
+    margin-top: var(--space-sm);
+    color: var(--color-accent);
+    font-size: 0.9rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 520px) {
+    .newsletter-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

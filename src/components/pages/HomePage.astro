@@ -1,18 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../Hero.astro';
-import NextScreening from '../NextScreening.astro';
+import UpcomingScreenings from '../UpcomingScreenings.astro';
 import Numbers from '../Numbers.astro';
 import Features from '../Features.astro';
-import { getMovies, getNextMovie } from '../../lib/sheets';
+import { getMovies, getNextMovie, getUpcomingFlagged } from '../../lib/sheets';
 
 const movies = getMovies();
 const nextMovie = getNextMovie(movies);
+const upcoming = getUpcomingFlagged(movies);
 ---
 
 <BaseLayout title="Home">
   <Hero movie={nextMovie} />
-  <NextScreening movie={nextMovie} />
+  <UpcomingScreenings movies={upcoming} nextMovie={nextMovie} />
   <Numbers />
   <Features />
 </BaseLayout>

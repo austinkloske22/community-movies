@@ -1,0 +1,85 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import type { Movie } from '../lib/sheets';
+import MovieCard from './MovieCard.astro';
+import RsvpForm from './RsvpForm.astro';
+
+interface Props {
+  movies: Movie[];
+  nextMovie: Movie | null;
+}
+
+const { movies, nextMovie } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const hasList = movies.length > 0;
+---
+
+{hasList && (
+  <section class="upcoming section" id="upcoming">
+    <div class="container">
+      <header class="upcoming-header">
+        <h2 class="upcoming-title">{t('schedule.upcoming')}</h2>
+        <p class="upcoming-lede">{t('schedule.upcomingLede')}</p>
+      </header>
+
+      <div class="upcoming-grid grid grid-2">
+        {movies.map((movie) => (
+          <MovieCard
+            title={movie.title}
+            descriptionNl={movie.descriptionNl}
+            descriptionEn={movie.descriptionEn}
+            descriptionAra={movie.descriptionAra}
+            rating={movie.rating}
+            contentWarnings={movie.contentWarnings}
+            date={movie.date}
+            time={movie.time}
+            language={movie.language}
+            subtitles={movie.subtitles}
+            headphones={movie.headphones}
+            previewUrl={movie.previewUrl}
+            program={movie.program}
+            location={movie.location}
+            preProgramStartMin={movie.preProgramStartMin}
+            preProgramNl={movie.preProgramNl}
+            preProgramEn={movie.preProgramEn}
+            preProgramAra={movie.preProgramAra}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{nextMovie && (
+  <div id="rsvp-panel" class="rsvp-panel container" hidden>
+    <RsvpForm movie={nextMovie} lang={lang} />
+  </div>
+)}
+
+<style>
+  .upcoming {
+    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-primary) 100%);
+  }
+
+  .upcoming-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .upcoming-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: var(--space-xs);
+  }
+
+  .upcoming-lede {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .rsvp-panel {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+</style>

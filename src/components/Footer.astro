@@ -1,6 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import SponsorStrip from './SponsorStrip.astro';
+import NewsletterSignup from './NewsletterSignup.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -33,6 +34,10 @@ const t = useTranslations(lang);
           </a>
         </div>
       </div>
+    </div>
+
+    <div class="footer-newsletter">
+      <NewsletterSignup />
     </div>
 
     <div class="footer-sponsors">
@@ -109,6 +114,12 @@ const t = useTranslations(lang);
   .contact-link {
     color: var(--color-text);
     font-size: 0.875rem;
+  }
+
+  .footer-newsletter {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .footer-sponsors {

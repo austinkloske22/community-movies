@@ -68,25 +68,29 @@ Movie schedule and site settings are stored as local files. To update content, e
 
 ### Movie Schedule: `src/data/schedule.csv`
 
+One row per screening, across all programs (cities). The `program` column in position 1 controls which city the screening belongs to.
+
 CSV columns (in order):
-1. **Title** - Movie title
-2. **descriptionNl** - Dutch description
-3. **descriptionEn** - English description
-4. **descriptionAra** - Arabic description (falls back to English if empty)
-5. **Rating** - Kijkwijzer age rating (AL, 6, 9, 12, 14, 16, 18)
-6. **ContentWarnings** - Kijkwijzer pictograms, pipe-separated (e.g., `geweld|angst`)
-7. **Date** - Format: YYYY-MM-DD
-8. **Time** - Format: HH:MM (film start)
-9. **language** - Spoken language
-10. **subtitles** - Subtitle language
-11. **headphones** - Audio description availability (or "n/a")
-12. **Preview URL** - YouTube link for trailer
-13. **location** - Venue name (e.g., `Nelson Mandelapark`)
-14. **silent_disco** - `true` / `false`
-15. **preProgramStartMin** - Minutes before film to invite people to arrive (e.g., `60`). Leave blank or `0` to hide the "come early" line.
-16. **preProgramNl** - Dutch copy for what's happening before the film (e.g., `Silent disco · BYOP · buren ontmoeten. Muzikanten welkom.`)
-17. **preProgramEn** - English copy for what's happening before the film
-18. **preProgramAra** - Arabic copy for what's happening before the film (falls back to English if empty)
+1. **program** - Program/city slug: `haarlem`, `tiel`, or `ijmuiden`. Drives filtering on city schedule pages and the `Haarlem · Nelson Mandelapark`-style venue label. To add a new city, add its slug + label to `src/lib/programs.ts`.
+2. **Title** - Movie title
+3. **descriptionNl** - Dutch description
+4. **descriptionEn** - English description
+5. **descriptionAra** - Arabic description (falls back to English if empty)
+6. **Rating** - Kijkwijzer age rating (AL, 6, 9, 12, 14, 16, 18)
+7. **ContentWarnings** - Kijkwijzer pictograms, pipe-separated (e.g., `geweld|angst`)
+8. **Date** - Format: YYYY-MM-DD
+9. **Time** - Format: HH:MM (film start)
+10. **language** - Spoken language
+11. **subtitles** - Subtitle language
+12. **headphones** - Audio description availability (or "n/a")
+13. **Preview URL** - YouTube link for trailer
+14. **location** - Venue name only (e.g., `Nelson Mandelapark`). The city prefix is added automatically from `program`.
+15. **silent_disco** - `true` / `false`
+16. **preProgramStartMin** - Minutes before film to invite people to arrive (e.g., `60`). Leave blank or `0` to hide the "come early" line.
+17. **preProgramNl** - Dutch copy for what's happening before the film (e.g., `Silent disco · BYOP · buren ontmoeten. Muzikanten welkom.`)
+18. **preProgramEn** - English copy for what's happening before the film
+19. **preProgramAra** - Arabic copy for what's happening before the film (falls back to English if empty)
+20. **upcoming** - `true` / `false`. When `true`, the row appears in the homepage "Upcoming" section under the hero. Manual opt-in flag so you control which screenings per city get extra visibility. The flag is the sole gate — flagging the hero row shows it in both places.
 
 **Kijkwijzer Age Ratings:**
 - `AL` - Alle leeftijden (All ages)

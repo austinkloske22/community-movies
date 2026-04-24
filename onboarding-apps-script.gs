@@ -30,11 +30,11 @@
  */
 
 const CONFIG = {
-  ADMIN_EMAIL: 'austinkloske@gmail.com',  // who gets notified on every submission
+  ADMIN_EMAIL: 'Nelsons.film.Haarlem@gmail.com',  // who gets notified on every submission
   SEND_PARTNER_CONFIRMATION: true,         // auto-ack the person who submitted
-  SHEET_NAME: 'Submissions',               // samenwerking/collaboration statements
+  SHEET_NAME: 'samenwerkingsverklaring',   // samenwerking/collaboration statements
   RSVP_SHEET_NAME: 'RSVPs',                // neighbour RSVPs for individual screenings
-  NOTIFY_SHEET_NAME: 'Notify',             // "tell me when you're in my city" signups
+  NOTIFY_SHEET_NAME: 'newsletter',         // "tell me when you're in my city" signups AND footer newsletter (location='newsletter')
   // If this Apps Script is STANDALONE (not created from inside a Sheet), paste the
   // target Sheet's ID here. Find it in the Sheet URL:
   //   https://docs.google.com/spreadsheets/d/{THIS_IS_THE_ID}/edit
@@ -63,7 +63,8 @@ function doPost(e) {
     }
 
     // "Notify me when you're in my city" signups — also no emails, just
-    // rows in the Notify sheet tab grouped by location.
+    // rows in the Notify sheet tab grouped by location. Footer newsletter
+    // signups use the same handler with location='newsletter'.
     if (body && body.type === 'notify') {
       return handleNotify(body);
     }
@@ -151,9 +152,9 @@ function doPost(e) {
   }
 }
 
-// RSVP handler — appends one row to the RSVPs tab. Does NOT send any email
-// (the project doesn't have an email engine wired up yet; once it does,
-// add MailApp calls here).
+// RSVP handler — appends one row to the RSVPs tab.
+// Side-effect: if cohostInterested=true, email admin with the RSVP and the
+// voorprogramma idea. Plain RSVPs are silent — just the sheet row, no email.
 function handleRsvp(body) {
   const t0 = Date.now();
   try {
@@ -161,6 +162,7 @@ function handleRsvp(body) {
       movieId: body.movieId, movieTitle: body.movieTitle,
       locale: body.locale, partySize: body.partySize,
       hasNotes: !!(body.notes && String(body.notes).trim()),
+      cohostInterested: !!body.cohostInterested,
     });
     const ss = CONFIG.SPREADSHEET_ID
       ? SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)
@@ -187,6 +189,40 @@ function handleRsvp(body) {
       body.pageUrl || '',
     ]);
     console.log('[rsvp] row appended', { rows: sheet.getLastRow(), ms: Date.now() - t0 });
+
+    // Voorprogramma idea: email admin so they can follow up. Plain RSVPs stay
+    // silent — this only fires when the user explicitly opts in via the
+    // "heb je een leuk idee voor het voorprogramma?" checkbox.
+    if (body.cohostInterested && CONFIG.ADMIN_EMAIL) {
+      try {
+        const subject = `[Nelsons Film] Voorprogramma idee — ${body.movieTitle || 'RSVP'}`;
+        const lines = [
+          `Iemand heeft bij de RSVP aangegeven een idee te hebben voor het voorprogramma.`,
+          ``,
+          `Film:          ${body.movieTitle || '—'}`,
+          `Datum:         ${body.screeningDate || '—'}`,
+          `E-mail:        ${body.email || '—'}`,
+          `Aantal mensen: ${Number(body.partySize || 0) || '—'}`,
+          `Taal:          ${body.locale || '—'}`,
+          ``,
+          `Idee / omschrijving:`,
+          String(body.notes || '(geen tekst ingevuld)'),
+          ``,
+          `— Pagina: ${body.pageUrl || '—'}`,
+        ];
+        MailApp.sendEmail({
+          to: CONFIG.ADMIN_EMAIL,
+          subject: subject,
+          body: lines.join('\n'),
+          replyTo: body.email || CONFIG.ADMIN_EMAIL,
+        });
+        console.log('[rsvp] cohost email sent to admin');
+      } catch (mailErr) {
+        console.error('[rsvp] cohost email FAILED', { message: mailErr.message });
+        // Don't fail the whole RSVP over mail delivery.
+      }
+    }
+
     return jsonResponse({ ok: true });
   } catch (err) {
     console.error('[rsvp] FAILED', { message: err.message, stack: err.stack });

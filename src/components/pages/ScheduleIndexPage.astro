@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../Icon.astro';
-import { getHaarlemMovies, getTielMovies, getIJmuidenMovies, getAnnouncedUpcoming } from '../../lib/sheets';
+import { getHaarlemMovies, getTielMovies, getIJmuidenMovies, getBadhoevedorpMovies, getAnnouncedUpcoming } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -11,6 +11,7 @@ const t = useTranslations(lang);
 const haarlemAnnounced = getAnnouncedUpcoming(getHaarlemMovies());
 const tielAnnounced = getAnnouncedUpcoming(getTielMovies());
 const ijmuidenAnnounced = getAnnouncedUpcoming(getIJmuidenMovies());
+const badhoevedorpAnnounced = getAnnouncedUpcoming(getBadhoevedorpMovies());
 
 interface Loc {
   city: string;
@@ -20,9 +21,10 @@ interface Loc {
 }
 
 const locations: Loc[] = [
-  { city: t('schedule.locationHaarlem'),  href: '/programma/haarlem',  count: haarlemAnnounced.length,  active: haarlemAnnounced.length > 0 },
-  { city: t('schedule.locationTiel'),     href: '/programma/tiel',     count: tielAnnounced.length,     active: tielAnnounced.length > 0 },
-  { city: t('schedule.locationIJmuiden'), href: '/programma/ijmuiden', count: ijmuidenAnnounced.length, active: ijmuidenAnnounced.length > 0 },
+  { city: t('schedule.locationHaarlem'),      href: '/programma/haarlem',       count: haarlemAnnounced.length,      active: haarlemAnnounced.length > 0 },
+  { city: t('schedule.locationTiel'),         href: '/programma/tiel',          count: tielAnnounced.length,         active: tielAnnounced.length > 0 },
+  { city: t('schedule.locationIJmuiden'),     href: '/programma/ijmuiden',      count: ijmuidenAnnounced.length,     active: ijmuidenAnnounced.length > 0 },
+  { city: t('schedule.locationBadhoevedorp'), href: '/programma/badhoevedorp',  count: badhoevedorpAnnounced.length, active: badhoevedorpAnnounced.length > 0 },
 ];
 ---
 

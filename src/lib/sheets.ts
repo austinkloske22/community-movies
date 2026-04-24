@@ -1,11 +1,13 @@
-// Movie schedules from local CSV files (one per location)
-// Update src/data/<location>-schedule.csv and redeploy to change the schedule
+// Movie schedule from a single local CSV — one row per screening.
+// The first column is `program` (city/client slug, e.g. haarlem/tiel/ijmuiden),
+// which drives per-city filtering, ICS exports, and UI labels.
+// Update src/data/schedule.csv and redeploy to change the schedule.
 
-import haarlemCSV from '../data/haarlem-schedule.csv?raw';
-import tielCSV from '../data/tiel-schedule.csv?raw';
-import ijmuidenCSV from '../data/ijmuiden-schedule.csv?raw';
+import scheduleCSV from '../data/schedule.csv?raw';
+import type { Program } from './programs';
 
 export interface Movie {
+  program: string;
   title: string;
   descriptionNl: string;
   descriptionEn: string;
@@ -24,6 +26,7 @@ export interface Movie {
   preProgramNl: string;
   preProgramEn: string;
   preProgramAra: string;
+  upcoming: boolean;
 }
 
 function parseCSV(csv: string): Movie[] {
@@ -51,44 +54,59 @@ function parseCSV(csv: string): Movie[] {
     }
     values.push(current.trim());
 
-    // Column order: Title, descriptionNl, descriptionEn, descriptionAra, Rating, ContentWarnings, Date, Time, language, subtitles, headphones, Preview URL, location, silent_disco, preProgramStartMin, preProgramNl, preProgramEn, preProgramAra
+    // Column order: program, Title, descriptionNl, descriptionEn, descriptionAra, Rating,
+    // ContentWarnings, Date, Time, language, subtitles, headphones, Preview URL,
+    // location, silent_disco, preProgramStartMin, preProgramNl, preProgramEn, preProgramAra,
+    // upcoming
     return {
-      title: values[0] || '',
-      descriptionNl: values[1] || '',
-      descriptionEn: values[2] || '',
-      descriptionAra: values[3] || '',
-      rating: values[4] || '',
-      contentWarnings: values[5] || '',
-      date: values[6] || '',
-      time: values[7] || '',
-      language: values[8] || '',
-      subtitles: values[9] || '',
-      headphones: values[10] || '',
-      previewUrl: values[11] || '',
-      location: values[12] || '',
-      silentDisco: (values[13] || '').toLowerCase() === 'true',
-      preProgramStartMin: parseInt(values[14] || '0', 10) || 0,
-      preProgramNl: values[15] || '',
-      preProgramEn: values[16] || '',
-      preProgramAra: values[17] || '',
+      program: (values[0] || '').toLowerCase(),
+      title: values[1] || '',
+      descriptionNl: values[2] || '',
+      descriptionEn: values[3] || '',
+      descriptionAra: values[4] || '',
+      rating: values[5] || '',
+      contentWarnings: values[6] || '',
+      date: values[7] || '',
+      time: values[8] || '',
+      language: values[9] || '',
+      subtitles: values[10] || '',
+      headphones: values[11] || '',
+      previewUrl: values[12] || '',
+      location: values[13] || '',
+      silentDisco: (values[14] || '').toLowerCase() === 'true',
+      preProgramStartMin: parseInt(values[15] || '0', 10) || 0,
+      preProgramNl: values[16] || '',
+      preProgramEn: values[17] || '',
+      preProgramAra: values[18] || '',
+      upcoming: (values[19] || '').toLowerCase() === 'true',
     };
   }).filter((movie) => movie.title && movie.date);
 }
 
+export function getMovies(): Movie[] {
+  return parseCSV(scheduleCSV);
+}
+
+export function getMoviesByProgram(program: Program): Movie[] {
+  return getMovies().filter((m) => m.program === program);
+}
+
+// Per-city wrappers kept for readability at call sites; they are thin
+// adapters over getMoviesByProgram.
 export function getHaarlemMovies(): Movie[] {
-  return parseCSV(haarlemCSV);
+  return getMoviesByProgram('haarlem');
 }
 
 export function getTielMovies(): Movie[] {
-  return parseCSV(tielCSV);
+  return getMoviesByProgram('tiel');
 }
 
 export function getIJmuidenMovies(): Movie[] {
-  return parseCSV(ijmuidenCSV);
+  return getMoviesByProgram('ijmuiden');
 }
 
-export function getMovies(): Movie[] {
-  return [...getHaarlemMovies(), ...getTielMovies(), ...getIJmuidenMovies()];
+export function getBadhoevedorpMovies(): Movie[] {
+  return getMoviesByProgram('badhoevedorp');
 }
 
 export function getUpcomingMovies(movies: Movie[]): Movie[] {
@@ -121,4 +139,31 @@ export function getAnnouncedUpcoming(movies: Movie[]): Movie[] {
 export function getNextMovie(movies: Movie[]): Movie | null {
   const upcoming = getAnnouncedUpcoming(movies);
   return upcoming[0] || null;
+}
+
+/**
+ * Rows flagged `upcoming=true` that either have a future date or no
+ * parseable date at all (placeholder "date TBA" tiles for cities that
+ * are coming but haven't been scheduled yet). Valid-dated rows sort
+ * chronologically first; date-unknown rows follow.
+ */
+export function getUpcomingFlagged(movies: Movie[]): Movie[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const flagged = movies.filter((m) => m.upcoming);
+  const withParsed = flagged.map((m) => {
+    const t = m.date ? new Date(m.date).getTime() : NaN;
+    return { m, t: Number.isNaN(t) ? null : t };
+  });
+
+  return withParsed
+    .filter((x) => x.t === null || x.t >= today.getTime())
+    .sort((a, b) => {
+      if (a.t === null && b.t === null) return 0;
+      if (a.t === null) return 1;
+      if (b.t === null) return -1;
+      return a.t - b.t;
+    })
+    .map((x) => x.m);
 }
