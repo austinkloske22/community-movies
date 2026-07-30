@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!--
+  Nelsons Film — placeholder page (2026 season paused, back in 2027).
+
+  This standalone page is what GitHub Pages publishes while
+  PLACEHOLDER_MODE is 'true' in .github/workflows/deploy.yml.
+  The full Astro site stays untouched in src/ — flip the flag to bring it back.
+-->
+<html lang="nl" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terug in 2027 | Nelsons Film</title>
+  <meta name="description" content="Dit jaar zijn er geen filmavonden. In 2027 staat het scherm weer in de buurt. Nelsons Film — samen kijken, samen leven." />
+  <link rel="canonical" href="https://nelsonsfilm.nl/" />
+  <link rel="icon" type="image/png" href="/images/brand/icon-logo-clear-background.png" />
+
+  <meta property="og:title" content="Terug in 2027 | Nelsons Film" />
+  <meta property="og:description" content="Dit jaar zijn er geen filmavonden. In 2027 staat het scherm weer in de buurt." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nelsonsfilm.nl/" />
+  <meta property="og:image" content="https://nelsonsfilm.nl/images/brand/og-default.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Nelsons Film" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Terug in 2027 | Nelsons Film" />
+  <meta name="twitter:description" content="Dit jaar zijn er geen filmavonden. In 2027 staat het scherm weer in de buurt." />
+  <meta name="twitter:image" content="https://nelsonsfilm.nl/images/brand/og-default.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500&family=Open+Sans:wght@400;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      /* Brandbook palette */
+      --night:       #1B2F4A;  /* Night sky dark blue */
+      --night-deep:  #101E31;
+      --terra:       #D76E4D;  /* Terra Cotta Cosy Connection */
+      --screen:      #EFE6D8;  /* Movie Screen Broken White */
+      --spot:        #F2C75C;  /* Spotlight Yellow */
+      --muted:       rgba(239, 230, 216, 0.62);
+
+      --font-body: 'Open Sans', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'Poppins', 'Noto Sans Arabic', var(--font-body);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      padding: clamp(1.5rem, 5vh, 3rem) 1.25rem;
+      font-family: var(--font-body);
+      line-height: 1.65;
+      color: var(--screen);
+      background-color: var(--night);
+      background-image:
+        radial-gradient(115% 70% at 50% 116%, rgba(242, 199, 92, 0.15), transparent 62%),
+        linear-gradient(180deg, var(--night-deep) 0%, var(--night) 58%, #16283E 100%);
+      overflow-x: hidden;
+    }
+
+    /* `margin: auto` centres without clipping the top when the content is
+       taller than the viewport — unlike `justify-content: center`. */
+    .stage {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1.5rem, 4vh, 2.5rem);
+      width: min(730px, 100%);
+    }
+
+    /* The projector beam — widens from behind the viewer up onto the screen.
+       The one deliberately bold element; everything else stays quiet. */
+    .beam {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      width: 150vw;
+      height: 76vh;
+      transform: translateX(-50%);
+      z-index: 0;
+      pointer-events: none;
+      clip-path: polygon(48% 100%, 52% 100%, 79% 0%, 21% 0%);
+      background: linear-gradient(to top, rgba(242, 199, 92, 0.085), rgba(242, 199, 92, 0.028) 60%, transparent 92%);
+      filter: blur(90px);
+      animation: breathe 11s ease-in-out infinite;
+    }
+
+    /* Both brand PNGs are square with generous transparent padding.
+       The negative margins crop that padding back out of the layout. */
+    .moon {
+      --mn: clamp(140px, 24vw, 170px);
+      position: relative;
+      z-index: 1;
+      width: var(--mn);
+      height: auto;
+      margin: calc(var(--mn) * -0.22) 0;
+      filter: drop-shadow(0 0 26px rgba(242, 199, 92, 0.32));
+      animation: rise 900ms cubic-bezier(.2, .7, .3, 1) both;
+    }
+
+    /* The screen: two sheets on a fence, seam down the middle. */
+    .screen {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: clamp(1.75rem, 4.5vw, 2.75rem) clamp(1.5rem, 5vw, 3.5rem);
+      text-align: center;
+      border: 1px solid rgba(239, 230, 216, 0.22);
+      background: linear-gradient(180deg, rgba(239, 230, 216, 0.075), rgba(239, 230, 216, 0.02));
+      box-shadow: 0 0 90px rgba(242, 199, 92, 0.09), inset 0 0 70px rgba(239, 230, 216, 0.025);
+      animation: rise 900ms cubic-bezier(.2, .7, .3, 1) 140ms both;
+    }
+
+    .screen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      border-left: 1px dashed rgba(239, 230, 216, 0.13);
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    h1 {
+      margin-top: 0.75rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.75rem, 10vw, 4.25rem);
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+      color: var(--terra);
+    }
+
+    .lead {
+      max-width: 42ch;
+      margin: 1.25rem auto 0;
+      font-size: clamp(1rem, 2.4vw, 1.125rem);
+      text-wrap: pretty;
+    }
+
+    .rule {
+      width: 44px;
+      height: 1px;
+      margin: 1.375rem auto;
+      background: rgba(239, 230, 216, 0.25);
+      border: 0;
+    }
+
+    .alt {
+      max-width: 46ch;
+      margin: 0 auto;
+      font-size: 0.9375rem;
+      color: var(--muted);
+      text-wrap: pretty;
+    }
+
+    .alt + .alt { margin-top: 0.875rem; }
+
+    .alt[lang="ara"] {
+      font-family: 'Noto Sans Arabic', var(--font-body);
+      line-height: 1.9;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.125rem;
+      text-align: center;
+      animation: rise 900ms cubic-bezier(.2, .7, .3, 1) 320ms both;
+    }
+
+    .wordmark {
+      --wm: clamp(240px, 54vw, 300px);
+      width: var(--wm);
+      height: auto;
+      margin: calc(var(--wm) * -0.355) 0 calc(var(--wm) * -0.40);
+      opacity: 0.9;
+    }
+
+    .contact {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .contact a {
+      color: var(--screen);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(239, 230, 216, 0.3);
+      padding-bottom: 1px;
+      transition: color 150ms ease, border-color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .contact a:hover,
+    .contact a:focus-visible {
+      color: var(--spot);
+      border-color: var(--spot);
+    }
+
+    .dot { padding: 0 0.35rem; opacity: 0.5; }
+
+    .tagline {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(239, 230, 216, 0.45);
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--spot);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.8; }
+      50%      { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .moon, .screen, footer, .beam {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .screen { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .beam { clip-path: polygon(46% 100%, 54% 100%, 92% 0%, 8% 0%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="beam" aria-hidden="true"></div>
+
+  <div class="stage">
+  <img class="moon" src="/images/brand/icon-logo-clear-background.png" alt="" width="132" height="132" />
+
+  <main class="screen">
+    <p class="eyebrow">Pauze · Intermission</p>
+    <h1>Tot 2027</h1>
+
+    <p class="lead">
+      Dit jaar zijn er geen filmavonden. We nemen de tijd om het goed te doen.
+      In 2027 staat het scherm weer in de buurt — samen kijken, in je eigen taal.
+    </p>
+
+    <hr class="rule" />
+
+    <p class="alt" lang="en">
+      There are no film nights this year. We are taking the time to do it properly.
+      In 2027 the screen goes back up in the neighbourhood — watching together, in your own language.
+    </p>
+
+    <p class="alt" lang="ara" dir="rtl">
+      لا توجد عروض أفلام هذا العام. نأخذ وقتنا لنقوم بذلك على أكمل وجه.
+      في عام 2027 ستعود الشاشة إلى الحي — نشاهد معًا، كلٌّ بلغته.
+    </p>
+  </main>
+
+  <footer>
+    <img class="wordmark" src="/images/brand/text-logo-clear-background.png" alt="Nelsons Film" width="230" height="230" />
+    <p class="contact">
+      Vragen of samenwerken?
+      <a href="mailto:Nelsons.film.Haarlem@gmail.com">Nelsons.film.Haarlem@gmail.com</a>
+      <span class="dot" aria-hidden="true">·</span>
+      <a href="https://instagram.com/nelsonsfilm" target="_blank" rel="noopener">Instagram</a>
+    </p>
+    <p class="tagline">Samen kijken, samen leven.</p>
+  </footer>
+  </div>
+
+  <script data-goatcounter="https://nelsonsfilm.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
