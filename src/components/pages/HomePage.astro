@@ -2,18 +2,41 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../Hero.astro';
 import UpcomingScreenings from '../UpcomingScreenings.astro';
+import AbridgedNotice from '../AbridgedNotice.astro';
+import SeasonEndNotice from '../SeasonEndNotice.astro';
 import Numbers from '../Numbers.astro';
 import Features from '../Features.astro';
 import { getMovies, getNextMovie, getUpcomingFlagged } from '../../lib/sheets';
+import { isActiveProgram } from '../../lib/programs';
+import { isSeasonOver } from '../../lib/season';
 
 const movies = getMovies();
 const nextMovie = getNextMovie(movies);
-const upcoming = getUpcomingFlagged(movies);
+// Rows for programs that are off ACTIVE_PROGRAMS never reach the page — see
+// src/lib/programs.ts.
+const upcoming = getUpcomingFlagged(movies).filter((m) => isActiveProgram(m.program));
+
+// If the site is rebuilt after the season ends, drop the screening blocks
+// from the HTML entirely. If it is *not* rebuilt, the `data-season`
+// attributes let the inline script in BaseLayout do the same swap in the
+// browser. See src/lib/season.ts.
+const over = isSeasonOver();
 ---
 
 <BaseLayout title="Home">
-  <Hero movie={nextMovie} />
-  <UpcomingScreenings movies={upcoming} nextMovie={nextMovie} />
+  <Hero movie={over ? null : nextMovie} />
+
+  {!over && (
+    <div data-season="active">
+      <UpcomingScreenings movies={upcoming} nextMovie={nextMovie} />
+      <AbridgedNotice />
+    </div>
+  )}
+
+  <div data-season={over ? undefined : 'over'}>
+    <SeasonEndNotice />
+  </div>
+
   <Numbers />
   <Features />
 </BaseLayout>

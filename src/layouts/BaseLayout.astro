@@ -13,7 +13,9 @@ interface Props {
 
 const {
   title,
-  description = 'Gratis openluchtbioscoop in het Nelson Mandelapark, Haarlem Noord',
+  // Deliberately venue-neutral: screenings move between locations, so naming
+  // one park here put a wrong address on every page that does not set its own.
+  description = 'Gratis openluchtfilms voor de buurt in Haarlem Noord — meertalig, verbindend en altijd gratis',
   ogImage = '/images/brand/og-default.jpg',
   ogType = 'website',
 } = Astro.props;
@@ -56,6 +58,16 @@ const fullTitle = `${title} | Nelsons Film`;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
     <title>{fullTitle}</title>
+
+    <script is:inline>
+      // End-of-season switch. GitHub Pages only rebuilds on a push, so the
+      // swap from "here is the programme" to "back in 2027" has to be able
+      // to happen in the browser too. Keep the date in sync with
+      // src/lib/season.ts.
+      if (Date.now() >= new Date(2026, 8, 14, 0, 0, 0).getTime()) {
+        document.documentElement.classList.add('season-over');
+      }
+    </script>
   </head>
   <body>
     <Header />

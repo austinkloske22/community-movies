@@ -15,12 +15,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # The season is paused. While this is 'true', GitHub Pages publishes only
-  # placeholder/index.html ("Tot 2027") instead of the full site.
-  #
-  # To bring the whole site back: change this to 'false' and push to main.
-  # Nothing else needs to change — src/ is untouched.
-  PLACEHOLDER_MODE: 'true'
+  # Set this to 'true' to publish placeholder/index.html ("Tot 2027") instead
+  # of the full site — used when a season is paused. While it is 'false' the
+  # normal Astro build runs and the whole site goes live.
+  PLACEHOLDER_MODE: 'false'
 
 jobs:
   build:

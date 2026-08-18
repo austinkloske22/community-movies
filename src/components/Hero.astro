@@ -48,7 +48,7 @@ const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
     </div>
 
     {movie && (
-      <div class="hero-card fade-in">
+      <div class="hero-card fade-in" data-season="active">
         <NextScreeningCard movie={movie} lang={lang} pageUrl={pageUrl} />
       </div>
     )}

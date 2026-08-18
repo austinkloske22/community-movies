@@ -1,0 +1,38 @@
+---
+// Shown once the 2026 season is over (see src/lib/season.ts): the site
+// stops advertising screenings and points people at the newsletter for the
+// 2027 announcement instead. Reuses NotifySignup so the signup keeps
+// writing to the same Apps Script sheet, tagged `2027`.
+import NotifySignup from './NotifySignup.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="season-end section">
+  <div class="container">
+    <NotifySignup
+      location="2027"
+      lang={lang}
+      title={t('season.endTitle')}
+      body={t('season.endBody')}
+      gdpr={t('season.gdpr')}
+    />
+    <p class="season-end-thanks">{t('season.endThanks')}</p>
+  </div>
+</section>
+
+<style>
+  .season-end {
+    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-primary) 100%);
+  }
+
+  .season-end-thanks {
+    max-width: 640px;
+    margin: var(--space-md) auto 0;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+</style>

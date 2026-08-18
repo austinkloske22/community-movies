@@ -10,3 +10,9 @@ export const DONATIONS_ENABLED = false;
 // current tally is too modest to show publicly. Flip to `true` to
 // re-enable the strip on the homepage, about page, and municipalities page.
 export const STATS_ENABLED = false;
+
+// "Add to calendar" (the .ics download buttons on the schedule pages and on
+// the next-screening card). Overkill for a two-night programme — the dates
+// are on the page. The .ics routes themselves still build, so flipping this
+// to `true` brings the buttons straight back.
+export const CALENDAR_ENABLED = false;
