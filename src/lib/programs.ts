@@ -45,11 +45,12 @@ export function venueLine(program: string | undefined | null, venue: string | un
 // Google Maps search link for a venue.
 //
 // Venue strings carry human detail the map does not need — a trailing "*"
-// marking a location that may still change, or a "/ ..." suffix naming the
-// spot at that address. Search on the address part plus the city, which is
-// what actually resolves.
+// marking a location that may still change, a "/ ..." suffix naming the spot
+// at that address, or a comma-separated description of where on the street to
+// look. Search on the leading place name plus the city, which is what
+// actually resolves.
 export function mapsSearchUrl(venue: string, program: string): string {
-  const address = (venue || '').split('/')[0].replace(/\*/g, '').trim();
+  const address = (venue || '').split(/[\/,]/)[0].replace(/\*/g, '').trim();
   const query = [address, programLabel(program)].filter(Boolean).join(', ');
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }

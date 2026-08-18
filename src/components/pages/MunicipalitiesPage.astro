@@ -121,12 +121,6 @@ const samenwerkingHref = `/samenwerking/${lang === 'en' ? '?lang=en' : ''}`;
         <path d="M5 12h14M12 5l7 7-7 7"/>
       </svg>
     </a>
-    <p class="p-call-prompt">
-      {t('partner.callPrompt')}
-      <a href="tel:+31657576047" class="p-call-link">
-        <Icon name="phone" size={16} /> +31 6 57576047
-      </a>
-    </p>
   </section>
 </BaseLayout>
 
@@ -387,24 +381,5 @@ const samenwerkingHref = `/samenwerking/${lang === 'en' ? '?lang=en' : ''}`;
     color: var(--color-text-muted);
     line-height: 1.7;
     margin-bottom: var(--space-lg);
-  }
-
-  .p-call-prompt {
-    margin-top: var(--space-md);
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-  }
-
-  .p-call-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-inline-start: 4px;
-    color: var(--color-accent);
-    font-weight: 500;
-  }
-
-  .p-call-link:hover {
-    color: var(--color-gold);
   }
 </style>
