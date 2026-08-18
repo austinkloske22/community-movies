@@ -251,7 +251,6 @@ export const ui = {
     'partner.faqA4': 'Een groene plek in de wijk met stroom binnen 50 meter en ruimte voor 50+ bezoekers. Parken, pleinen en binnenterreinen werken allemaal. Wij komen langs om de plek te beoordelen.',
     'partner.endCtaTitle': 'Klaar om te beginnen?',
     'partner.endCtaBody': 'Teken de samenwerkingsverklaring. In ongeveer 10 minuten vertel je wie je bent en hoe je wilt samenwerken.',
-    'partner.callPrompt': 'Liever eerst bellen?',
 
     // Location
     'location.title': 'Locatie',
@@ -276,7 +275,6 @@ export const ui = {
     'contact.copy': 'Kopieer',
     'contact.copied': 'Gekopieerd',
     'contact.emailUs': 'Stuur ons een e-mail',
-    'contact.callUs': 'Bel ons',
     'contact.instagram': 'Instagram',
     'contact.municipalitiesLink': 'Voor gemeenten',
 
@@ -549,7 +547,6 @@ export const ui = {
     'partner.faqA4': "A green spot in the neighbourhood with power within 50 metres and room for 50+ visitors. Parks, squares and courtyards all work. We visit in person to confirm the location.",
     'partner.endCtaTitle': 'Ready to start?',
     'partner.endCtaBody': 'Sign the collaboration statement. In about 10 minutes, tell us who you are and how you\'d like to collaborate.',
-    'partner.callPrompt': 'Prefer to call first?',
 
     // Location
     'location.title': 'Location',
@@ -574,7 +571,6 @@ export const ui = {
     'contact.copy': 'Copy',
     'contact.copied': 'Copied',
     'contact.emailUs': 'Email us',
-    'contact.callUs': 'Call us',
     'contact.instagram': 'Instagram',
     'contact.municipalitiesLink': 'For municipalities',
 
@@ -846,7 +842,6 @@ export const ui = {
     'partner.faqA4': 'مكان أخضر في الحي مع كهرباء في نطاق 50 متراً ومساحة لأكثر من 50 زائراً.',
     'partner.endCtaTitle': 'جاهز للبدء؟',
     'partner.endCtaBody': 'وقّع إعلان التعاون. في حوالي 10 دقائق، أخبرنا من أنت وكيف تودّ التعاون.',
-    'partner.callPrompt': 'تفضل الاتصال أولاً؟',
 
     // Location
     'location.title': 'الموقع',
@@ -871,7 +866,6 @@ export const ui = {
     'contact.copy': 'نسخ',
     'contact.copied': 'تم النسخ',
     'contact.emailUs': 'راسلنا بالبريد',
-    'contact.callUs': 'اتصل بنا',
     'contact.instagram': 'إنستغرام',
     'contact.municipalitiesLink': 'للبلديات',
 
