@@ -188,3 +188,24 @@ a:hover {
     padding: var(--space-lg) 0;
   }
 }
+
+/* End-of-season switch (see src/lib/season.ts)
+ *
+ * Blocks marked [data-season="over"] are in the HTML but hidden while the
+ * season runs. Once <html> picks up the .season-over class — either from the
+ * inline script in BaseLayout or because the site was rebuilt after the
+ * season ended — they take the place of the screening blocks. */
+/* !important is deliberate: Astro's component-scoped rules (e.g. the
+ * .calendar-btn on the schedule page) carry an extra attribute selector, so
+ * they tie on specificity and win on source order without it. */
+[data-season="over"] {
+  display: none !important;
+}
+
+.season-over [data-season="over"] {
+  display: block !important;
+}
+
+.season-over [data-season="active"] {
+  display: none !important;
+}

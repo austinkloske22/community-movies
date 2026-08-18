@@ -3,8 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
 import Icon from '../Icon.astro';
 import NotifySignup from '../NotifySignup.astro';
+import SeasonEndNotice from '../SeasonEndNotice.astro';
 import { getIJmuidenMovies, getAnnouncedUpcoming, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { isActiveProgram } from '../../lib/programs';
+import { CALENDAR_ENABLED } from '../../lib/features';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -12,6 +15,11 @@ const t = useTranslations(lang);
 const movies = getIJmuidenMovies();
 const announced = getAnnouncedUpcoming(movies);
 const nextMovie = getNextMovie(movies);
+
+// This program is hidden while it is off ACTIVE_PROGRAMS (see
+// src/lib/programs.ts). The page stays reachable by direct link, so say
+// what is actually true rather than promising a date that is not coming.
+const active = isActiveProgram('ijmuiden');
 ---
 
 <BaseLayout title={`${t('schedule.title')} — ${t('schedule.locationIJmuiden')}`} description="Bekijk het programma van Nelsons Film in IJmuiden">
@@ -24,7 +32,7 @@ const nextMovie = getNextMovie(movies);
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationIJmuiden')}</h1>
         <p class="page-subtitle">{t('schedule.datesToBeAnnounced')}</p>
-        {announced.length > 0 && (
+        {CALENDAR_ENABLED && announced.length > 0 && (
           <a href="/programma/ijmuiden.ics" class="calendar-btn"
              data-goatcounter-click="calendar-ijmuiden"
              data-goatcounter-title="Calendar download">
@@ -61,10 +69,12 @@ const nextMovie = getNextMovie(movies);
             />
           ))}
         </div>
-      ) : (
+      ) : active ? (
         <div class="no-movies">
           <NotifySignup location="ijmuiden" lang={lang} />
         </div>
+      ) : (
+        <SeasonEndNotice />
       )}
 
       <div class="schedule-info">

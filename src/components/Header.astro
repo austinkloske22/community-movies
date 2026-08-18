@@ -2,6 +2,7 @@
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/utils';
 import { languages } from '../i18n/ui';
 import LanguagePicker from './LanguagePicker.astro';
+import { isActiveProgram } from '../lib/programs';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -36,7 +37,7 @@ const locations = [
     href: '/programma/badhoevedorp',
     active: true
   },
-];
+].filter((location) => isActiveProgram(location.id));
 
 // Same paths for all languages (Dutch path names)
 const navItems = [

@@ -4,6 +4,7 @@ import { useTranslations } from '../i18n/utils';
 import type { Movie } from '../lib/sheets';
 import { programLabel, venueLine } from '../lib/programs';
 import { buildIcs, slugifyForFilename } from '../lib/ics.ts';
+import { CALENDAR_ENABLED } from '../lib/features';
 
 interface Props {
   movie: Movie;
@@ -76,13 +77,15 @@ const whatsappHref = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
     </div>
 
     <div class="ns-actions">
-      <button type="button" class="ns-action action-calendar"
-              data-ics={icsText}
-              data-ics-filename={icsFilename}
-              aria-label={t('share.addToCalendar')}>
-        <Icon name="calendar" size={16} />
-        <span>{t('share.addToCalendar')}</span>
-      </button>
+      {CALENDAR_ENABLED && (
+        <button type="button" class="ns-action action-calendar"
+                data-ics={icsText}
+                data-ics-filename={icsFilename}
+                aria-label={t('share.addToCalendar')}>
+          <Icon name="calendar" size={16} />
+          <span>{t('share.addToCalendar')}</span>
+        </button>
+      )}
       <a href={whatsappHref} target="_blank" rel="noopener" class="ns-action"
          aria-label={t('share.whatsapp')}>
         <Icon name="share-2" size={16} />

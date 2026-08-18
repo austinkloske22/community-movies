@@ -7,9 +7,16 @@ interface Props {
    * email so the admin can filter by location in the sheet. */
   location: string;
   lang: 'nl' | 'en' | 'ara';
+  /** Override the default "coming to your city" copy. Used by the
+   * end-of-season and abridged-season notices, which reuse this form with
+   * their own heading — including the fine print, since the default line
+   * says "no newsletter" and those two are newsletter signups. */
+  title?: string;
+  body?: string;
+  gdpr?: string;
 }
 
-const { location, lang } = Astro.props;
+const { location, lang, title, body, gdpr } = Astro.props;
 const t = useTranslations(lang);
 
 // Same Apps Script /exec URL used by the RSVP and samenwerking flows.
@@ -25,8 +32,8 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
       data-mailto-fallback={mailtoFallback}
       novalidate>
   <div class="notify-body">
-    <h2 class="notify-title">{t('notify.title')}</h2>
-    <p class="notify-lede">{t('notify.body')}</p>
+    <h2 class="notify-title">{title || t('notify.title')}</h2>
+    <p class="notify-lede">{body || t('notify.body')}</p>
 
     <div class="notify-row">
       <label class="sr-only" for={`notify-email-${location}`}>Email</label>
@@ -44,7 +51,7 @@ const mailtoFallback = `mailto:Nelsons.film.Haarlem@gmail.com?subject=${encodeUR
       </button>
     </div>
 
-    <p class="notify-gdpr">{t('notify.gdpr')}</p>
+    <p class="notify-gdpr">{gdpr || t('notify.gdpr')}</p>
   </div>
 
   <div class="notify-success" role="status" aria-live="polite" hidden>

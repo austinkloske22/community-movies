@@ -2,8 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieCard from '../MovieCard.astro';
 import Icon from '../Icon.astro';
+import AbridgedNotice from '../AbridgedNotice.astro';
+import SeasonEndNotice from '../SeasonEndNotice.astro';
 import { getHaarlemMovies, getUpcomingMovies, getNextMovie } from '../../lib/sheets';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { isSeasonOver } from '../../lib/season';
+import { mapsSearchUrl } from '../../lib/programs';
+import { CALENDAR_ENABLED } from '../../lib/features';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -11,6 +16,28 @@ const t = useTranslations(lang);
 const movies = getHaarlemMovies();
 const upcomingMovies = getUpcomingMovies(movies);
 const nextMovie = getNextMovie(movies);
+
+// Same end-of-season switch as the homepage, so a site that has not been
+// rebuilt does not keep listing September as "upcoming". See src/lib/season.ts.
+const over = isSeasonOver();
+const showMovies = !over && upcomingMovies.length > 0;
+
+// The venues come from the screenings themselves — this programme runs at a
+// different place each night, so a single hardcoded park address would be
+// wrong for at least one of them.
+const localeMap: Record<string, string> = { nl: 'nl-NL', en: 'en-US', ara: 'ar-SA' };
+const venues = upcomingMovies
+  .filter((m) => m.location)
+  .map((m) => {
+    const d = new Date(m.date);
+    return {
+      date: Number.isNaN(d.getTime())
+        ? ''
+        : d.toLocaleDateString(localeMap[lang] || 'en-US', { day: 'numeric', month: 'short' }),
+      venue: m.location,
+      href: mapsSearchUrl(m.location, m.program),
+    };
+  });
 ---
 
 <BaseLayout title={`${t('schedule.title')} — ${t('schedule.locationHaarlem')}`} description="Bekijk het volledige programma van Nelsons Film in Haarlem">
@@ -22,9 +49,8 @@ const nextMovie = getNextMovie(movies);
 
       <header class="page-header">
         <h1>{t('schedule.title')} — {t('schedule.locationHaarlem')}</h1>
-        <p class="page-subtitle">{t('schedule.everySecondSaturday')}</p>
-        {upcomingMovies.length > 0 && (
-          <a href="/programma/haarlem.ics" class="calendar-btn"
+        {CALENDAR_ENABLED && showMovies && (
+          <a href="/programma/haarlem.ics" class="calendar-btn" data-season="active"
              data-goatcounter-click="calendar-haarlem"
              data-goatcounter-title="Calendar download">
             <Icon name="calendar" size={18} /> {t('schedule.addToCalendar')}
@@ -34,8 +60,8 @@ const nextMovie = getNextMovie(movies);
         <p class="page-free">{t('schedule.freeInfo')}</p>
       </header>
 
-      {upcomingMovies.length > 0 ? (
-        <div class="movies-grid grid grid-2">
+      {showMovies && (
+        <div class="movies-grid grid grid-2" data-season="active">
           {upcomingMovies.map((movie) => (
             <MovieCard
               title={movie.title}
@@ -60,11 +86,17 @@ const nextMovie = getNextMovie(movies);
             />
           ))}
         </div>
-      ) : (
-        <div class="no-movies">
-          <p class="text-muted text-center">{t('schedule.noUpcoming')}</p>
+      )}
+
+      {showMovies && (
+        <div data-season="active">
+          <AbridgedNotice />
         </div>
       )}
+
+      <div data-season={over ? undefined : 'over'}>
+        <SeasonEndNotice />
+      </div>
 
       <div class="schedule-info">
         <div class="info-card">
@@ -79,10 +111,19 @@ const nextMovie = getNextMovie(movies);
 
         <div class="info-card location-card">
           <h3><Icon name="map-pin" size={22} /> {t('location.title')}</h3>
-          <p>{t('schedule.locationPark')}, {t('schedule.locationHaarlem')}</p>
-          <a href="https://maps.app.goo.gl/vTwsWfp325V5ArpKA" target="_blank" rel="noopener" class="map-link">
-            {t('location.directions')} →
-          </a>
+          {showMovies && (
+            <ul class="venue-list" data-season="active">
+              {venues.map((v) => (
+                <li class="venue-item">
+                  {v.date && <span class="venue-date">{v.date}</span>}
+                  <a href={v.href} target="_blank" rel="noopener" class="map-link">
+                    {v.venue}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p data-season={over ? undefined : 'over'}>{t('schedule.locationHaarlem')}</p>
         </div>
       </div>
     </div>
@@ -189,9 +230,32 @@ const nextMovie = getNextMovie(movies);
     line-height: 1.7;
   }
 
+  .venue-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .venue-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    line-height: 1.5;
+  }
+
+  .venue-date {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
   .location-card .map-link {
-    display: inline-block;
-    margin-top: var(--space-sm);
     color: var(--color-accent);
     font-weight: 500;
   }

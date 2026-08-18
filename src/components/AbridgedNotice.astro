@@ -1,0 +1,33 @@
+---
+// Shown alongside the 2026 programme while the season is still running: says
+// plainly that this year is a short one and points at the newsletter for the
+// 2027 announcement. Once the season is over, SeasonEndNotice takes its place
+// (both are gated on data-season — see src/lib/season.ts).
+//
+// Uses a different NotifySignup tag ("newsletter") from SeasonEndNotice
+// ("2027") so the two forms never collide on element ids and the sheet shows
+// which one people signed up through.
+import NotifySignup from './NotifySignup.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="abridged">
+  <div class="container">
+    <NotifySignup
+      location="newsletter"
+      lang={lang}
+      title={t('season.abridgedTitle')}
+      body={t('season.abridgedBody')}
+      gdpr={t('season.gdpr')}
+    />
+  </div>
+</section>
+
+<style>
+  .abridged {
+    padding-top: var(--space-xl);
+  }
+</style>
