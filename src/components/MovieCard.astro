@@ -98,17 +98,20 @@ const description = lang === 'nl'
     ? (descriptionAra || descriptionEn)
     : descriptionEn;
 
-// Extract YouTube video ID for thumbnail
-function getYouTubeThumbnail(url: string | undefined): string {
-  if (!url) return '/images/movie-placeholder.svg';
+// Extract YouTube video ID for thumbnail. Older uploads have no
+// maxresdefault.jpg — YouTube answers those with a grey 120x90 placeholder
+// (status 404, but a valid image, so `onerror` never fires). We hand the
+// hqdefault URL along as a fallback and swap client-side when the grey
+// placeholder comes back; hqdefault exists for every video.
+function getYouTubeId(url: string | undefined): string | null {
+  if (!url) return null;
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
-  if (match) {
-    return `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`;
-  }
-  return '/images/movie-placeholder.svg';
+  return match ? match[1] : null;
 }
 
-const thumbnail = imageUrl || getYouTubeThumbnail(previewUrl);
+const videoId = imageUrl ? null : getYouTubeId(previewUrl);
+const thumbnail = imageUrl || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '/images/movie-placeholder.svg');
+const thumbnailFallback = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : undefined;
 
 // Pre-program start time — driven by preProgramStartMin from schedule.csv
 function earlier(showtime: string, minutesBefore: number): string {
@@ -157,7 +160,7 @@ const hasShowtime = !!time && !['TBA', 'n/a', 'N/A'].includes(time.trim());
         {t('schedule.nextScreening')}
       </div>
     )}
-    <img src={thumbnail} alt={title} loading="lazy" />
+    <img src={thumbnail} alt={title} loading="lazy" data-thumb-fallback={thumbnailFallback} />
     {previewUrl && (
       <a href={previewUrl} target="_blank" rel="noopener" class="play-button" aria-label={t('common.watchTrailer')}
          data-goatcounter-click={`trailer-${title.toLowerCase().replace(/\s+/g, '-')}`}
@@ -439,3 +442,22 @@ const hasShowtime = !!time && !['TBA', 'n/a', 'N/A'].includes(time.trim());
     width: 100%;
   }
 </style>
+
+<script>
+  // YouTube serves a grey 120x90 placeholder for videos without a
+  // maxresdefault thumbnail. Detect that and fall back to hqdefault.
+  function useFallback(img: HTMLImageElement) {
+    const fallback = img.dataset.thumbFallback;
+    if (!fallback || img.src === fallback) return;
+    if (img.naturalWidth > 0 && img.naturalWidth <= 120) img.src = fallback;
+  }
+
+  document.querySelectorAll<HTMLImageElement>('img[data-thumb-fallback]').forEach((img) => {
+    if (img.complete) useFallback(img);
+    else img.addEventListener('load', () => useFallback(img), { once: true });
+    img.addEventListener('error', () => {
+      const fallback = img.dataset.thumbFallback;
+      if (fallback && img.src !== fallback) img.src = fallback;
+    }, { once: true });
+  });
+</script>
